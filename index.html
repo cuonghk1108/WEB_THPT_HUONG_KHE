@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trường THPT Hương Khê - Hà Tĩnh | Học sáng tạo – Sống tử tế</title>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --primary: #FF6B35; /* Màu cam chủ đạo */
+            --primary-dark: #e55a2b;
+            --white: #ffffff;
+            --dark: #1a1a1a;
+            --gray: #f4f4f4;
+            --text-gray: #666;
+            --shadow: 0 5px 15px rgba(0,0,0,0.1);
+            --strong-shadow: 0 20px 40px rgba(255, 107, 53, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            color: var(--dark);
+            background-color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* --- NAVIGATION --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span { color: var(--dark); }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-weight: 600;
+            font-size: 1rem;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        /* Hover Effect: Underline animation */
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease-in-out;
+        }
+
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a:hover { color: var(--primary); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, #fff5f0 0%, #ffffff 100%);
+            position: relative;
+            padding: 0 20px;
+        }
+
+        /* Hình tròn trang trí background */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            right: -5%;
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+            opacity: 0.1;
+            border-radius: 50%;
+            z-index: 0;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -10%;
+            left: -5%;
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            opacity: 0.05;
+            border-radius: 50%;
+            z-index: 0;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        .hero-content {
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            background: -webkit-linear-gradient(45deg, var(--dark), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: var(--text-gray);
+            margin-bottom: 2.5rem;
+            font-style: italic;
+        }
+
+        /* --- BUTTON STYLES (Strong Hover) --- */
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: var(--primary);
+            color: var(--white);
+            font-weight: 600;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy effect */
+            box-shadow: 0 10px 20px rgba(255, 107, 53, 0.2);
+            border: 2px solid var(--primary);
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: var(--strong-shadow);
+            background: var(--white);
+            color: var(--primary);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            margin-left: 15px;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: var(--strong-shadow);
+        }
+
+        /* --- SECTIONS COMMON --- */
+        section {
+            padding: 80px 5%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            width: 60px;
+            height: 5px;
+            background: var(--primary);
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 5px;
+        }
+
+        /* --- ABOUT SECTION --- */
+        #about {
+            background-color: var(--white);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid #eee;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            transition: transform 0.4s ease;
+        }
+
+        /* Hover Effect: Card Lift & Icon Rotate */
+        .feature-card:hover {
+            transform: translateY(-15px);
+            box-shadow: var(--strong-shadow);
+            border-color: var(--primary);
+        }
+
+        .feature-card:hover i {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .feature-card h3 { margin-bottom: 1rem; }
+
+        /* --- CLUBS SECTION --- */
+        #clubs {
+            background-color: var(--gray);
+        }
+
+        .clubs-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 2rem;
+            padding-bottom: 3rem; /* Space for shadow */
+            scrollbar-width: none; /* Hide scrollbar Firefox */
+        }
+        
+        .clubs-container::-webkit-scrollbar { display: none; }
+
+        .club-card {
+            min-width: 300px;
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.5s ease;
+            cursor: pointer;
+        }
+
+        .club-img {
+            height: 200px;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #aaa;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Giả lập ảnh bằng CSS Gradient */
+        .club-img.tech { background: linear-gradient(45deg, #2193b0, #6dd5ed); }
+        .club-img.art { background: linear-gradient(45deg, #cc2b5e, #753a88); }
+        .club-img.sport { background: linear-gradient(45deg, #56ab2f, #a8e063); }
+
+        .club-content {
+            padding: 1.5rem;
+        }
+
+        /* Hover Effect: Zoom Image & Card Pop */
+        .club-card:hover {
+            transform: translateY(-20px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+            z-index: 10;
+        }
+
+        /* Nút giả "Tham gia" hiện lên khi hover */
+        .club-card::before {
+            content: 'THAM GIA NGAY';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary);
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 30px;
+            z-index: 5;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+        }
+
+        .club-card:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        /* --- CONTACT SECTION --- */
+        #contact {
+            background-color: var(--dark);
+            color: var(--white);
+            position: relative;
+        }
+
+        .contact-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4rem;
+            justify-content: center;
+        }
+
+        .contact-info, .contact-form {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: var(--white);
+            font-family: inherit;
+            transition: 0.3s;
+        }
+
+        /* Hover/Focus Effect: Glow Border */
+        .contact-form input:focus, .contact-form textarea:focus {
+            outline: none;
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        .footer {
+            text-align: center;
+            padding-top: 50px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 50px;
+            color: #888;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { display: none; } /* Đơn giản hóa cho demo */
+            .navbar { padding: 1rem; }
+            .contact-wrapper { flex-direction: column; gap: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            HUONG KHE<span> HIGH SCHOOL</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#about">Giới thiệu</a></li>
+            <li><a href="#clubs">Câu lạc bộ</a></li>
+            <li><a href="#contact">Liên hệ</a></li>
+        </ul>
+        <a href="#contact" style="padding: 8px 20px; background: var(--primary); color: white; border-radius: 20px; font-weight: bold;">Đăng nhập</a>
+    </nav>
+
+    <header class="hero" id="home">
+        <div class="hero-content" data-aos="fade-up">
+            <h1>Học Sáng Tạo <br> Sống Tử Tế</h1>
+            <p>Môi trường giáo dục hiện đại, nơi ươm mầm tài năng và nhân cách cho thế hệ Gen Z.</p>
+            <a href="#about" class="btn">Khám phá ngay</a>
+            <a href="#clubs" class="btn btn-outline">Xem CLB</a>
+        </div>
+    </header>
+
+    <section id="about">
+        <h2 class="section-title" data-aos="fade-up">Tại sao chọn chúng tôi?</h2>
+        <div class="features-grid" data-aos="fade-up" data-aos-delay="200">
+            <div class="feature-card">
+                <i class="fas fa-brain"></i>
+                <h3>Tư duy Sáng tạo</h3>
+                <p>Chương trình học khuyến khích học sinh suy nghĩ khác biệt và giải quyết vấn đề thực tế.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-heart"></i>
+                <h3>Giá trị Nhân văn</h3>
+                <p>Rèn luyện lòng trắc ẩn và sự tử tế thông qua các hoạt động cộng đồng.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-rocket"></i>
+                <h3>Cơ sở vật chất</h3>
+                <p>Phòng Lab, thư viện số và không gian thể thao chuẩn quốc tế.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="clubs">
+        <h2 class="section-title" data-aos="fade-up">Câu Lạc Bộ Nổi Bật</h2>
+        <p style="text-align: center; margin-bottom: 30px; color: #666;" data-aos="fade-up" data-aos-delay="100">Kéo ngang để xem thêm &rarr;</p>
+        
+        <div class="clubs-container" data-aos="fade-up" data-aos-delay="300">
+            <div class="club-card">
+                <div class="club-img tech"><i class="fas fa-robot" style="color:white"></i></div>
+                <div class="club-content">
+                    <h3>CLB Robotics</h3>
+                    <p>Lập trình và chế tạo robot, tham gia các giải đấu quốc gia.</p>
+                </div>
+            </div>
+            <div class="club-card">
+                <div class="club-img art"><i class="fas fa-palette" style="color:white"></i></div>
+                <div class="club-content">
+                    <h3>CLB Mỹ Thuật</h3>
+                    <p>Không gian sáng tạo cho những tâm hồn yêu nghệ thuật và thiết kế.</p>
+                </div>
+            </div>
+            <div class="club-card">
+                <div class="club-img sport"><i class="fas fa-basketball-ball" style="color:white"></i></div>
+                <div class="club-content">
+                    <h3>CLB Bóng Rổ</h3>
+                    <p>Rèn luyện sức khỏe và tinh thần đồng đội trên sân đấu.</p>
+                </div>
+            </div>
+             <div class="club-card">
+                <div class="club-img tech" style="background: linear-gradient(45deg, #ff9966, #ff5e62);"><i class="fas fa-camera" style="color:white"></i></div>
+                <div class="club-content">
+                    <h3>CLB Nhiếp Ảnh</h3>
+                    <p>Lưu giữ những khoảnh khắc thanh xuân rực rỡ nhất.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2 class="section-title" style="color: white; border-color: white;" data-aos="fade-up">Liên Hệ</h2>
+        <div class="contact-wrapper" data-aos="fade-up" data-aos-delay="200">
+            <div class="contact-info">
+                <h3>Trường THPT Hương Khê - Hà Tĩnh</h3>
+                <p style="margin: 20px 0; color: #ccc;">"Học sáng tạo - Sống tử tế"</p>
+                <p><i class="fas fa-map-marker-alt" style="color: var(--primary); margin-right: 10px;"></i> Xã Hương Khê, Huyện Hương Khê, Tỉnh Hà Tĩnh</p>
+                <p><i class="fas fa-phone" style="color: var(--primary); margin-right: 10px;"></i> (0239) 123 4567</p>
+                <p><i class="fas fa-envelope" style="color: var(--primary); margin-right: 10px;"></i> tuyensinh@huongkhe.edu.vn</p>
+            </div>
+            <div class="contact-form">
+                <form>
+                    <input type="text" placeholder="Họ và tên học sinh">
+                    <input type="email" placeholder="Email liên hệ">
+                    <textarea rows="5" placeholder="Nội dung cần tư vấn..."></textarea>
+                    <button type="button" class="btn" style="width: 100%;">Gửi tin nhắn</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer">
+            &copy; 2024 THPT Hương Khê Design. All rights reserved.
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+    </script>
+
+</body>
+</html>
