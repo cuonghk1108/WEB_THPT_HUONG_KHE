@@ -3,511 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trường THPT Hương Khê - Hà Tĩnh | Học sáng tạo – Sống tử tế</title>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
+    <title>Gửi Nguyễn Thành Hà ❤️</title>
     <style>
-        /* --- CSS VARIABLES & RESET --- */
-        :root {
-            --primary: #FF6B35; /* Màu cam chủ đạo */
-            --primary-dark: #e55a2b;
-            --white: #ffffff;
-            --dark: #1a1a1a;
-            --gray: #f4f4f4;
-            --text-gray: #666;
-            --shadow: 0 5px 15px rgba(0,0,0,0.1);
-            --strong-shadow: 0 20px 40px rgba(255, 107, 53, 0.3);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            scroll-behavior: smooth;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Nunito:wght@400;700&display=swap');
 
         body {
-            font-family: 'Be Vietnam Pro', sans-serif;
-            color: var(--dark);
-            background-color: var(--white);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
-
-        /* --- NAVIGATION --- */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 5%;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary);
-            letter-spacing: -1px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo span { color: var(--dark); }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            font-weight: 600;
-            font-size: 1rem;
-            position: relative;
-            transition: color 0.3s;
-        }
-
-        /* Hover Effect: Underline animation */
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 3px;
-            bottom: -5px;
-            left: 0;
-            background-color: var(--primary);
-            transition: width 0.3s ease-in-out;
-        }
-
-        .nav-links a:hover::after { width: 100%; }
-        .nav-links a:hover { color: var(--primary); }
-
-        /* --- HERO SECTION --- */
-        .hero {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
             height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
-            text-align: center;
-            background: linear-gradient(135deg, #fff5f0 0%, #ffffff 100%);
-            position: relative;
-            padding: 0 20px;
-        }
-
-        /* Hình tròn trang trí background */
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -10%;
-            right: -5%;
-            width: 500px;
-            height: 500px;
-            background: var(--primary);
-            opacity: 0.1;
-            border-radius: 50%;
-            z-index: 0;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: -10%;
-            left: -5%;
-            width: 400px;
-            height: 400px;
-            background: var(--primary);
-            opacity: 0.05;
-            border-radius: 50%;
-            z-index: 0;
-            animation: float 8s ease-in-out infinite reverse;
-        }
-
-        .hero-content {
-            z-index: 1;
-            max-width: 800px;
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 1rem;
-            background: -webkit-linear-gradient(45deg, var(--dark), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            font-size: 1.5rem;
-            color: var(--text-gray);
-            margin-bottom: 2.5rem;
-            font-style: italic;
-        }
-
-        /* --- BUTTON STYLES (Strong Hover) --- */
-        .btn {
-            display: inline-block;
-            padding: 15px 40px;
-            background: var(--primary);
-            color: var(--white);
-            font-weight: 600;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy effect */
-            box-shadow: 0 10px 20px rgba(255, 107, 53, 0.2);
-            border: 2px solid var(--primary);
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            transform: translateY(-8px) scale(1.05);
-            box-shadow: var(--strong-shadow);
-            background: var(--white);
-            color: var(--primary);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--primary);
-            margin-left: 15px;
-        }
-
-        .btn-outline:hover {
-            background: var(--primary);
-            color: var(--white);
-            transform: translateY(-8px) scale(1.05);
-            box-shadow: var(--strong-shadow);
-        }
-
-        /* --- SECTIONS COMMON --- */
-        section {
-            padding: 80px 5%;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            position: relative;
-            display: inline-block;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .section-title::after {
-            content: '';
-            width: 60px;
-            height: 5px;
-            background: var(--primary);
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 5px;
-        }
-
-        /* --- ABOUT SECTION --- */
-        #about {
-            background-color: var(--white);
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .feature-card {
-            padding: 2rem;
-            background: var(--white);
-            border-radius: 20px;
-            text-align: center;
-            border: 1px solid #eee;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card i {
-            font-size: 3rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            transition: transform 0.4s ease;
-        }
-
-        /* Hover Effect: Card Lift & Icon Rotate */
-        .feature-card:hover {
-            transform: translateY(-15px);
-            box-shadow: var(--strong-shadow);
-            border-color: var(--primary);
-        }
-
-        .feature-card:hover i {
-            transform: scale(1.2) rotate(10deg);
-        }
-
-        .feature-card h3 { margin-bottom: 1rem; }
-
-        /* --- CLUBS SECTION --- */
-        #clubs {
-            background-color: var(--gray);
-        }
-
-        .clubs-container {
-            display: flex;
-            overflow-x: auto;
-            gap: 2rem;
-            padding-bottom: 3rem; /* Space for shadow */
-            scrollbar-width: none; /* Hide scrollbar Firefox */
-        }
-        
-        .clubs-container::-webkit-scrollbar { display: none; }
-
-        .club-card {
-            min-width: 300px;
-            background: var(--white);
-            border-radius: 20px;
-            overflow: hidden;
-            position: relative;
-            transition: all 0.5s ease;
-            cursor: pointer;
-        }
-
-        .club-img {
-            height: 200px;
-            background-color: #ddd;
-            display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            color: #aaa;
-            position: relative;
-            overflow: hidden;
+            font-family: 'Nunito', sans-serif;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="%23ff4d6d"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'), auto;
         }
 
-        /* Giả lập ảnh bằng CSS Gradient */
-        .club-img.tech { background: linear-gradient(45deg, #2193b0, #6dd5ed); }
-        .club-img.art { background: linear-gradient(45deg, #cc2b5e, #753a88); }
-        .club-img.sport { background: linear-gradient(45deg, #56ab2f, #a8e063); }
-
-        .club-content {
-            padding: 1.5rem;
-        }
-
-        /* Hover Effect: Zoom Image & Card Pop */
-        .club-card:hover {
-            transform: translateY(-20px) scale(1.02);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
-            z-index: 10;
-        }
-
-        /* Nút giả "Tham gia" hiện lên khi hover */
-        .club-card::before {
-            content: 'THAM GIA NGAY';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
+        /* Container chính */
+        .card {
             background: rgba(255, 255, 255, 0.9);
-            color: var(--primary);
-            padding: 10px 20px;
-            font-weight: bold;
-            border-radius: 30px;
-            z-index: 5;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            opacity: 0;
-        }
-
-        .club-card:hover::before {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-        }
-
-        /* --- CONTACT SECTION --- */
-        #contact {
-            background-color: var(--dark);
-            color: var(--white);
-            position: relative;
-        }
-
-        .contact-wrapper {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4rem;
-            justify-content: center;
-        }
-
-        .contact-info, .contact-form {
-            flex: 1;
-            min-width: 300px;
-        }
-
-        .contact-form input, .contact-form textarea {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 20px;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255,255,255,0.1);
-            color: var(--white);
-            font-family: inherit;
-            transition: 0.3s;
-        }
-
-        /* Hover/Focus Effect: Glow Border */
-        .contact-form input:focus, .contact-form textarea:focus {
-            outline: none;
-            background: rgba(255,255,255,0.2);
-            box-shadow: 0 0 15px var(--primary);
-        }
-
-        .footer {
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.3);
             text-align: center;
-            padding-top: 50px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            margin-top: 50px;
-            color: #888;
+            position: relative;
+            z-index: 10;
+            max-width: 90%;
+            width: 400px;
+            animation: popIn 1s ease-out;
+            border: 2px solid #fff;
         }
 
-        /* --- RESPONSIVE --- */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .nav-links { display: none; } /* Đơn giản hóa cho demo */
-            .navbar { padding: 1rem; }
-            .contact-wrapper { flex-direction: column; gap: 2rem; }
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            color: #ff4d6d;
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
         }
+
+        p {
+            font-size: 1.2em;
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .name-highlight {
+            color: #d63384;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+            height: 60px; /* Giữ chỗ cho nút chạy */
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: bold;
+            outline: none;
+        }
+
+        .btn-yes {
+            background: linear-gradient(45deg, #ff4d6d, #ff8fa3);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 77, 109, 0.6);
+        }
+
+        .btn-no {
+            background: #f1f1f1;
+            color: #555;
+            position: absolute; /* Để có thể di chuyển tự do */
+            left: 55%; /* Vị trí ban đầu */
+        }
+
+        /* Hiệu ứng nền trái tim rơi */
+        .heart-bg {
+            position: absolute;
+            color: #ff4d6d;
+            top: -10vh;
+            font-size: 20px;
+            animation: fall linear forwards;
+            z-index: 1;
+            opacity: 0.6;
+        }
+
+        /* Hiệu ứng chuột */
+        .cursor-heart {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #ff4d6d;
+            transform: rotate(45deg);
+            pointer-events: none;
+            animation: fadeOut 1s forwards;
+            z-index: 100;
+        }
+        .cursor-heart::before, .cursor-heart::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #ff4d6d;
+            border-radius: 50%;
+        }
+        .cursor-heart::before { left: -8px; }
+        .cursor-heart::after { top: -8px; }
+
+        /* Animation Keyframes */
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            0% { transform: scale(1) rotate(45deg); opacity: 1; }
+            100% { transform: scale(0) rotate(45deg); opacity: 0; top: -50px; }
+        }
+
+        /* Popup kết quả */
+        #success-msg {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 20;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+        }
+        #success-msg h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4em;
+            color: #ff4d6d;
+            animation: heartbeat 1s infinite;
+        }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="logo">
-            <i class="fas fa-graduation-cap"></i>
-            HUONG KHE<span> HIGH SCHOOL</span>
+    <div class="card">
+        <h1>Chào Hà! ❤️</h1>
+        <p>
+            Có một người luôn âm thầm quan tâm cậu.<br>
+            Hôm nay lấy hết can đảm để hỏi <span class="name-highlight">Nguyễn Thành Hà</span> một câu thôi:
+            <br><br>
+            <b>Làm người yêu tớ nhé?</b>
+        </p>
+        <div class="btn-group">
+            <button class="btn-yes" onclick="acceptLove()">Đồng ý luôn!</button>
+            <button class="btn-no" id="btnNo" onmouseover="moveButton()">Không nha</button>
         </div>
-        <ul class="nav-links">
-            <li><a href="#about">Giới thiệu</a></li>
-            <li><a href="#clubs">Câu lạc bộ</a></li>
-            <li><a href="#contact">Liên hệ</a></li>
-        </ul>
-        <a href="#contact" style="padding: 8px 20px; background: var(--primary); color: white; border-radius: 20px; font-weight: bold;">Đăng nhập</a>
-    </nav>
+    </div>
 
-    <header class="hero" id="home">
-        <div class="hero-content" data-aos="fade-up">
-            <h1>Học Sáng Tạo <br> Sống Tử Tế</h1>
-            <p>Môi trường giáo dục hiện đại, nơi ươm mầm tài năng và nhân cách cho thế hệ Gen Z.</p>
-            <a href="#about" class="btn">Khám phá ngay</a>
-            <a href="#clubs" class="btn btn-outline">Xem CLB</a>
-        </div>
-    </header>
+    <div id="success-msg">
+        <h2>Tớ biết Hà sẽ đồng ý mà! ❤️</h2>
+        <p>Yêu cậu nhiều lắm! (Chụp màn hình gửi lại tớ nhé)</p>
+        <canvas id="confetti"></canvas>
+    </div>
 
-    <section id="about">
-        <h2 class="section-title" data-aos="fade-up">Tại sao chọn chúng tôi?</h2>
-        <div class="features-grid" data-aos="fade-up" data-aos-delay="200">
-            <div class="feature-card">
-                <i class="fas fa-brain"></i>
-                <h3>Tư duy Sáng tạo</h3>
-                <p>Chương trình học khuyến khích học sinh suy nghĩ khác biệt và giải quyết vấn đề thực tế.</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-heart"></i>
-                <h3>Giá trị Nhân văn</h3>
-                <p>Rèn luyện lòng trắc ẩn và sự tử tế thông qua các hoạt động cộng đồng.</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-rocket"></i>
-                <h3>Cơ sở vật chất</h3>
-                <p>Phòng Lab, thư viện số và không gian thể thao chuẩn quốc tế.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="clubs">
-        <h2 class="section-title" data-aos="fade-up">Câu Lạc Bộ Nổi Bật</h2>
-        <p style="text-align: center; margin-bottom: 30px; color: #666;" data-aos="fade-up" data-aos-delay="100">Kéo ngang để xem thêm &rarr;</p>
-        
-        <div class="clubs-container" data-aos="fade-up" data-aos-delay="300">
-            <div class="club-card">
-                <div class="club-img tech"><i class="fas fa-robot" style="color:white"></i></div>
-                <div class="club-content">
-                    <h3>CLB Robotics</h3>
-                    <p>Lập trình và chế tạo robot, tham gia các giải đấu quốc gia.</p>
-                </div>
-            </div>
-            <div class="club-card">
-                <div class="club-img art"><i class="fas fa-palette" style="color:white"></i></div>
-                <div class="club-content">
-                    <h3>CLB Mỹ Thuật</h3>
-                    <p>Không gian sáng tạo cho những tâm hồn yêu nghệ thuật và thiết kế.</p>
-                </div>
-            </div>
-            <div class="club-card">
-                <div class="club-img sport"><i class="fas fa-basketball-ball" style="color:white"></i></div>
-                <div class="club-content">
-                    <h3>CLB Bóng Rổ</h3>
-                    <p>Rèn luyện sức khỏe và tinh thần đồng đội trên sân đấu.</p>
-                </div>
-            </div>
-             <div class="club-card">
-                <div class="club-img tech" style="background: linear-gradient(45deg, #ff9966, #ff5e62);"><i class="fas fa-camera" style="color:white"></i></div>
-                <div class="club-content">
-                    <h3>CLB Nhiếp Ảnh</h3>
-                    <p>Lưu giữ những khoảnh khắc thanh xuân rực rỡ nhất.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact">
-        <h2 class="section-title" style="color: white; border-color: white;" data-aos="fade-up">Liên Hệ</h2>
-        <div class="contact-wrapper" data-aos="fade-up" data-aos-delay="200">
-            <div class="contact-info">
-                <h3>Trường THPT Hương Khê - Hà Tĩnh</h3>
-                <p style="margin: 20px 0; color: #ccc;">"Học sáng tạo - Sống tử tế"</p>
-                <p><i class="fas fa-map-marker-alt" style="color: var(--primary); margin-right: 10px;"></i> Xã Hương Khê, Huyện Hương Khê, Tỉnh Hà Tĩnh</p>
-                <p><i class="fas fa-phone" style="color: var(--primary); margin-right: 10px;"></i> (0239) 123 4567</p>
-                <p><i class="fas fa-envelope" style="color: var(--primary); margin-right: 10px;"></i> tuyensinh@huongkhe.edu.vn</p>
-            </div>
-            <div class="contact-form">
-                <form>
-                    <input type="text" placeholder="Họ và tên học sinh">
-                    <input type="email" placeholder="Email liên hệ">
-                    <textarea rows="5" placeholder="Nội dung cần tư vấn..."></textarea>
-                    <button type="button" class="btn" style="width: 100%;">Gửi tin nhắn</button>
-                </form>
-            </div>
-        </div>
-        <div class="footer">
-            &copy; 2024 THPT Hương Khê Design. All rights reserved.
-        </div>
-    </section>
-
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({
-            duration: 1000,
-            once: true
-        });
-    </script>
+        /* 1. Logic nút "Không" bỏ chạy */
+        const btnNo = document.getElementById('btnNo');
+        
+        function moveButton() {
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 100);
+            btnNo.style.position = 'fixed'; // Chuyển sang fixed để chạy khắp màn hình
+            btnNo.style.left = `${x}px`;
+            btnNo.style.top = `${y}px`;
+        }
 
+        /* 2. Tạo mưa trái tim nền */
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-bg');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+            
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+        setInterval(createHeart, 200);
+
+        /* 3. Hiệu ứng chuột */
+        document.addEventListener('mousemove', function(e) {
+            const heart = document.createElement('div');
+            heart.className = 'cursor-heart';
+            heart.style.left = e.pageX + 'px';
+            heart.style.top = e.pageY + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1000);
+        });
+
+        /* 4. Xử lý khi bấm Đồng ý */
+        function acceptLove() {
+            document.getElementById('success-msg').style.display = 'flex';
+            // Tạo hiệu ứng nổ tung trời
+            for(let i=0; i<100; i++) {
+                setTimeout(createHeart, i*10); // Tăng tốc độ rơi trái tim
+            }
+        }
+    </script>
 </body>
 </html>
