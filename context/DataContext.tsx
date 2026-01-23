@@ -196,236 +196,63 @@ const INITIAL_GALLERY: GalleryItem[] = [
   { id: 4, title: 'Học sinh giỏi Quốc gia', category: 'Thành tích', imageUrl: 'https://images.unsplash.com/photo-1546519638-68e109498ee2?q=80&w=600' },
 ];
 
+const DEFAULT_WEEK_SCHEDULE: ScheduleRow[] = [
+  { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Toán', 'Lý', 'Hóa'] },
+  { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
+  { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Sinh', 'GDCD', 'CN'] },
+  { day: 'Thứ 5', periods: ['Toán', 'Toán', 'Văn', 'Anh', 'Thể dục'] },
+  { day: 'Thứ 6', periods: ['Lý', 'Hóa', 'Sinh', 'Công nghệ', 'Âm nhạc'] },
+  { day: 'Thứ 7', periods: ['Sử', 'Địa', 'GDQP', 'Hoạt động trải nghiệm', 'Sinh hoạt lớp'] },
+];
+
+const CLASS_NAMES = [
+  '10A1', '10A2', '10A3', '10A4', '10A5', '10A6', '10A7', '10A8', '10A9',
+  '10C1', '10C2', '10C3', '10C4', '10C5', '10C6',
+  '11A1', '11A2', '11A3', '11A4', '11A5', '11A6', '11A7', '11A8',
+  '11C1', '11C2', '11C3', '11C4', '11C5', '11C6', '11C7',
+  '12A1', '12A2', '12A3', '12A4', '12A5', '12A6', '12A7',
+  '12C1', '12C2', '12C3', '12C4', '12C5', '12C6', '12C7', '12C8',
+];
+
+const SUBJECT_POOL = [
+  'Toán', 'Văn', 'Anh', 'Lý', 'Hóa', 'Sinh', 'Sử', 'Địa', 'GDCD', 'Tin',
+  'Công nghệ', 'Thể dục', 'Âm nhạc', 'Mỹ thuật', 'GDQP', 'Công dân số', 'STEM',
+  'Hoạt động trải nghiệm', 'Sinh hoạt lớp', 'Tự chọn'
+];
+
+const hashClassName = (name: string) => name.split('').reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+const rotateArray = <T,>(arr: T[], offset: number): T[] => arr.map((_, idx) => arr[(idx + offset) % arr.length]);
+const applyFixedSlots = (periods: string[], day: string) => {
+  const next = [...periods];
+  if (day === 'Thứ 2' && next.length > 0) next[0] = 'Chào cờ';
+  if (day === 'Thứ 7' && next.length > 4) next[4] = 'Sinh hoạt lớp';
+  return next;
+};
+const createScheduleForClass = (className: string): ScheduleRow[] => {
+  const basePeriods = DEFAULT_WEEK_SCHEDULE[0]?.periods.length || 5;
+  const hash = hashClassName(className);
+  return DEFAULT_WEEK_SCHEDULE.map((row, dayIdx) => {
+    const dayShift = (hash + dayIdx * 7) % SUBJECT_POOL.length;
+    const dayPool = rotateArray(SUBJECT_POOL, dayShift);
+    const periods = applyFixedSlots(dayPool.slice(0, basePeriods), row.day);
+    return { day: row.day, periods };
+  });
+};
+const buildScheduleByClass = () => CLASS_NAMES.map(className => ({ className, scheduleRows: createScheduleForClass(className) }));
+
+const schedulesEqual = (rows: ScheduleRow[], target: ScheduleRow[]) => {
+  if (rows.length !== target.length) return false;
+  return rows.every((row, idx) =>
+    row.day === target[idx].day &&
+    row.periods.length === target[idx].periods.length &&
+    row.periods.every((p, pIdx) => p === target[idx].periods[pIdx])
+  );
+};
+
 const INITIAL_STUDENT_CORNER: StudentCornerData = {
   scheduleTitle: 'Thời khóa biểu (Áp dụng từ tuần 5)',
   scheduleDescription: 'Lịch học chi tiết cho từng lớp',
-  scheduleByClass: [
-    { className: '10A1', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Toán', 'Lý', 'Hóa'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Sinh', 'GDCD', 'CN'] },
-    ]},
-    { className: '10A2', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Toán', 'Lý', 'Hóa'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Sinh', 'GDCD', 'CN'] },
-    ]},
-    { className: '10A3', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Toán', 'Lý', 'Hóa'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Sinh', 'GDCD', 'CN'] },
-    ]},
-    { className: '10A4', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Toán', 'Lý', 'Hóa'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Sinh', 'GDCD', 'CN'] },
-    ]},
-    { className: '10A5', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Toán', 'Lý', 'Hóa'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Sinh', 'GDCD', 'CN'] },
-    ]},
-    { className: '10A6', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Toán', 'Lý', 'Hóa'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Sinh', 'GDCD', 'CN'] },
-    ]},
-    { className: '10A7', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Toán', 'Lý', 'Hóa'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Sinh', 'GDCD', 'CN'] },
-    ]},
-    { className: '10A8', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Toán', 'Lý', 'Hóa'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Sinh', 'GDCD', 'CN'] },
-    ]},
-    { className: '10A9', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Toán', 'Lý', 'Hóa'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Sinh', 'GDCD', 'CN'] },
-    ]},
-    { className: '10C1', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '10C2', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '10C3', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '10C4', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '10C5', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '10C6', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '11A1', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán NC', 'Lý NC', 'Hóa NC', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '11A2', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán NC', 'Lý NC', 'Hóa NC', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '11A3', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán NC', 'Lý NC', 'Hóa NC', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '11A4', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán NC', 'Lý NC', 'Hóa NC', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '11A5', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán NC', 'Lý NC', 'Hóa NC', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '11A6', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán NC', 'Lý NC', 'Hóa NC', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '11A7', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán NC', 'Lý NC', 'Hóa NC', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '11A8', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán NC', 'Lý NC', 'Hóa NC', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '11C1', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '11C2', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '11C3', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '11C4', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '11C5', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '11C6', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '11C7', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '12A1', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán NC', 'Vật lý NC', 'Hóa NC', 'Sinh NC'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '12A2', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán NC', 'Vật lý NC', 'Hóa NC', 'Sinh NC'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '12A3', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán NC', 'Vật lý NC', 'Hóa NC', 'Sinh NC'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '12A4', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán NC', 'Vật lý NC', 'Hóa NC', 'Sinh NC'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '12A5', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán NC', 'Vật lý NC', 'Hóa NC', 'Sinh NC'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '12A6', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán NC', 'Vật lý NC', 'Hóa NC', 'Sinh NC'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '12A7', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán NC', 'Vật lý NC', 'Hóa NC', 'Sinh NC'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '12C1', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '12C2', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '12C3', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '12C4', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '12C5', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '12C6', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '12C7', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-    { className: '12C8', scheduleRows: [
-      { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Lý', 'Hóa', 'Sinh'] },
-      { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
-      { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Công nghệ', 'GDCD', 'Thể dục'] },
-    ]},
-  ],
+  scheduleByClass: buildScheduleByClass(),
   scheduleNote: '* Đây là thời khóa biểu mẫu. Học sinh vui lòng xem chi tiết theo từng lớp tại bảng tin nhà trường.',
   examTitle: 'Lịch kiểm tra tập trung',
   exams: [
@@ -525,8 +352,14 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           parsed.scheduleByClass = [{ className: 'Chung', scheduleRows: parsed.scheduleRows }];
           delete parsed.scheduleRows;
         }
-        // If data is incomplete (too few classes), fall back to fresh default
-        if (parsed.scheduleByClass && parsed.scheduleByClass.length >= 5) {
+        const hasCompleteSchedule = parsed.scheduleByClass
+          && parsed.scheduleByClass.length === CLASS_NAMES.length
+          && parsed.scheduleByClass.every((cls: ClassSchedule) => cls.scheduleRows && cls.scheduleRows.length >= DEFAULT_WEEK_SCHEDULE.length);
+        if (hasCompleteSchedule) {
+          const allDefaultLike = parsed.scheduleByClass.every((cls: ClassSchedule) => schedulesEqual(cls.scheduleRows, DEFAULT_WEEK_SCHEDULE));
+          if (allDefaultLike) {
+            return { ...parsed, scheduleByClass: buildScheduleByClass() };
+          }
           return parsed;
         }
       }

@@ -57,10 +57,38 @@ const StudentCornerManager: React.FC = () => {
     setIsScheduleEditOpen(false);
   };
 
+  const currentPeriodCount = Math.max(
+    1,
+    ...(currentClassSchedule?.scheduleRows.map((r) => r.periods.length) ?? [5])
+  );
+
   const handleAddScheduleRow = () => {
     updateClassSchedule((cls) => ({
       ...cls,
-      scheduleRows: [...cls.scheduleRows, { day: '', periods: ['', '', '', '', ''] }],
+      scheduleRows: [
+        ...cls.scheduleRows,
+        { day: '', periods: Array.from({ length: currentPeriodCount }, () => '') },
+      ],
+    }));
+  };
+
+  const handleAddPeriod = () => {
+    updateClassSchedule((cls) => ({
+      ...cls,
+      scheduleRows: cls.scheduleRows.map((row) => ({
+        ...row,
+        periods: [...row.periods, ''],
+      })),
+    }));
+  };
+
+  const handleRemovePeriod = () => {
+    updateClassSchedule((cls) => ({
+      ...cls,
+      scheduleRows: cls.scheduleRows.map((row) => ({
+        ...row,
+        periods: row.periods.length > 1 ? row.periods.slice(0, -1) : row.periods,
+      })),
     }));
   };
 
@@ -231,7 +259,25 @@ const StudentCornerManager: React.FC = () => {
                       ))}
                     </select>
                   </div>
-                  <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">Dòng thời khóa biểu ({selectedClass})</label>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="block text-sm font-bold text-slate-800 dark:text-slate-200">Dòng thời khóa biểu ({selectedClass})</label>
+                    <div className="flex gap-2 text-xs">
+                      <button
+                        type="button"
+                        onClick={handleAddPeriod}
+                        className="px-3 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg hover:bg-blue-100 dark:bg-blue-900 dark:text-blue-200 dark:border-blue-700"
+                      >
+                        + Thêm tiết
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleRemovePeriod}
+                        className="px-3 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600"
+                      >
+                        − Bớt tiết
+                      </button>
+                    </div>
+                  </div>
                   <div className="space-y-3">
                     {currentClassSchedule?.scheduleRows.map((row, idx) => (
                       <div key={idx} className="flex gap-2">
@@ -304,39 +350,36 @@ const StudentCornerManager: React.FC = () => {
               <div className="text-slate-600 dark:text-slate-300">
                 <p className="font-bold mb-2">{scheduleData.scheduleTitle}</p>
                 <p className="text-sm mb-4">{scheduleData.scheduleDescription}</p>
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {scheduleData.scheduleByClass.map((cls) => (
-                    <button
-                      key={cls.className}
-                      onClick={() => setSelectedClass(cls.className)}
-                      className={`px-3 py-1 rounded-full text-sm font-semibold border transition-colors ${
-                        selectedClass === cls.className
-                          ? 'bg-blue-600 text-white border-blue-600'
-                          : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-600 hover:border-blue-400'
-                      }`}
-                    >
-                      {cls.className}
-                    </button>
-                  ))}
+                <div className="mb-4 flex items-center gap-3">
+                  <label className="text-sm font-bold text-slate-800 dark:text-slate-200">Chọn lớp:</label>
+                  <select
+                    value={selectedClass}
+                    onChange={(e) => setSelectedClass(e.target.value)}
+                    className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white font-semibold focus:ring-2 focus:ring-blue-500 outline-none"
+                  >
+                    {scheduleData.scheduleByClass.map((cls) => (
+                      <option key={cls.className} value={cls.className}>
+                        {cls.className}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-                <table className="w-full border border-slate-200 dark:border-slate-600 text-sm">
+                <table className="w-full table-fixed border border-slate-200 dark:border-slate-600 text-sm">
                   <thead>
                     <tr className="bg-slate-100 dark:bg-slate-700">
-                      <th className="border border-slate-200 dark:border-slate-600 p-2">Thứ</th>
-                      <th className="border border-slate-200 dark:border-slate-600 p-2">Tiết 1</th>
-                      <th className="border border-slate-200 dark:border-slate-600 p-2">Tiết 2</th>
-                      <th className="border border-slate-200 dark:border-slate-600 p-2">Tiết 3</th>
-                      <th className="border border-slate-200 dark:border-slate-600 p-2">Tiết 4</th>
-                      <th className="border border-slate-200 dark:border-slate-600 p-2">Tiết 5</th>
+                      <th className="border border-slate-200 dark:border-slate-600 p-2 h-12 align-middle text-left">Tiết / Thứ</th>
+                      {currentClassSchedule?.scheduleRows.map((row, idx) => (
+                        <th key={idx} className="border border-slate-200 dark:border-slate-600 p-2 h-12 align-middle text-center">{row.day}</th>
+                      ))}
                     </tr>
                   </thead>
                   <tbody>
-                    {currentClassSchedule?.scheduleRows.map((row, idx) => (
-                      <tr key={idx}>
-                        <td className="border border-slate-200 dark:border-slate-600 p-2 font-bold bg-slate-50 dark:bg-slate-700">{row.day}</td>
-                        {row.periods.map((period, pIdx) => (
-                          <td key={pIdx} className="border border-slate-200 dark:border-slate-600 p-2 text-center">
-                            {period}
+                    {Array.from({ length: Math.max(0, ...(currentClassSchedule?.scheduleRows.map(r => r.periods.length) ?? [])) }).map((_, periodIndex) => (
+                      <tr key={periodIndex}>
+                        <td className="border border-slate-200 dark:border-slate-600 p-2 h-12 align-middle font-bold bg-slate-50 dark:bg-slate-700 text-left">Tiết {periodIndex + 1}</td>
+                        {currentClassSchedule?.scheduleRows.map((row, dayIdx) => (
+                          <td key={dayIdx} className="border border-slate-200 dark:border-slate-600 p-2 h-12 align-middle text-center">
+                            {row.periods[periodIndex] || ''}
                           </td>
                         ))}
                       </tr>

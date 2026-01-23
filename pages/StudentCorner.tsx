@@ -12,6 +12,13 @@ const StudentCorner: React.FC = () => {
     return studentCorner.scheduleByClass.find((item) => item.className === selectedClass) || studentCorner.scheduleByClass[0];
   }, [selectedClass, studentCorner.scheduleByClass]);
 
+  const maxPeriods = useMemo(() => {
+    return Math.max(
+      0,
+      ...currentSchedule?.scheduleRows.map((row) => row.periods.length) ?? []
+    );
+  }, [currentSchedule]);
+
   const handleDownload = (itemName: string) => {
     alert(`Đang tải xuống: ${itemName}`);
   }
@@ -64,38 +71,37 @@ const StudentCorner: React.FC = () => {
                 </button>
               </div>
               <div className="overflow-x-auto">
-                <div className="flex flex-wrap gap-3 mb-4">
-                  {studentCorner.scheduleByClass.map((cls) => (
-                    <button
-                      key={cls.className}
-                      onClick={() => setSelectedClass(cls.className)}
-                      className={`px-3 py-1 rounded-full text-sm font-semibold border transition-colors ${
-                        selectedClass === cls.className
-                          ? 'bg-blue-600 text-white border-blue-600'
-                          : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-600 hover:border-blue-400'
-                      }`}
-                    >
-                      {cls.className}
-                    </button>
-                  ))}
+                <div className="mb-4 flex items-center gap-3">
+                  <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Chọn lớp:</label>
+                  <select
+                    value={selectedClass}
+                    onChange={(e) => setSelectedClass(e.target.value)}
+                    className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white font-semibold focus:ring-2 focus:ring-blue-500 outline-none"
+                  >
+                    {studentCorner.scheduleByClass.map((cls) => (
+                      <option key={cls.className} value={cls.className}>
+                        {cls.className}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-                <table className="w-full border-collapse border border-slate-200 dark:border-slate-600 text-sm">
+                <table className="w-full table-fixed border-collapse border border-slate-200 dark:border-slate-600 text-sm">
                   <thead>
                     <tr className="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">
-                      <th className="border border-slate-200 dark:border-slate-600 p-3">Thứ</th>
-                      <th className="border border-slate-200 dark:border-slate-600 p-3">Tiết 1</th>
-                      <th className="border border-slate-200 dark:border-slate-600 p-3">Tiết 2</th>
-                      <th className="border border-slate-200 dark:border-slate-600 p-3">Tiết 3</th>
-                      <th className="border border-slate-200 dark:border-slate-600 p-3">Tiết 4</th>
-                      <th className="border border-slate-200 dark:border-slate-600 p-3">Tiết 5</th>
+                      <th className="border border-slate-200 dark:border-slate-600 p-3 h-14 align-middle text-left">Tiết / Thứ</th>
+                      {currentSchedule?.scheduleRows.map((row, idx) => (
+                        <th key={idx} className="border border-slate-200 dark:border-slate-600 p-3 h-14 align-middle text-center">{row.day}</th>
+                      ))}
                     </tr>
                   </thead>
                   <tbody>
-                    {currentSchedule?.scheduleRows.map((row, idx) => (
-                      <tr key={idx} className="text-center text-slate-700 dark:text-slate-300">
-                        <td className="border border-slate-200 dark:border-slate-600 p-3 font-bold bg-slate-50 dark:bg-slate-700">{row.day}</td>
-                        {row.periods.map((period, pIdx) => (
-                          <td key={pIdx} className="border border-slate-200 dark:border-slate-600 p-3">{period}</td>
+                    {Array.from({ length: maxPeriods }).map((_, periodIndex) => (
+                      <tr key={periodIndex} className="text-center text-slate-700 dark:text-slate-300">
+                        <td className="border border-slate-200 dark:border-slate-600 p-3 h-14 align-middle font-bold bg-slate-50 dark:bg-slate-700 text-left">Tiết {periodIndex + 1}</td>
+                        {currentSchedule?.scheduleRows.map((row, dayIdx) => (
+                          <td key={dayIdx} className="border border-slate-200 dark:border-slate-600 p-3 h-14 align-middle">
+                            {row.periods[periodIndex] || ''}
+                          </td>
                         ))}
                       </tr>
                     ))}
