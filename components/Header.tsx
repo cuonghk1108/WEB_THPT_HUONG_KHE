@@ -47,27 +47,32 @@ const Header: React.FC = () => {
             
             {/* Logo Section */}
             <Link to="/" onClick={handleLinkClick} className="flex items-center space-x-2 md:space-x-3 cursor-pointer group">
-              {globalImages.logo ? (
-                <img 
-                  key={logoSrc}
-                  src={logoSrc} 
-                  alt="Logo THPT Hương Khê" 
-                  className={`h-6 w-6 md:h-8 md:w-8 object-cover transition-all duration-500 group-hover:scale-110 ${
-                    scrolled ? 'rotate-0' : '-rotate-3'
-                  }`} 
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = 'none';
-                  }}
-                />
-              ) : (
-                <div className={`p-1.5 md:p-2 rounded-xl transition-all duration-500 shadow-lg group-hover:scale-110 ${
-                  scrolled 
-                    ? 'bg-gradient-to-br from-primary-600 to-primary-800 rotate-0' 
-                    : 'bg-gradient-to-br from-primary-500 to-primary-700 -rotate-3'
-                }`}>
-                  <GraduationCap className="h-4 w-4 md:h-5 md:w-5 text-white" />
-                </div>
-              )}
+              <div className={`relative overflow-hidden rounded-xl transition-all duration-500 shadow-lg group-hover:scale-110 ${
+                scrolled 
+                  ? 'bg-gradient-to-br from-primary-600 to-primary-800 rotate-0' 
+                  : 'bg-gradient-to-br from-primary-500 to-primary-700 -rotate-3'
+              }`}>
+                {globalImages.logo ? (
+                  <img 
+                    key={logoSrc}
+                    src={logoSrc} 
+                    alt="Logo THPT Hương Khê" 
+                    className="h-6 w-6 md:h-8 md:w-8 object-cover" 
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const parent = target.parentElement;
+                      if (parent) {
+                        const icon = document.createElement('div');
+                        icon.innerHTML = '<svg class="h-4 w-4 md:h-5 md:w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>';
+                        parent.appendChild(icon.firstChild as Node);
+                      }
+                    }}
+                  />
+                ) : (
+                  <GraduationCap className="h-4 w-4 md:h-5 md:w-5 text-white p-1.5 md:p-2" />
+                )}
+              </div>
               <div className="flex flex-col">
                 <h1 className={`text-lg md:text-xl font-bold font-heading leading-none transition-colors ${scrolled ? 'text-slate-900' : 'text-slate-800'}`}>
                   <span className="hidden sm:inline">{SCHOOL_NAME}</span>
@@ -117,21 +122,28 @@ const Header: React.FC = () => {
           <X className="h-8 w-8" />
         </button>
         <div className="flex items-center space-x-3 mb-8">
-          {globalImages.logo ? (
-            <img 
-              key={logoSrc}
-              src={logoSrc} 
-              alt="Logo THPT Hương Khê" 
-              className="h-10 w-10 object-cover rounded-lg" 
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none';
-              }}
-            />
-          ) : (
-            <div className="h-10 w-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
+          <div className="h-10 w-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center overflow-hidden">
+            {globalImages.logo ? (
+              <img 
+                key={logoSrc}
+                src={logoSrc} 
+                alt="Logo THPT Hương Khê" 
+                className="h-full w-full object-cover" 
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  const parent = target.parentElement;
+                  if (parent) {
+                    const icon = document.createElement('div');
+                    icon.innerHTML = '<svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>';
+                    parent.appendChild(icon.firstChild as Node);
+                  }
+                }}
+              />
+            ) : (
               <GraduationCap className="h-6 w-6 text-white" />
-            </div>
-          )}
+            )}
+          </div>
           <div className="text-center">
             <h2 className="text-lg font-bold text-slate-800">THPT Hương Khê</h2>
             <p className="text-xs text-primary-600">60 NĂM HÌNH THÀNH</p>
