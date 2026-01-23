@@ -101,7 +101,7 @@ const App: React.FC = () => {
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </HashRouter>
+      </BrowserRouter>
     </DataProvider>
   );
 };
