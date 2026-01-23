@@ -45,19 +45,20 @@ const Header: React.FC = () => {
           <div className={`flex justify-between items-center bg-white/50 backdrop-blur-sm border border-white/40 rounded-full px-6 py-2 transition-all duration-300 ${scrolled ? 'bg-transparent border-none p-0' : 'shadow-sm'}`}>
             
             {/* Logo Section */}
-            <Link to="/" onClick={handleLinkClick} className="flex items-center space-x-3 cursor-pointer group">
+            <Link to="/" onClick={handleLinkClick} className="flex items-center space-x-2 md:space-x-3 cursor-pointer group">
               <img 
                 src={globalImages.logo} 
                 alt="Logo THPT Hương Khê" 
-                className={`h-8 w-8 object-cover transition-all duration-500 group-hover:scale-110 ${
+                className={`h-6 w-6 md:h-8 md:w-8 object-cover transition-all duration-500 group-hover:scale-110 ${
                   scrolled ? 'rotate-0' : '-rotate-3'
                 }`} 
               />
               <div className="flex flex-col">
-                <h1 className={`text-xl font-bold font-heading leading-none transition-colors ${scrolled ? 'text-slate-900' : 'text-slate-800'}`}>
-                  {SCHOOL_NAME}
+                <h1 className={`text-lg md:text-xl font-bold font-heading leading-none transition-colors ${scrolled ? 'text-slate-900' : 'text-slate-800'}`}>
+                  <span className="hidden sm:inline">{SCHOOL_NAME}</span>
+                  <span className="sm:hidden">THPT Hương Khê</span>
                 </h1>
-                <span className="text-[9px] font-bold tracking-wide text-primary-600 uppercase mt-0.5">60 NĂM HÌNH THÀNH VÀ PHÁT TRIỂN</span>
+                <span className="text-[8px] md:text-[9px] font-bold tracking-wide text-primary-600 uppercase mt-0.5 hidden md:inline">60 NĂM HÌNH THÀNH VÀ PHÁT TRIỂN</span>
               </div>
             </Link>
 
@@ -93,7 +94,24 @@ const Header: React.FC = () => {
       </header>
 
       {/* Mobile Menu Overlay */}
-      <div className={`fixed inset-0 z-40 bg-white/95 backdrop-blur-xl transition-transform duration-500 ease-in-out md:hidden flex flex-col justify-center items-center space-y-6 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`fixed inset-0 z-40 bg-white/95 backdrop-blur-xl transition-transform duration-500 ease-in-out md:hidden flex flex-col justify-center items-center space-y-8 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <button
+          onClick={toggleMenu}
+          className="absolute top-6 right-6 text-slate-600 hover:text-slate-800 p-2"
+        >
+          <X className="h-8 w-8" />
+        </button>
+        <div className="flex items-center space-x-3 mb-8">
+          <img 
+            src={globalImages.logo} 
+            alt="Logo THPT Hương Khê" 
+            className="h-10 w-10 object-cover rounded-lg" 
+          />
+          <div className="text-center">
+            <h2 className="text-lg font-bold text-slate-800">THPT Hương Khê</h2>
+            <p className="text-xs text-primary-600">60 NĂM HÌNH THÀNH</p>
+          </div>
+        </div>
          {NAV_LINKS.map((link) => (
             <NavLink
               key={link.path}
