@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import { Plus, Edit, Trash2, X, Save, Calendar, FileText, BookOpen } from 'lucide-react';
-import { ScheduleRow, ExamItem, FormItem } from '../../types';
+import { ScheduleRow, ExamItem, FormItem, ClassSchedule } from '../../types';
 
 const StudentCornerManager: React.FC = () => {
   const { studentCorner, updateStudentCorner, addExam, deleteExam, addForm, deleteForm } = useData();
@@ -17,8 +17,9 @@ const StudentCornerManager: React.FC = () => {
     scheduleTitle: studentCorner.scheduleTitle,
     scheduleDescription: studentCorner.scheduleDescription,
     scheduleNote: studentCorner.scheduleNote,
-    scheduleRows: studentCorner.scheduleRows,
+    scheduleByClass: studentCorner.scheduleByClass,
   });
+  const [selectedClass, setSelectedClass] = useState<string>(studentCorner.scheduleByClass[0]?.className || '');
 
   // Exam State
   const [examData, setExamData] = useState({
@@ -34,39 +35,52 @@ const StudentCornerManager: React.FC = () => {
   });
 
   // Schedule
+  const currentClassSchedule = scheduleData.scheduleByClass.find((cls) => cls.className === selectedClass) || scheduleData.scheduleByClass[0];
+
+  const updateClassSchedule = (updater: (cls: ClassSchedule) => ClassSchedule) => {
+    setScheduleData({
+      ...scheduleData,
+      scheduleByClass: scheduleData.scheduleByClass.map((cls) =>
+        cls.className === (currentClassSchedule?.className || selectedClass) ? updater(cls) : cls
+      ),
+    });
+  };
+
   const handleSaveSchedule = () => {
     updateStudentCorner({
       ...studentCorner,
       scheduleTitle: scheduleData.scheduleTitle,
       scheduleDescription: scheduleData.scheduleDescription,
       scheduleNote: scheduleData.scheduleNote,
-      scheduleRows: scheduleData.scheduleRows,
+      scheduleByClass: scheduleData.scheduleByClass,
     });
     setIsScheduleEditOpen(false);
   };
 
   const handleAddScheduleRow = () => {
-    setScheduleData({
-      ...scheduleData,
-      scheduleRows: [...scheduleData.scheduleRows, { day: '', periods: ['', '', '', '', ''] }],
-    });
+    updateClassSchedule((cls) => ({
+      ...cls,
+      scheduleRows: [...cls.scheduleRows, { day: '', periods: ['', '', '', '', ''] }],
+    }));
   };
 
   const handleUpdateScheduleRow = (idx: number, field: 'day' | 'periods', value: any) => {
-    const updated = [...scheduleData.scheduleRows];
-    if (field === 'day') {
-      updated[idx].day = value;
-    } else {
-      updated[idx].periods = value;
-    }
-    setScheduleData({ ...scheduleData, scheduleRows: updated });
+    updateClassSchedule((cls) => {
+      const updated = [...cls.scheduleRows];
+      if (field === 'day') {
+        updated[idx].day = value;
+      } else {
+        updated[idx].periods = value;
+      }
+      return { ...cls, scheduleRows: updated };
+    });
   };
 
   const handleDeleteScheduleRow = (idx: number) => {
-    setScheduleData({
-      ...scheduleData,
-      scheduleRows: scheduleData.scheduleRows.filter((_, i) => i !== idx),
-    });
+    updateClassSchedule((cls) => ({
+      ...cls,
+      scheduleRows: cls.scheduleRows.filter((_, i) => i !== idx),
+    }));
   };
 
   // Exams
@@ -205,9 +219,21 @@ const StudentCornerManager: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">Dòng thời khóa biểu</label>
+                  <div className="flex items-center gap-3 mb-3">
+                    <label className="block text-sm font-bold text-slate-800 dark:text-slate-200">Chọn lớp</label>
+                    <select
+                      className="px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white"
+                      value={selectedClass}
+                      onChange={(e) => setSelectedClass(e.target.value)}
+                    >
+                      {scheduleData.scheduleByClass.map((cls) => (
+                        <option key={cls.className} value={cls.className}>{cls.className}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">Dòng thời khóa biểu ({selectedClass})</label>
                   <div className="space-y-3">
-                    {scheduleData.scheduleRows.map((row, idx) => (
+                    {currentClassSchedule?.scheduleRows.map((row, idx) => (
                       <div key={idx} className="flex gap-2">
                         <input
                           type="text"
@@ -278,6 +304,21 @@ const StudentCornerManager: React.FC = () => {
               <div className="text-slate-600 dark:text-slate-300">
                 <p className="font-bold mb-2">{scheduleData.scheduleTitle}</p>
                 <p className="text-sm mb-4">{scheduleData.scheduleDescription}</p>
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {scheduleData.scheduleByClass.map((cls) => (
+                    <button
+                      key={cls.className}
+                      onClick={() => setSelectedClass(cls.className)}
+                      className={`px-3 py-1 rounded-full text-sm font-semibold border transition-colors ${
+                        selectedClass === cls.className
+                          ? 'bg-blue-600 text-white border-blue-600'
+                          : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-600 hover:border-blue-400'
+                      }`}
+                    >
+                      {cls.className}
+                    </button>
+                  ))}
+                </div>
                 <table className="w-full border border-slate-200 dark:border-slate-600 text-sm">
                   <thead>
                     <tr className="bg-slate-100 dark:bg-slate-700">
@@ -290,7 +331,7 @@ const StudentCornerManager: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {scheduleData.scheduleRows.map((row, idx) => (
+                    {currentClassSchedule?.scheduleRows.map((row, idx) => (
                       <tr key={idx}>
                         <td className="border border-slate-200 dark:border-slate-600 p-2 font-bold bg-slate-50 dark:bg-slate-700">{row.day}</td>
                         {row.periods.map((period, pIdx) => (

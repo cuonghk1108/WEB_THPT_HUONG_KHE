@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Calendar, Download, FileText, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
@@ -6,6 +6,11 @@ import { useData } from '../context/DataContext';
 const StudentCorner: React.FC = () => {
   const { studentCorner } = useData();
   const [activeTab, setActiveTab] = useState<'schedule' | 'exam' | 'forms'>('schedule');
+  const [selectedClass, setSelectedClass] = useState<string>(studentCorner.scheduleByClass[0]?.className || '');
+
+  const currentSchedule = useMemo(() => {
+    return studentCorner.scheduleByClass.find((item) => item.className === selectedClass) || studentCorner.scheduleByClass[0];
+  }, [selectedClass, studentCorner.scheduleByClass]);
 
   const handleDownload = (itemName: string) => {
     alert(`Đang tải xuống: ${itemName}`);
@@ -59,6 +64,21 @@ const StudentCorner: React.FC = () => {
                 </button>
               </div>
               <div className="overflow-x-auto">
+                <div className="flex flex-wrap gap-3 mb-4">
+                  {studentCorner.scheduleByClass.map((cls) => (
+                    <button
+                      key={cls.className}
+                      onClick={() => setSelectedClass(cls.className)}
+                      className={`px-3 py-1 rounded-full text-sm font-semibold border transition-colors ${
+                        selectedClass === cls.className
+                          ? 'bg-blue-600 text-white border-blue-600'
+                          : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-600 hover:border-blue-400'
+                      }`}
+                    >
+                      {cls.className}
+                    </button>
+                  ))}
+                </div>
                 <table className="w-full border-collapse border border-slate-200 dark:border-slate-600 text-sm">
                   <thead>
                     <tr className="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">
@@ -71,7 +91,7 @@ const StudentCorner: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {studentCorner.scheduleRows.map((row, idx) => (
+                    {currentSchedule?.scheduleRows.map((row, idx) => (
                       <tr key={idx} className="text-center text-slate-700 dark:text-slate-300">
                         <td className="border border-slate-200 dark:border-slate-600 p-3 font-bold bg-slate-50 dark:bg-slate-700">{row.day}</td>
                         {row.periods.map((period, pIdx) => (

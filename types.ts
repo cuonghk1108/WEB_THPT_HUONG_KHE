@@ -81,6 +81,11 @@ export interface ScheduleRow {
   periods: string[];
 }
 
+export interface ClassSchedule {
+  className: string;
+  scheduleRows: ScheduleRow[];
+}
+
 export interface ExamItem {
   id: number;
   date: string;
@@ -96,7 +101,7 @@ export interface FormItem {
 export interface StudentCornerData {
   scheduleTitle: string;
   scheduleDescription: string;
-  scheduleRows: ScheduleRow[];
+  scheduleByClass: ClassSchedule[];
   scheduleNote: string;
   examTitle: string;
   exams: ExamItem[];
