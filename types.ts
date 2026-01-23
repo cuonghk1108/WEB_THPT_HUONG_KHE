@@ -47,6 +47,7 @@ export interface GlobalImages {
   homeHero: string;
   principal: string;
   introHistory: string;
+  logo: string;
 }
 
 export interface Teacher {

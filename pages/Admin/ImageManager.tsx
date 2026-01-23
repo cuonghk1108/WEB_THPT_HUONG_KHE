@@ -61,6 +61,11 @@ const ImageManager: React.FC = () => {
         label: 'Ảnh Lịch Sử', 
         description: 'Hình ảnh hiển thị trong trang Giới thiệu phần Lịch sử hình thành.' 
     },
+    { 
+        key: 'logo', 
+        label: 'Logo Trường', 
+        description: 'Logo chính thức của trường THPT Hương Khê.' 
+    },
   ];
 
   return (

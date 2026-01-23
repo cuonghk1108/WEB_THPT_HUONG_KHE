@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, GraduationCap } from 'lucide-react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { NAV_LINKS, SCHOOL_NAME } from '../constants';
+import { useData } from '../context/DataContext';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const { globalImages } = useData();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,12 +46,12 @@ const Header: React.FC = () => {
             
             {/* Logo Section */}
             <Link to="/" onClick={handleLinkClick} className="flex items-center space-x-3 cursor-pointer group">
-              <div className={`p-2.5 rounded-xl transition-all duration-500 shadow-lg group-hover:scale-110 ${
+              <div className={`p-2.5 rounded-xl transition-all duration-500 shadow-lg group-hover:scale-110 overflow-hidden ${
                 scrolled 
                   ? 'bg-gradient-to-br from-primary-600 to-primary-800 rotate-0' 
                   : 'bg-gradient-to-br from-primary-500 to-primary-700 -rotate-3'
               }`}>
-                 <GraduationCap className="h-6 w-6 text-white" />
+                 <img src={globalImages.logo} alt="Logo THPT Hương Khê" className="h-6 w-6 object-cover" />
               </div>
               <div className="flex flex-col">
                 <h1 className={`text-xl font-bold font-heading leading-none transition-colors ${scrolled ? 'text-slate-900' : 'text-slate-800'}`}>
