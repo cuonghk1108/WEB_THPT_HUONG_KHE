@@ -2,6 +2,8 @@
 
 interface ImportMetaEnv {
   readonly VITE_GEMINI_API_KEY: string;
+  readonly VITE_JSONBIN_API_KEY: string;
+  readonly VITE_JSONBIN_BIN_ID: string;
 }
 
 interface ImportMeta {

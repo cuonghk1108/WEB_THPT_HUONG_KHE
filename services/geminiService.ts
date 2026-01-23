@@ -1,14 +1,11 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { SCHOOL_KNOWLEDGE_BASE } from "../constants";
 
-// --- CẤU HÌNH API KEY TẠI ĐÂY ---
-const HARDCODED_API_KEY = "AIzaSyD-xHkY5JbhU0iZIPvAywtd-l7tguGOkmU"; 
-
 /**
  * Creates a new Chat Session with the school's knowledge base.
  */
 export const createChatSession = () => {
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY || HARDCODED_API_KEY;
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
   
   if (!apiKey || apiKey === "") {
     console.warn("Chưa cấu hình Gemini API Key.");

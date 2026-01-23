@@ -1,8 +1,8 @@
 // Cloud storage using JSONBin.io (free tier - 100k requests/month)
 // Create your own bin at https://jsonbin.io
 
-const JSONBIN_API_KEY = '$2a$10$bkywhTiV1oToNcOUSc0brulL8H/qWccAMLCxd5ULfKNCUY2pMbLku'; // Replace with your key from jsonbin.io
-const BIN_ID = '697323b7d0ea881f407ef5ba'; // Replace with your bin ID
+const JSONBIN_API_KEY = import.meta.env.VITE_JSONBIN_API_KEY || '';
+const BIN_ID = import.meta.env.VITE_JSONBIN_BIN_ID || '';
 
 interface StorageData {
   globalImages: any;
