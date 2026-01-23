@@ -52,7 +52,8 @@ const Home: React.FC = () => {
                 <img 
                   src={globalImages.homeHero} 
                   alt="Khuôn viên trường học" 
-                  className="w-full h-auto object-cover hover:scale-105 transition-transform duration-1000"
+                  className="w-full h-auto object-cover hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
                 />
               </div>
               {/* Decorative Elements */}
@@ -114,6 +115,7 @@ const Home: React.FC = () => {
                     src={globalImages.principal}
                     alt="Hiệu trưởng" 
                     className="w-full h-full rounded-full border-4 border-white/20 shadow-lg object-cover" 
+                    loading="lazy"
                   />
                </div>
                <div className="text-center md:text-left">

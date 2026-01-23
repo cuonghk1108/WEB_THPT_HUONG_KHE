@@ -77,7 +77,8 @@ const News: React.FC = () => {
                 <img 
                   src={featuredArticle.imageUrl} 
                   alt={featuredArticle.title} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
                 <div className="absolute bottom-0 left-0 w-full p-6 md:p-10 text-white">
@@ -114,9 +115,10 @@ const News: React.FC = () => {
                      <article key={item.id} className="group flex flex-col h-full bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer" onClick={() => setSelectedArticle(item)}>
                        <div className="aspect-[16/10] overflow-hidden relative rounded-t-2xl">
                          <img 
-                            src={item.imageUrl} 
-                            alt={item.title} 
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                           src={item.imageUrl} 
+                           alt={item.title} 
+                           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                           loading="lazy"
                          />
                          <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-slate-800 shadow-sm">
                            {item.category}
