@@ -4,7 +4,7 @@ import { SCHOOL_KNOWLEDGE_BASE } from "../constants";
 // --- CẤU HÌNH API KEY TẠI ĐÂY ---
 // Bạn hãy dán API Key của bạn vào giữa dấu ngoặc kép bên dưới.
 // Ví dụ: const HARDCODED_API_KEY = "AIzaSyDaMz...";
-const HARDCODED_API_KEY = ""; 
+const HARDCODED_API_KEY = "AIzaSyDph-VSpQQ1zh5yXlSN_qWerr4Omk0-47E"; 
 
 /**
  * Creates a new Chat Session with the school's knowledge base.
