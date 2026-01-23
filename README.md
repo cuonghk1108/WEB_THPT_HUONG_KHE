@@ -107,7 +107,7 @@ AI/
 
 Đăng nhập admin tại: `/admin/login`
 
-**Mật khẩu mặc định:** `cuonghk1108`
+**Mật khẩu mặc định:** `admin`
 
 Quản lý:
 - Tin tức
