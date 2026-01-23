@@ -521,10 +521,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (saved) {
         const parsed = JSON.parse(saved);
         if (!parsed.scheduleByClass && parsed.scheduleRows) {
+          // Legacy format: only one scheduleRows -> wrap as a single class
           parsed.scheduleByClass = [{ className: 'Chung', scheduleRows: parsed.scheduleRows }];
           delete parsed.scheduleRows;
         }
-        if (parsed.scheduleByClass && parsed.scheduleByClass.length > 0) {
+        // If data is incomplete (too few classes), fall back to fresh default
+        if (parsed.scheduleByClass && parsed.scheduleByClass.length >= 5) {
           return parsed;
         }
       }
