@@ -16,17 +16,6 @@ const ClubManager: React.FC = () => {
     imageUrl: ''
   });
 
-  const handleFileChange = (file: File | null) => {
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const dataUrl = e.target?.result as string;
-        setFormData(prev => ({ ...prev, imageUrl: dataUrl }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const resetForm = () => {
     setFormData({ name: '', description: '', members: 0, schedule: '', imageUrl: '' });
     setEditingItem(null);
@@ -123,8 +112,8 @@ const ClubManager: React.FC = () => {
                         </div>
                     </div>
                     <div>
-                        <label className="block text-sm font-bold text-slate-800 mb-1">Upload ảnh bìa CLB</label>
-                        <input type="file" accept="image/*" className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none" onChange={e => handleFileChange(e.target.files?.[0] || null)} />
+                        <label className="block text-sm font-bold text-slate-800 mb-1">Link ảnh bìa CLB</label>
+                        <input type="text" className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none" value={formData.imageUrl} onChange={e => setFormData({...formData, imageUrl: e.target.value})} placeholder="https://..." />
                     </div>
                     <div className="pt-4 flex justify-end gap-3">
                         <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-slate-700 hover:bg-slate-100 font-bold rounded-lg border border-slate-300">Hủy</button>

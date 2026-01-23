@@ -20,7 +20,7 @@ const Admissions: React.FC = () => {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-white dark:bg-slate-900 min-h-screen">
        <div className="bg-secondary-600 text-white pt-32 pb-20 relative overflow-hidden">
         {/* Decorative Circles */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/3"></div>
@@ -45,8 +45,8 @@ const Admissions: React.FC = () => {
           
           {/* Main Info */}
           <div className="lg:col-span-2 space-y-8">
-            <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+            <div className="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 flex items-center gap-2">
                 <Calendar className="text-secondary-600" /> Thông tin chung
               </h2>
               <div className="space-y-4 text-gray-700">
@@ -65,8 +65,8 @@ const Admissions: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+            <div className="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 flex items-center gap-2">
                 <FileText className="text-secondary-600" /> Hồ sơ nhập học
               </h2>
               <ul className="space-y-3 text-gray-700">

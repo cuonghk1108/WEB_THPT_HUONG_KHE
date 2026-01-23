@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { NewsItem, GlobalImages, Teacher, Club, GalleryItem } from '../types';
+import { NewsItem, GlobalImages, Teacher, Club, GalleryItem, StudentCornerData, ExamItem, FormItem } from '../types';
+import { cloudStorage } from '../services/cloudStorage';
 
 interface DataContextType {
   news: NewsItem[];
@@ -23,6 +24,13 @@ interface DataContextType {
   gallery: GalleryItem[];
   addGalleryItem: (item: Omit<GalleryItem, 'id'>) => void;
   deleteGalleryItem: (id: number) => void;
+
+  studentCorner: StudentCornerData;
+  updateStudentCorner: (data: StudentCornerData) => void;
+  addExam: (exam: Omit<ExamItem, 'id'>) => void;
+  deleteExam: (id: number) => void;
+  addForm: (form: Omit<FormItem, 'id'>) => void;
+  deleteForm: (id: number) => void;
 
   isAuthenticated: boolean;
   login: () => void;
@@ -188,33 +196,113 @@ const INITIAL_GALLERY: GalleryItem[] = [
   { id: 4, title: 'Học sinh giỏi Quốc gia', category: 'Thành tích', imageUrl: 'https://images.unsplash.com/photo-1546519638-68e109498ee2?q=80&w=600' },
 ];
 
+const INITIAL_STUDENT_CORNER: StudentCornerData = {
+  scheduleTitle: 'Thời khóa biểu (Áp dụng từ tuần 5)',
+  scheduleDescription: 'Lịch học chi tiết cho từng lớp',
+  scheduleRows: [
+    { day: 'Thứ 2', periods: ['Chào cờ', 'Toán', 'Toán', 'Lý', 'Hóa'] },
+    { day: 'Thứ 3', periods: ['Văn', 'Văn', 'Anh', 'Sử', 'Địa'] },
+    { day: 'Thứ 4', periods: ['Tin', 'Tin', 'Sinh', 'GDCD', 'CN'] },
+  ],
+  scheduleNote: '* Đây là thời khóa biểu mẫu. Học sinh vui lòng xem chi tiết theo từng lớp tại bảng tin nhà trường.',
+  examTitle: 'Lịch kiểm tra tập trung',
+  exams: [
+    { id: 1, date: '15/10/2025', subject: 'Toán học (1 tiết)', time: '7:00 - 7:45' },
+    { id: 2, date: '16/10/2025', subject: 'Ngữ văn (2 tiết)', time: '8:00 - 9:30' },
+    { id: 3, date: '18/10/2025', subject: 'Tiếng Anh (1 tiết)', time: '9:45 - 10:30' },
+  ],
+  formTitle: 'Biểu mẫu & Quy định',
+  forms: [
+    { id: 1, name: 'Đơn xin nghỉ học có phép' },
+    { id: 2, name: 'Đơn xin phúc khảo bài thi' },
+    { id: 3, name: 'Giấy xác nhận học sinh' },
+    { id: 4, name: 'Bản cam kết an toàn giao thông' },
+    { id: 5, name: 'Nội quy học sinh (Sửa đổi 2025)' },
+  ],
+};
+
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // News State
   const [news, setNews] = useState<NewsItem[]>(() => {
-    const saved = localStorage.getItem('school_news');
-    return saved ? JSON.parse(saved) : INITIAL_NEWS;
+    try {
+      const saved = localStorage.getItem('school_news');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return (parsed && parsed.length > 0) ? parsed : INITIAL_NEWS;
+      }
+    } catch (error) {
+      console.error('Error loading news from localStorage:', error);
+    }
+    return INITIAL_NEWS;
   });
 
   // Global Images State
   const [globalImages, setGlobalImages] = useState<GlobalImages>(() => {
-    const saved = localStorage.getItem('school_images');
-    return saved ? JSON.parse(saved) : INITIAL_IMAGES;
+    try {
+      const saved = localStorage.getItem('school_images');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Check if parsed data has actual values
+        if (parsed && parsed.homeHero && parsed.logo) {
+          return parsed;
+        }
+      }
+    } catch (error) {
+      console.error('Error loading images from localStorage:', error);
+    }
+    return INITIAL_IMAGES;
   });
 
   // Dynamic Data States with persistence
   const [teachers, setTeachers] = useState<Teacher[]>(() => {
-    const saved = localStorage.getItem('school_teachers');
-    return saved ? JSON.parse(saved) : INITIAL_TEACHERS;
+    try {
+      const saved = localStorage.getItem('school_teachers');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return (parsed && parsed.length > 0) ? parsed : INITIAL_TEACHERS;
+      }
+    } catch (error) {
+      console.error('Error loading teachers from localStorage:', error);
+    }
+    return INITIAL_TEACHERS;
   });
 
   const [clubs, setClubs] = useState<Club[]>(() => {
-    const saved = localStorage.getItem('school_clubs');
-    return saved ? JSON.parse(saved) : INITIAL_CLUBS;
+    try {
+      const saved = localStorage.getItem('school_clubs');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return (parsed && parsed.length > 0) ? parsed : INITIAL_CLUBS;
+      }
+    } catch (error) {
+      console.error('Error loading clubs from localStorage:', error);
+    }
+    return INITIAL_CLUBS;
   });
 
   const [gallery, setGallery] = useState<GalleryItem[]>(() => {
-    const saved = localStorage.getItem('school_gallery');
-    return saved ? JSON.parse(saved) : INITIAL_GALLERY;
+    try {
+      const saved = localStorage.getItem('school_gallery');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return (parsed && parsed.length > 0) ? parsed : INITIAL_GALLERY;
+      }
+    } catch (error) {
+      console.error('Error loading gallery from localStorage:', error);
+    }
+    return INITIAL_GALLERY;
+  });
+
+  const [studentCorner, setStudentCorner] = useState<StudentCornerData>(() => {
+    try {
+      const saved = localStorage.getItem('school_student_corner');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (error) {
+      console.error('Error loading student corner from localStorage:', error);
+    }
+    return INITIAL_STUDENT_CORNER;
   });
 
   // Auth State
@@ -222,26 +310,85 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return localStorage.getItem('admin_auth') === 'true';
   });
 
-  // Persistence Effects
+  // Load from cloud on first mount (only if cloud has data)
   useEffect(() => {
-    localStorage.setItem('school_news', JSON.stringify(news));
-  }, [news]);
+    const loadData = async () => {
+      const cloudData = await cloudStorage.fetchData();
+      if (cloudData) {
+        // Only update if cloud actually has data (not empty)
+        if (cloudData.globalImages && Object.keys(cloudData.globalImages).length > 0) {
+          setGlobalImages(cloudData.globalImages);
+          localStorage.setItem('school_images', JSON.stringify(cloudData.globalImages));
+        }
+        if (cloudData.news && cloudData.news.length > 0) {
+          setNews(cloudData.news);
+          localStorage.setItem('school_news', JSON.stringify(cloudData.news));
+        }
+        if (cloudData.teachers && cloudData.teachers.length > 0) {
+          setTeachers(cloudData.teachers);
+          localStorage.setItem('school_teachers', JSON.stringify(cloudData.teachers));
+        }
+        if (cloudData.clubs && cloudData.clubs.length > 0) {
+          setClubs(cloudData.clubs);
+          localStorage.setItem('school_clubs', JSON.stringify(cloudData.clubs));
+        }
+        if (cloudData.gallery && cloudData.gallery.length > 0) {
+          setGallery(cloudData.gallery);
+          localStorage.setItem('school_gallery', JSON.stringify(cloudData.gallery));
+        }
+      }
+    };
+    loadData();
+  }, []);
 
+  // Save to both localStorage and cloud
   useEffect(() => {
     localStorage.setItem('school_images', JSON.stringify(globalImages));
+    const timer = setTimeout(() => {
+      cloudStorage.saveData({ globalImages });
+    }, 1000);
+    return () => clearTimeout(timer);
   }, [globalImages]);
 
   useEffect(() => {
+    localStorage.setItem('school_news', JSON.stringify(news));
+    const timer = setTimeout(() => {
+      cloudStorage.saveData({ news });
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [news]);
+
+  useEffect(() => {
     localStorage.setItem('school_teachers', JSON.stringify(teachers));
+    const timer = setTimeout(() => {
+      cloudStorage.saveData({ teachers });
+    }, 1000);
+    return () => clearTimeout(timer);
   }, [teachers]);
 
   useEffect(() => {
     localStorage.setItem('school_clubs', JSON.stringify(clubs));
+    const timer = setTimeout(() => {
+      cloudStorage.saveData({ clubs });
+    }, 1000);
+    return () => clearTimeout(timer);
   }, [clubs]);
 
   useEffect(() => {
     localStorage.setItem('school_gallery', JSON.stringify(gallery));
+    const timer = setTimeout(() => {
+      cloudStorage.saveData({ gallery });
+    }, 1000);
+    return () => clearTimeout(timer);
   }, [gallery]);
+
+  useEffect(() => {
+    localStorage.setItem('school_student_corner', JSON.stringify(studentCorner));
+    const timer = setTimeout(() => {
+      cloudStorage.saveData({ studentCorner });
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [studentCorner]);
 
   useEffect(() => {
       localStorage.setItem('admin_auth', String(isAuthenticated));
@@ -300,6 +447,37 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setGallery(gallery.filter(g => g.id !== id));
   };
 
+  // StudentCorner
+  const updateStudentCorner = (data: StudentCornerData) => {
+    setStudentCorner(data);
+  };
+  const addExam = (exam: Omit<ExamItem, 'id'>) => {
+    const newId = studentCorner.exams.length > 0 ? Math.max(...studentCorner.exams.map(e => e.id)) + 1 : 1;
+    setStudentCorner({
+      ...studentCorner,
+      exams: [...studentCorner.exams, { ...exam, id: newId }]
+    });
+  };
+  const deleteExam = (id: number) => {
+    setStudentCorner({
+      ...studentCorner,
+      exams: studentCorner.exams.filter(e => e.id !== id)
+    });
+  };
+  const addForm = (form: Omit<FormItem, 'id'>) => {
+    const newId = studentCorner.forms.length > 0 ? Math.max(...studentCorner.forms.map(f => f.id)) + 1 : 1;
+    setStudentCorner({
+      ...studentCorner,
+      forms: [...studentCorner.forms, { ...form, id: newId }]
+    });
+  };
+  const deleteForm = (id: number) => {
+    setStudentCorner({
+      ...studentCorner,
+      forms: studentCorner.forms.filter(f => f.id !== id)
+    });
+  };
+
   const login = () => setIsAuthenticated(true);
   const logout = () => setIsAuthenticated(false);
 
@@ -310,6 +488,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       teachers, addTeacher, updateTeacher, deleteTeacher,
       clubs, addClub, updateClub, deleteClub,
       gallery, addGalleryItem, deleteGalleryItem,
+      studentCorner, updateStudentCorner, addExam, deleteExam, addForm, deleteForm,
       isAuthenticated, login, logout 
     }}>
       {children}

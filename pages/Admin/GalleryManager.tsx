@@ -1,25 +1,59 @@
 import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import { Plus, Trash2, X, Save, Image as ImageIcon } from 'lucide-react';
+import { cloudStorage } from '../../services/cloudStorage';
 
 const GalleryManager: React.FC = () => {
   const { gallery, addGalleryItem, deleteGalleryItem } = useData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({ title: '', category: 'Sự kiện', imageUrl: '' });
-
-  const handleFileChange = (file: File | null) => {
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const dataUrl = e.target?.result as string;
-        setFormData(prev => ({ ...prev, imageUrl: dataUrl }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   const resetForm = () => {
     setFormData({ title: '', category: 'Sự kiện', imageUrl: '' });
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !file.type.startsWith('image/')) {
+      alert('Vui lòng chọn file ảnh hợp lệ!');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Kích thước ảnh quá lớn! Vui lòng chọn ảnh dưới 5MB.');
+      return;
+    }
+
+    setUploadingImage(true);
+
+    try {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64String = reader.result as string;
+        
+        try {
+          // Try to upload to ImgBB cloud
+          const imageUrl = await cloudStorage.uploadImage(base64String, 'gallery');
+          if (imageUrl) {
+            setFormData({...formData, imageUrl});
+            setUploadingImage(false);
+            return;
+          }
+        } catch (error) {
+          console.error('Cloud upload failed, using base64:', error);
+        }
+
+        // Fallback to base64
+        setFormData({...formData, imageUrl: base64String});
+        setUploadingImage(false);
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Lỗi khi tải ảnh lên!');
+      setUploadingImage(false);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -75,8 +109,28 @@ const GalleryManager: React.FC = () => {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-sm font-bold text-slate-800 mb-1">Upload hình ảnh</label>
-                        <input required type="file" accept="image/*" className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none" onChange={e => handleFileChange(e.target.files?.[0] || null)} />
+                        <label className="block text-sm font-bold text-slate-800 mb-1">Hình ảnh</label>
+                        <div className="space-y-2">
+                            <div className="flex gap-2">
+                                <label className="flex-1 flex items-center justify-center px-4 py-3 border-2 border-dashed border-slate-300 rounded-lg hover:border-primary-500 hover:bg-primary-50 cursor-pointer transition-colors">
+                                    <input 
+                                        type="file" 
+                                        accept="image/*" 
+                                        onChange={handleImageUpload}
+                                        disabled={uploadingImage}
+                                        className="hidden"
+                                    />
+                                    <span className="text-sm font-bold text-slate-700">
+                                        {uploadingImage ? 'Đang upload...' : 'Chọn ảnh từ máy'}
+                                    </span>
+                                </label>
+                                <div className="w-16 h-16 rounded border border-slate-300 overflow-hidden flex-shrink-0 bg-slate-50">
+                                    {formData.imageUrl && <img src={formData.imageUrl} alt="Preview" className="w-full h-full object-cover" />}
+                                </div>
+                            </div>
+                            <p className="text-xs text-slate-500 font-medium">Hoặc dán link ảnh:</p>
+                            <input required type="text" className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none" value={formData.imageUrl} onChange={e => setFormData({...formData, imageUrl: e.target.value})} placeholder="https://..." />
+                        </div>
                     </div>
                     <div className="pt-4 flex justify-end gap-3">
                         <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-slate-700 hover:bg-slate-100 font-bold rounded-lg border border-slate-300">Hủy</button>

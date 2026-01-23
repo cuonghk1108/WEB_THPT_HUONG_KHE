@@ -27,7 +27,7 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen pt-24 pb-20">
+    <div className="bg-white dark:bg-slate-900 min-h-screen pt-24 pb-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 max-w-2xl mx-auto">
            <h1 className="text-3xl md:text-4xl font-bold font-heading text-slate-900 mb-4">Liên hệ với chúng tôi</h1>
@@ -68,7 +68,7 @@ const Contact: React.FC = () => {
           {/* Form and Map */}
           <div className="lg:col-span-2 space-y-8">
              {/* Form */}
-             <div className="bg-white p-8 rounded-xl border border-slate-100 shadow-sm relative overflow-hidden">
+             <div className="bg-white dark:bg-slate-800 p-8 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm relative overflow-hidden">
                 {status === 'success' ? (
                   <div className="absolute inset-0 bg-white flex flex-col items-center justify-center z-10 animate-fade-in">
                     <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
@@ -80,7 +80,7 @@ const Contact: React.FC = () => {
                     </p>
                     <button 
                       onClick={() => setStatus('idle')}
-                      className="mt-6 px-6 py-2 bg-slate-100 text-slate-700 font-medium rounded-lg hover:bg-slate-200 transition-colors"
+                      className="mt-6 px-6 py-2 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 font-medium rounded-lg hover:bg-green-200 dark:hover:bg-green-800 transition-colors"
                     >
                       Gửi tin nhắn khác
                     </button>
@@ -157,8 +157,8 @@ const Contact: React.FC = () => {
              {/* Map */}
              <div className="bg-white p-2 rounded-xl border border-slate-100 shadow-sm h-64">
                <iframe 
-                title="Google Map"
-                src="https://maps.google.com/maps?q=344%20Tr%E1%BA%A7n%20Ph%C3%BA%2C%20H%C6%B0%C6%A1ng%20Kh%C3%ea%2C%20H%C3%a0%20T%C4%A9nh&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                title="Google Map - THPT Hương Khê"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3833.8179419506167!2d105.72843!3d18.33455!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3139296f0000000d%3A0x5mgx9f2!2s5MGX%2B9F2%20Kh%E1%BB%91i%204%2C%20H%C6%B0%C6%A1ng%20Kh%C3%AA%2C%20H%C3%a0%20T%C4%A9nh%2C%20Vi%E1%BB%87t%20Nam!5e0!3m2!1svi!2s!4v1674000000000"
                 width="100%" 
                 height="100%" 
                 style={{border:0}} 

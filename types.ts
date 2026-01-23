@@ -75,3 +75,31 @@ export interface GalleryItem {
   imageUrl: string;
   category: string;
 }
+
+export interface ScheduleRow {
+  day: string;
+  periods: string[];
+}
+
+export interface ExamItem {
+  id: number;
+  date: string;
+  subject: string;
+  time: string;
+}
+
+export interface FormItem {
+  id: number;
+  name: string;
+}
+
+export interface StudentCornerData {
+  scheduleTitle: string;
+  scheduleDescription: string;
+  scheduleRows: ScheduleRow[];
+  scheduleNote: string;
+  examTitle: string;
+  exams: ExamItem[];
+  formTitle: string;
+  forms: FormItem[];
+}

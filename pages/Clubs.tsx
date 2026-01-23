@@ -3,7 +3,7 @@ import { useData } from '../context/DataContext';
 import { Users, Calendar, ArrowRight } from 'lucide-react';
 
 const Clubs: React.FC = () => {
-  const { clubs, getImageSrc } = useData();
+  const { clubs } = useData();
 
   const handleRegister = (clubName: string) => {
     alert(`Cảm ơn bạn đã quan tâm đến ${clubName}. Vui lòng liên hệ Văn phòng Đoàn trường để nhận đơn đăng ký!`);
@@ -14,7 +14,7 @@ const Clubs: React.FC = () => {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen pb-16">
+    <div className="bg-white dark:bg-slate-900 min-h-screen pb-16">
       <div className="bg-gradient-to-br from-purple-700 to-indigo-800 text-white pt-32 pb-16">
         <div className="container mx-auto px-4 text-center">
           <span className="inline-block py-1 px-3 rounded-full bg-white/20 text-xs font-bold uppercase mb-4 backdrop-blur-sm">Hoạt động ngoại khóa</span>
@@ -31,7 +31,7 @@ const Clubs: React.FC = () => {
             <div key={club.id} className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 group flex flex-col md:flex-row h-full md:h-64">
               <div className="md:w-2/5 h-48 md:h-full relative overflow-hidden">
                 <img 
-                  src={getImageSrc(club.imageUrl)} 
+                  src={club.imageUrl} 
                   alt={club.name} 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
@@ -64,7 +64,7 @@ const Clubs: React.FC = () => {
         </div>
         
         {/* Call to Action */}
-        <div className="mt-16 bg-white p-8 rounded-2xl shadow-sm border border-slate-100 text-center">
+        <div className="mt-16 bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 text-center">
             <h3 className="text-xl font-bold text-slate-900 mb-2">Bạn muốn thành lập CLB mới?</h3>
             <p className="text-slate-600 mb-6">Chúng tôi luôn khuyến khích những ý tưởng mới mẻ và sáng tạo từ học sinh.</p>
             <button 

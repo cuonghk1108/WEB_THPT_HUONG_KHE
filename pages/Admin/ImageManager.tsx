@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useData } from '../../context/DataContext';
-import { Save, Image as ImageIcon, RotateCcw } from 'lucide-react';
+import { Save, Image as ImageIcon, RotateCcw, Upload } from 'lucide-react';
 import { GlobalImages } from '../../types';
+import { cloudStorage } from '../../services/cloudStorage';
 
 const ImageManager: React.FC = () => {
   const { globalImages, updateGlobalImages } = useData();
@@ -13,19 +14,57 @@ const ImageManager: React.FC = () => {
     setFormData(globalImages);
   }, [globalImages]);
 
-  const handleFileChange = (key: keyof GlobalImages, file: File | null) => {
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const dataUrl = e.target?.result as string;
-        setFormData(prev => ({ ...prev, [key]: dataUrl }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleChange = (key: keyof GlobalImages, value: string) => {
     setFormData(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleFileUpload = async (key: keyof GlobalImages, file: File) => {
+    if (!file.type.startsWith('image/')) {
+      alert('Vui lòng chọn file ảnh hợp lệ!');
+      return;
+    }
+
+    // Check file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      alert('Kích thước ảnh quá lớn! Vui lòng chọn ảnh dưới 2MB.');
+      return;
+    }
+
+    setStatus('saving');
+
+    try {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64String = reader.result as string;
+        
+        try {
+          // Try to upload to ImgBB cloud
+          const imageUrl = await cloudStorage.uploadImage(base64String, key);
+          
+          // Update with cloud URL
+          const newImages = { ...formData, [key]: imageUrl };
+          setFormData(newImages);
+          updateGlobalImages(newImages);
+          
+          setStatus('success');
+          setTimeout(() => setStatus('idle'), 2000);
+        } catch (error) {
+          console.error('Cloud upload failed, using base64:', error);
+          // Fallback to base64 if cloud fails
+          const newImages = { ...formData, [key]: base64String };
+          setFormData(newImages);
+          updateGlobalImages(newImages);
+          
+          setStatus('success');
+          setTimeout(() => setStatus('idle'), 2000);
+        }
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Lỗi khi tải ảnh lên. Vui lòng thử lại!');
+      setStatus('idle');
+    }
   };
 
   const handleSave = () => {
@@ -49,7 +88,7 @@ const ImageManager: React.FC = () => {
     { 
         key: 'logo', 
         label: 'Logo Trường', 
-        description: 'Logo chính thức của trường THPT Hương Khê.' 
+        description: 'Logo hiển thị trên Header và toàn bộ website (Nên dùng ảnh vuông, nền trong suốt).' 
     },
     { 
         key: 'homeHero', 
@@ -72,7 +111,7 @@ const ImageManager: React.FC = () => {
     <div className="max-w-4xl mx-auto">
        <div className="mb-8">
           <h1 className="text-2xl font-bold font-heading text-slate-900">Quản lý Hình ảnh</h1>
-          <p className="text-slate-600 text-sm font-medium">Thay đổi các hình ảnh chính trên toàn bộ website.</p>
+          <p className="text-slate-600 text-sm font-medium">Thay đổi các hình ảnh chính trên toàn bộ website. Ảnh sẽ được lưu và hiển thị ngay lập tức.</p>
         </div>
 
         <div className="space-y-8">
@@ -85,14 +124,31 @@ const ImageManager: React.FC = () => {
                                 <h3 className="text-lg font-bold text-slate-800">{field.label}</h3>
                                 <p className="text-xs text-slate-500 font-medium mb-3">{field.description}</p>
                                 
-                                <div className="relative">
+                                <div className="relative mb-3">
+                                    <ImageIcon className="absolute left-3 top-2.5 h-5 w-5 text-slate-400" />
+                                    <input 
+                                        type="text" 
+                                        className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-slate-900 font-medium text-sm"
+                                        value={formData[field.key]}
+                                        onChange={(e) => handleChange(field.key, e.target.value)}
+                                        placeholder="https://... hoặc upload ảnh"
+                                    />
+                                </div>
+
+                                {/* Upload Button */}
+                                <label className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg cursor-pointer transition-colors text-sm font-semibold">
+                                    <Upload className="h-4 w-4" />
+                                    Tải ảnh lên từ máy
                                     <input 
                                         type="file" 
                                         accept="image/*"
-                                        className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-slate-900 font-medium text-sm"
-                                        onChange={(e) => handleFileChange(field.key, e.target.files?.[0] || null)}
+                                        className="hidden"
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0];
+                                            if (file) handleFileUpload(field.key, file);
+                                        }}
                                     />
-                                </div>
+                                </label>
                             </div>
                             
                             <div className="flex justify-end">

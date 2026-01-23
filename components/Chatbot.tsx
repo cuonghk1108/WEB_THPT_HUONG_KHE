@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, Send, X, GraduationCap, Loader2, Sparkles } from 'lucide-react';
-import { Chat } from "@google/genai";
+import { MessageCircle, Send, X, GraduationCap, Loader2, Bot } from 'lucide-react';
 import { createChatSession } from '../services/geminiService';
 import { ChatMessage, LoadingState } from '../types';
 
@@ -19,8 +18,7 @@ const Chatbot: React.FC = () => {
   const [input, setInput] = useState('');
   const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.IDLE);
   
-  // Ref to store the active Gemini Chat Session
-  const chatSessionRef = useRef<Chat | null>(null);
+  const chatSessionRef = useRef<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -28,15 +26,13 @@ const Chatbot: React.FC = () => {
   };
 
   useEffect(() => {
-    // Hide tooltip after 5s (Updated from 10s)
     const timer = setTimeout(() => setShowTooltip(false), 5000);
     
-    // Initialize the Chat Session on mount (using the admin configured key)
     const session = createChatSession();
     if (session) {
       chatSessionRef.current = session;
     } else {
-      console.error("Không thể khởi tạo Chatbot. Vui lòng kiểm tra API Key trong source code.");
+      console.error("Không thể khởi tạo Chatbot.");
     }
 
     return () => clearTimeout(timer);
@@ -66,9 +62,7 @@ const Chatbot: React.FC = () => {
     setInput('');
     setLoadingState(LoadingState.LOADING);
 
-    // Try to get session if not exists
     if (!chatSessionRef.current) {
-        // Retry creation
         const session = createChatSession();
         if (session) {
             chatSessionRef.current = session;
@@ -85,14 +79,9 @@ const Chatbot: React.FC = () => {
     }
 
     try {
-      let responseText = "Xin lỗi, không có phản hồi.";
-
-      if (chatSessionRef.current) {
-        const result = await chatSessionRef.current.sendMessage({ 
-          message: userMessageText 
-        });
-        responseText = result.text || "Xin lỗi, mình không có câu trả lời cho vấn đề này.";
-      }
+      const result = await chatSessionRef.current.sendMessage(userMessageText);
+      const response = result.response;
+      const responseText = (await response).text();
 
       const botMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -108,7 +97,7 @@ const Chatbot: React.FC = () => {
       const errorMessage: ChatMessage = {
          id: (Date.now() + 1).toString(),
          role: 'model',
-         text: "Xin lỗi, đã có lỗi kết nối. Vui lòng thử lại sau.",
+         text: `Xin lỗi, mình gặp vấn đề kỹ thuật. Lỗi: ${error instanceof Error ? error.message : 'Không xác định'}. Vui lòng thử lại sau!`,
          timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -148,20 +137,20 @@ const Chatbot: React.FC = () => {
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-50"></span>
           <span className="relative inline-flex rounded-full h-3 w-3 bg-red-400 border-2 border-primary-600"></span>
         </span>
-        <MessageCircle className="h-7 w-7 group-hover:scale-110 transition-transform" />
+        <Bot className="h-7 w-7 group-hover:scale-110 transition-transform" />
       </button>
 
       {/* Chat Window */}
       <div
         className={`${
           isOpen ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-10 pointer-events-none'
-        } transition-all duration-300 origin-bottom-right bg-white w-[350px] sm:w-[380px] h-[550px] rounded-3xl shadow-2xl flex flex-col border border-gray-100 overflow-hidden ring-1 ring-gray-100`}
+        } transition-all duration-300 origin-bottom-right bg-gradient-to-br from-slate-50 to-gray-100 dark:bg-slate-900 w-[350px] sm:w-[380px] h-[550px] rounded-3xl shadow-2xl flex flex-col border border-gray-200 dark:border-slate-700 overflow-hidden ring-1 ring-gray-200 dark:ring-slate-700`}
       >
         {/* Header */}
         <div className="bg-gradient-to-r from-primary-600 to-primary-800 p-4 flex justify-between items-center text-white shadow-md z-10">
           <div className="flex items-center space-x-3">
             <div className="bg-white/20 p-2 rounded-full backdrop-blur-sm border border-white/20">
-              <GraduationCap className="h-5 w-5" />
+              <Bot className="h-5 w-5" />
             </div>
             <div>
               <h3 className="font-bold text-sm font-heading">Trợ lý ảo AI</h3>
@@ -182,7 +171,7 @@ const Chatbot: React.FC = () => {
 
         {/* Content Area */}
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto p-4 bg-gray-50/50 scrollbar-thin scrollbar-thumb-gray-200">
+        <div className="flex-1 overflow-y-auto p-4 bg-gradient-to-br from-gray-50 to-blue-50/30 dark:bg-slate-800/30 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-slate-600">
             <div className="space-y-4">
             {messages.map((msg) => (
                 <div
@@ -190,15 +179,15 @@ const Chatbot: React.FC = () => {
                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start items-end'}`}
                 >
                 {msg.role === 'model' && (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-100 to-white border border-primary-50 flex items-center justify-center mr-2 flex-shrink-0 shadow-sm mb-1">
-                        <Sparkles className="h-4 w-4 text-primary-600" />
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-200 to-primary-100 dark:from-primary-900 dark:to-slate-800 border border-primary-300 dark:border-primary-700 flex items-center justify-center mr-2 flex-shrink-0 shadow-sm mb-1">
+                        <Bot className="h-4 w-4 text-primary-700 dark:text-primary-400" />
                     </div>
                 )}
                 <div
                     className={`max-w-[85%] p-3.5 rounded-2xl text-sm leading-relaxed shadow-sm ${
                     msg.role === 'user'
                         ? 'bg-primary-600 text-white rounded-br-none'
-                        : 'bg-white text-gray-700 border border-gray-100 rounded-bl-none'
+                        : 'bg-white dark:bg-slate-800 text-gray-800 dark:text-slate-200 border border-primary-200 dark:border-slate-700 rounded-bl-none'
                     }`}
                 >
                     {msg.text}
@@ -207,11 +196,11 @@ const Chatbot: React.FC = () => {
             ))}
             {loadingState === LoadingState.LOADING && (
                 <div className="flex justify-start items-end">
-                    <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center mr-2 mb-1">
-                        <Sparkles className="h-4 w-4 text-primary-600" />
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-200 to-primary-100 dark:bg-primary-900 flex items-center justify-center mr-2 mb-1 border border-primary-300 dark:border-primary-700">
+                        <Bot className="h-4 w-4 text-primary-700 dark:text-primary-400" />
                     </div>
-                <div className="bg-white p-3 rounded-2xl rounded-bl-none shadow-sm border border-gray-100">
-                    <Loader2 className="h-5 w-5 animate-spin text-primary-600" />
+                <div className="bg-white dark:bg-slate-800 p-3 rounded-2xl rounded-bl-none shadow-sm border border-primary-200 dark:border-slate-700">
+                    <Loader2 className="h-5 w-5 animate-spin text-primary-600 dark:text-primary-400" />
                 </div>
                 </div>
             )}
@@ -221,12 +210,12 @@ const Chatbot: React.FC = () => {
 
         {/* Quick Actions */}
         {messages.length < 4 && (
-            <div className="px-4 py-3 bg-gray-50/50 flex gap-2 overflow-x-auto scrollbar-hide mask-fade-right">
+            <div className="px-4 py-3 bg-gradient-to-r from-gray-100/70 to-blue-50/50 dark:bg-slate-800/30 flex gap-2 overflow-x-auto scrollbar-hide mask-fade-right">
             {quickQuestions.map((q, idx) => (
                 <button
                 key={idx}
                 onClick={() => { setInput(q); }}
-                className="whitespace-nowrap px-4 py-1.5 bg-white border border-primary-100 text-primary-700 text-xs font-medium rounded-full hover:bg-primary-50 hover:border-primary-200 hover:shadow-sm transition-all transform hover:-translate-y-0.5"
+                className="whitespace-nowrap px-4 py-1.5 bg-white dark:bg-slate-800 border border-primary-300 dark:border-primary-700 text-primary-700 dark:text-primary-400 text-xs font-medium rounded-full hover:bg-primary-50 dark:hover:bg-slate-700 hover:border-primary-400 dark:hover:border-primary-600 hover:shadow-sm transition-all transform hover:-translate-y-0.5"
                 >
                 {q}
                 </button>
@@ -235,15 +224,15 @@ const Chatbot: React.FC = () => {
         )}
 
         {/* Input Area */}
-        <div className="p-4 bg-white border-t border-gray-100">
-            <div className="flex items-center space-x-2 bg-white rounded-2xl px-4 py-2.5 border border-gray-300 focus-within:border-primary-400 focus-within:ring-2 focus-within:ring-primary-100 transition-all">
+        <div className="p-4 bg-gradient-to-r from-gray-100 to-blue-50/50 dark:bg-slate-900 border-t border-gray-300 dark:border-slate-700">
+            <div className="flex items-center space-x-2 bg-white dark:bg-slate-800 rounded-2xl px-4 py-2.5 border border-primary-300 dark:border-slate-600 focus-within:border-primary-500 dark:focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-100 dark:focus-within:ring-primary-900 transition-all shadow-sm">
             <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyPress}
                 placeholder="Nhập câu hỏi của bạn..."
-                className="flex-1 bg-transparent outline-none text-sm text-slate-900 placeholder-slate-400"
+                className="flex-1 bg-transparent outline-none text-sm text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-500"
                 disabled={loadingState === LoadingState.LOADING}
             />
             <button

@@ -37,10 +37,11 @@ Cổng thông tin điện tử trường THPT Hương Khê - Kết nối nhà tr
    npm install
    ```
 
-3. Tạo file `.env.local` và thêm API key:
+3. Tạo file `.env` và thêm API key:
    ```
-   GEMINI_API_KEY=your_api_key_here
+   VITE_GEMINI_API_KEY=your_api_key_here
    ```
+   Lấy API key tại: https://aistudio.google.com/app/apikey
 
 4. Chạy server local:
    ```bash

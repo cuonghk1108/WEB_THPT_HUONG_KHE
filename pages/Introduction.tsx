@@ -12,7 +12,7 @@ const Introduction: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-16">
+    <div className="bg-white dark:bg-slate-900 min-h-screen pb-16">
       <div className="bg-primary-900 text-white pt-32 pb-16">
         <div className="container mx-auto px-4">
           <h1 className="text-3xl md:text-5xl font-bold font-heading mb-4 text-center">Giới thiệu về nhà trường</h1>
@@ -26,7 +26,7 @@ const Introduction: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-white p-6 rounded-xl shadow-sm sticky top-24">
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm sticky top-24 border border-slate-100 dark:border-slate-700">
               <h3 className="font-bold text-lg mb-4 border-b pb-2">Mục lục</h3>
               <ul className="space-y-3 text-gray-600 cursor-pointer">
                 <li><a onClick={() => scrollToSection('lich-su')} className="hover:text-primary-600 block">Lịch sử hình thành</a></li>
@@ -39,7 +39,7 @@ const Introduction: React.FC = () => {
 
           {/* Content */}
           <div className="lg:col-span-3 space-y-12">
-            <section id="lich-su" className="bg-white p-8 rounded-xl shadow-sm">
+            <section id="lich-su" className="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
               <h2 className="text-2xl font-bold text-primary-900 mb-6 flex items-center gap-2">
                 <span className="w-2 h-8 bg-primary-600 rounded"></span> Lịch sử hình thành & Phát triển
               </h2>
@@ -67,7 +67,7 @@ const Introduction: React.FC = () => {
                   Chất lượng giáo dục toàn diện và mũi nhọn không ngừng được nâng cao. Tỷ lệ học sinh đậu tốt nghiệp hàng năm luôn ở mức cao, số lượng học sinh giỏi tỉnh, giỏi quốc gia và đỗ vào các trường Đại học danh tiếng ngày càng tăng. Trường THPT Hương Khê đã trở thành địa chỉ tin cậy, là cái nôi đào tạo nhân tài cho quê hương, đất nước, xứng đáng với niềm tin yêu của nhân dân.
                 </p>
 
-                <div id="thanh-tich" className="bg-primary-50 p-6 rounded-lg mt-8 border border-primary-100">
+                <div id="thanh-tich" className="bg-primary-100 dark:bg-primary-900/30 p-6 rounded-lg mt-8 border border-primary-200 dark:border-primary-700">
                   <h3 className="text-lg font-bold text-primary-900 mb-4 flex items-center">
                     <span className="bg-yellow-400 text-yellow-900 px-2 py-1 rounded mr-2 text-xs font-bold uppercase shadow-sm">Thành tích</span> 
                     Các phần thưởng cao quý
@@ -83,12 +83,12 @@ const Introduction: React.FC = () => {
               </div>
             </section>
 
-            <section id="tam-nhin" className="bg-white p-8 rounded-xl shadow-sm">
+            <section id="tam-nhin" className="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
               <h2 className="text-2xl font-bold text-primary-900 mb-6 flex items-center gap-2">
                  <span className="w-2 h-8 bg-secondary-500 rounded"></span> Tầm nhìn & Sứ mệnh
               </h2>
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-primary-50 p-6 rounded-lg border-l-4 border-primary-600">
+                <div className="bg-primary-100 dark:bg-primary-900/30 p-6 rounded-lg border-l-4 border-primary-600 dark:border-primary-400">
                   <h3 className="font-bold text-lg text-primary-900 mb-2">Tầm nhìn</h3>
                   <p className="text-gray-700">Trở thành trường THPT chất lượng cao, tiệm cận chuẩn quốc tế, là địa chỉ tin cậy của phụ huynh và học sinh.</p>
                 </div>
@@ -99,7 +99,7 @@ const Introduction: React.FC = () => {
               </div>
             </section>
 
-             <section id="to-chuc" className="bg-white p-8 rounded-xl shadow-sm">
+            <section id="to-chuc" className="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
               <h2 className="text-2xl font-bold text-primary-900 mb-6 flex items-center gap-2">
                 <span className="w-2 h-8 bg-primary-600 rounded"></span> Cơ cấu tổ chức
               </h2>

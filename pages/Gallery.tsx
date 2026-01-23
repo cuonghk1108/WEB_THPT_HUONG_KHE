@@ -3,14 +3,14 @@ import { useData } from '../context/DataContext';
 import { Maximize2, X } from 'lucide-react';
 
 const Gallery: React.FC = () => {
-  const { gallery, getImageSrc } = useData();
+  const { gallery } = useData();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   return (
-    <div className="bg-slate-900 min-h-screen pb-16">
+    <div className="bg-white dark:bg-slate-900 min-h-screen pb-16">
       <div className="pt-32 pb-12 container mx-auto px-4">
-        <h1 className="text-3xl md:text-5xl font-bold font-heading mb-4 text-white">Thư viện hình ảnh</h1>
-        <p className="text-slate-400">Lưu giữ những khoảnh khắc đáng nhớ của thầy và trò trường THPT Hương Khê.</p>
+        <h1 className="text-3xl md:text-5xl font-bold font-heading mb-4 text-slate-900 dark:text-white">Thư viện hình ảnh</h1>
+        <p className="text-slate-600 dark:text-slate-400">Lưu giữ những khoảnh khắc đáng nhớ của thầy và trò trường THPT Hương Khê.</p>
       </div>
 
       <div className="container mx-auto px-4">
@@ -18,11 +18,11 @@ const Gallery: React.FC = () => {
           {gallery.map((item, idx) => (
             <div 
               key={item.id} 
-              onClick={() => setSelectedImage(getImageSrc(item.imageUrl))}
+              onClick={() => setSelectedImage(item.imageUrl)}
               className={`relative rounded-xl overflow-hidden cursor-pointer group ${idx % 3 === 0 ? 'md:col-span-2 md:row-span-2' : ''}`}
             >
               <img 
-                src={getImageSrc(item.imageUrl)} 
+                src={item.imageUrl} 
                 alt={item.title} 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />

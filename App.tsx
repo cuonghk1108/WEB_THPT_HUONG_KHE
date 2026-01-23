@@ -13,6 +13,7 @@ import Teachers from './pages/Teachers';
 import StudentCorner from './pages/StudentCorner';
 import Clubs from './pages/Clubs';
 import Gallery from './pages/Gallery';
+import DarkModeTest from './pages/DarkModeTest';
 
 // Admin Imports
 import Login from './pages/Admin/Login';
@@ -22,8 +23,10 @@ import ImageManager from './pages/Admin/ImageManager';
 import TeacherManager from './pages/Admin/TeacherManager';
 import ClubManager from './pages/Admin/ClubManager';
 import GalleryManager from './pages/Admin/GalleryManager';
+import StudentCornerManager from './pages/Admin/StudentCornerManager';
 import Settings from './pages/Admin/Settings';
 import { DataProvider, useData } from './context/DataContext';
+import { DarkModeProvider } from './context/DarkModeContext';
 
 // ScrollToTop Component handles window scroll on route change
 const ScrollToTop = () => {
@@ -62,46 +65,50 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 const App: React.FC = () => {
   return (
     <DataProvider>
-      <BrowserRouter>
-        <ScrollToTop />
-        <Routes>
-          {/* Public Routes */}
-          <Route element={<PublicLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/gioi-thieu" element={<Introduction />} />
-            <Route path="/tuyen-sinh" element={<Admissions />} />
-            <Route path="/tin-tuc" element={<News />} />
-            <Route path="/van-ban" element={<Documents />} />
-            <Route path="/lien-he" element={<Contact />} />
-            <Route path="/giao-vien" element={<Teachers />} />
-            <Route path="/hoc-sinh" element={<StudentCorner />} />
-            <Route path="/cau-lac-bo" element={<Clubs />} />
-            <Route path="/thu-vien-anh" element={<Gallery />} />
-          </Route>
+      <DarkModeProvider>
+        <BrowserRouter>
+          <ScrollToTop />
+          <Routes>
+            {/* Public Routes */}
+            <Route element={<PublicLayout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/gioi-thieu" element={<Introduction />} />
+              <Route path="/tuyen-sinh" element={<Admissions />} />
+              <Route path="/tin-tuc" element={<News />} />
+              <Route path="/van-ban" element={<Documents />} />
+              <Route path="/lien-he" element={<Contact />} />
+              <Route path="/giao-vien" element={<Teachers />} />
+              <Route path="/hoc-sinh" element={<StudentCorner />} />
+              <Route path="/cau-lac-bo" element={<Clubs />} />
+              <Route path="/thu-vien-anh" element={<Gallery />} />
+              <Route path="/test-darkmode" element={<DarkModeTest />} />
+            </Route>
 
-          {/* Admin Routes */}
-          <Route path="/admin/login" element={<Login />} />
-          <Route 
-            path="/admin" 
-            element={
-              <ProtectedRoute>
-                <AdminLayout />
-              </ProtectedRoute>
-            }
-          >
-             <Route path="dashboard" element={<div className="p-8 text-center text-slate-500">Chào mừng đến với trang quản trị! Chọn các mục bên trái để bắt đầu chỉnh sửa nội dung website.</div>} />
-             <Route path="news" element={<NewsManager />} />
-             <Route path="images" element={<ImageManager />} />
-             <Route path="teachers" element={<TeacherManager />} />
-             <Route path="clubs" element={<ClubManager />} />
-             <Route path="gallery" element={<GalleryManager />} />
-             <Route path="settings" element={<Settings />} />
-             <Route path="*" element={<Navigate to="dashboard" replace />} />
-          </Route>
+            {/* Admin Routes */}
+            <Route path="/admin/login" element={<Login />} />
+            <Route 
+              path="/admin" 
+              element={
+                <ProtectedRoute>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }
+            >
+               <Route path="dashboard" element={<div className="p-8 text-center text-slate-500 dark:text-slate-400">Chào mừng đến với trang quản trị! Chọn các mục bên trái để bắt đầu chỉnh sửa nội dung website.</div>} />
+               <Route path="news" element={<NewsManager />} />
+               <Route path="images" element={<ImageManager />} />
+               <Route path="teachers" element={<TeacherManager />} />
+               <Route path="clubs" element={<ClubManager />} />
+               <Route path="gallery" element={<GalleryManager />} />
+               <Route path="student-corner" element={<StudentCornerManager />} />
+               <Route path="settings" element={<Settings />} />
+               <Route path="*" element={<Navigate to="dashboard" replace />} />
+            </Route>
 
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </DarkModeProvider>
     </DataProvider>
   );
 };

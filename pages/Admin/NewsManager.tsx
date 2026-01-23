@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import { Plus, Edit, Trash2, Search, X, Save, Image as ImageIcon } from 'lucide-react';
 import { NewsItem } from '../../types';
+import { cloudStorage } from '../../services/cloudStorage';
 
 const NewsManager: React.FC = () => {
   const { news, addNews, updateNews, deleteNews } = useData();
@@ -18,17 +19,7 @@ const NewsManager: React.FC = () => {
     imageUrl: '',
     date: new Date().toLocaleDateString('vi-VN')
   });
-
-  const handleFileChange = (file: File | null) => {
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const dataUrl = e.target?.result as string;
-        setFormData(prev => ({ ...prev, imageUrl: dataUrl }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   const resetForm = () => {
     setFormData({
@@ -76,6 +67,48 @@ const NewsManager: React.FC = () => {
     }
     setIsModalOpen(false);
     resetForm();
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !file.type.startsWith('image/')) {
+      alert('Vui lòng chọn file ảnh hợp lệ!');
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      alert('Kích thước ảnh quá lớn! Vui lòng chọn ảnh dưới 2MB.');
+      return;
+    }
+
+    setUploadingImage(true);
+
+    try {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64String = reader.result as string;
+        
+        try {
+          // Try to upload to ImgBB cloud
+          const imageUrl = await cloudStorage.uploadImage(base64String, 'news');
+          if (imageUrl) {
+            setFormData({...formData, imageUrl});
+            return;
+          }
+        } catch (error) {
+          console.error('Cloud upload failed, using base64:', error);
+        }
+
+        // Fallback to base64
+        setFormData({...formData, imageUrl: base64String});
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Lỗi khi tải ảnh lên!');
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
   const filteredNews = news.filter(n => n.title.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -216,18 +249,37 @@ const NewsManager: React.FC = () => {
                         </div>
 
                         <div className="col-span-2">
-                            <label className="block text-sm font-bold text-slate-800 mb-1">Upload Ảnh đại diện</label>
-                            <div className="flex gap-2">
-                                <div className="flex-1 relative">
-                                    <input 
-                                        type="file" 
-                                        accept="image/*"
-                                        className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-slate-900"
-                                        onChange={e => handleFileChange(e.target.files?.[0] || null)}
-                                    />
+                            <label className="block text-sm font-bold text-slate-800 mb-1">Ảnh đại diện</label>
+                            <div className="space-y-2">
+                                <div className="flex gap-2">
+                                    <label className="flex-1 flex items-center justify-center px-4 py-3 border-2 border-dashed border-slate-300 rounded-lg hover:border-primary-500 hover:bg-primary-50 cursor-pointer transition-colors">
+                                        <input 
+                                            type="file" 
+                                            accept="image/*" 
+                                            onChange={handleImageUpload}
+                                            disabled={uploadingImage}
+                                            className="hidden"
+                                        />
+                                        <span className="text-sm font-bold text-slate-700">
+                                            {uploadingImage ? 'Đang upload...' : 'Chọn ảnh từ máy'}
+                                        </span>
+                                    </label>
+                                    <div className="w-20 h-20 rounded border border-slate-300 overflow-hidden flex-shrink-0 bg-slate-50">
+                                        {formData.imageUrl && <img src={formData.imageUrl} alt="Preview" className="w-full h-full object-cover" />}
+                                    </div>
                                 </div>
-                                <div className="w-10 h-10 rounded border border-slate-300 overflow-hidden flex-shrink-0 bg-slate-50">
-                                    {formData.imageUrl && <img src={formData.imageUrl} alt="Preview" className="w-full h-full object-cover" />}
+                                <p className="text-xs text-slate-500 font-medium">Hoặc dán link ảnh:</p>
+                                <div className="flex gap-2">
+                                    <div className="flex-1 relative">
+                                        <ImageIcon className="absolute left-3 top-2.5 h-5 w-5 text-slate-500" />
+                                        <input 
+                                            type="text" 
+                                            className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-slate-900"
+                                            value={formData.imageUrl}
+                                            onChange={e => setFormData({...formData, imageUrl: e.target.value})}
+                                            placeholder="https://example.com/image.jpg"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>

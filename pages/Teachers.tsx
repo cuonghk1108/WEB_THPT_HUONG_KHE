@@ -3,7 +3,7 @@ import { useData } from '../context/DataContext';
 import { Mail, Search, BookOpen } from 'lucide-react';
 
 const Teachers: React.FC = () => {
-  const { teachers, getImageSrc } = useData();
+  const { teachers } = useData();
   const [selectedDept, setSelectedDept] = useState('Tất cả');
   const departments = ['Tất cả', 'Ban Giám Hiệu', 'Tổ Toán - Tin', 'Tổ Lý - Hóa', 'Tổ Ngoại Ngữ', 'Tổ Xã Hội'];
 
@@ -47,7 +47,7 @@ const Teachers: React.FC = () => {
             <div key={teacher.id} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group border border-slate-100">
               <div className="h-64 overflow-hidden relative">
                 <img 
-                  src={getImageSrc(teacher.imageUrl)} 
+                  src={teacher.imageUrl} 
                   alt={teacher.name} 
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />

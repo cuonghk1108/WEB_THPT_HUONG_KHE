@@ -46,7 +46,7 @@ const News: React.FC = () => {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen">
+    <div className="bg-white dark:bg-slate-900 min-h-screen">
       {/* Header Compact */}
       <div className="bg-white pt-28 pb-8 border-b border-slate-200">
         <div className="container mx-auto px-4">
@@ -77,8 +77,7 @@ const News: React.FC = () => {
                 <img 
                   src={featuredArticle.imageUrl} 
                   alt={featuredArticle.title} 
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  loading="lazy"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
                 <div className="absolute bottom-0 left-0 w-full p-6 md:p-10 text-white">
@@ -115,10 +114,9 @@ const News: React.FC = () => {
                      <article key={item.id} className="group flex flex-col h-full bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer" onClick={() => setSelectedArticle(item)}>
                        <div className="aspect-[16/10] overflow-hidden relative rounded-t-2xl">
                          <img 
-                           src={item.imageUrl} 
-                           alt={item.title} 
-                           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                           loading="lazy"
+                            src={item.imageUrl} 
+                            alt={item.title} 
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                          />
                          <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-slate-800 shadow-sm">
                            {item.category}
