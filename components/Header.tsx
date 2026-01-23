@@ -9,6 +9,7 @@ const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const { globalImages } = useData();
+  const logoSrc = `${globalImages.logo}?t=${Date.now()}`;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,7 +48,8 @@ const Header: React.FC = () => {
             {/* Logo Section */}
             <Link to="/" onClick={handleLinkClick} className="flex items-center space-x-2 md:space-x-3 cursor-pointer group">
               <img 
-                src={globalImages.logo} 
+                key={logoSrc}
+                src={logoSrc} 
                 alt="Logo THPT Hương Khê" 
                 className={`h-6 w-6 md:h-8 md:w-8 object-cover transition-all duration-500 group-hover:scale-110 ${
                   scrolled ? 'rotate-0' : '-rotate-3'
@@ -103,7 +105,8 @@ const Header: React.FC = () => {
         </button>
         <div className="flex items-center space-x-3 mb-8">
           <img 
-            src={globalImages.logo} 
+            key={logoSrc}
+            src={logoSrc} 
             alt="Logo THPT Hương Khê" 
             className="h-10 w-10 object-cover rounded-lg" 
           />
