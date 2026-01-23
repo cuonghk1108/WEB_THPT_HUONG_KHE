@@ -1,20 +1,61 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# THPT Hương Khê - Website Chính Thức
 
-# Run and deploy your AI Studio app
+Cổng thông tin điện tử trường THPT Hương Khê - Kết nối nhà trường, phụ huynh và học sinh. Tích hợp trợ lý ảo AI hỗ trợ tư vấn 24/7.
 
-This contains everything you need to run your app locally.
+## Tính năng
 
-View your app in AI Studio: https://ai.studio/apps/drive/19pVn9eBwdJxFlk6-K8SEiLjSuPFpXZlX
+- Trang chủ với banner và thông tin nổi bật
+- Giới thiệu về trường
+- Tuyển sinh
+- Tin tức và sự kiện
+- Văn bản và tài liệu
+- Giáo viên và cán bộ
+- Học sinh và góc học tập
+- Câu lạc bộ
+- Thư viện ảnh
+- Chatbot AI hỗ trợ tư vấn
 
-## Run Locally
+## Công nghệ sử dụng
 
-**Prerequisites:**  Node.js
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS
+- React Router
+- Google Gemini AI
 
+## Cài đặt và chạy
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+1. Clone repository:
+   ```bash
+   git clone https://github.com/cuonghk1108/AI.git
+   cd AI
+   ```
+
+2. Cài đặt dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Tạo file `.env.local` và thêm API key:
+   ```
+   GEMINI_API_KEY=your_api_key_here
+   ```
+
+4. Chạy server local:
+   ```bash
+   npm run dev
+   ```
+   Hoặc double-click `run_localhost.bat`
+
+5. Truy cập: http://localhost:3000
+
+## Deploy
+
+Website đã được deploy trên Vercel: https://ai-delta-ecru.vercel.app
+
+## Bản quyền
+
+© 2025 cuongdev1108. Tất cả quyền được bảo lưu.
+
+Dự án này được phát triển bởi cuongdev1108. Không được sao chép, phân phối hoặc sử dụng cho mục đích thương mại mà không có sự đồng ý bằng văn bản.
