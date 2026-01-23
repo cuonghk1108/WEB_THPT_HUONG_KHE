@@ -1,242 +1,112 @@
 <!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gửi Nguyễn Thành Hà ❤️</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Nunito:wght@400;700&display=swap');
-
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Nunito', sans-serif;
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="%23ff4d6d"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'), auto;
-        }
-
-        /* Container chính */
-        .card {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.3);
-            text-align: center;
-            position: relative;
-            z-index: 10;
-            max-width: 90%;
-            width: 400px;
-            animation: popIn 1s ease-out;
-            border: 2px solid #fff;
-        }
-
-        h1 {
-            font-family: 'Dancing Script', cursive;
-            color: #ff4d6d;
-            font-size: 3em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
-        }
-
-        p {
-            font-size: 1.2em;
-            color: #555;
-            margin-bottom: 30px;
-            line-height: 1.5;
-        }
-
-        .name-highlight {
-            color: #d63384;
-            font-weight: bold;
-            font-size: 1.3em;
-        }
-
-        .btn-group {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            position: relative;
-            height: 60px; /* Giữ chỗ cho nút chạy */
-        }
-
-        button {
-            padding: 12px 30px;
-            font-size: 1.1em;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            font-weight: bold;
-            outline: none;
-        }
-
-        .btn-yes {
-            background: linear-gradient(45deg, #ff4d6d, #ff8fa3);
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
-        }
-
-        .btn-yes:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(255, 77, 109, 0.6);
-        }
-
-        .btn-no {
-            background: #f1f1f1;
-            color: #555;
-            position: absolute; /* Để có thể di chuyển tự do */
-            left: 55%; /* Vị trí ban đầu */
-        }
-
-        /* Hiệu ứng nền trái tim rơi */
-        .heart-bg {
-            position: absolute;
-            color: #ff4d6d;
-            top: -10vh;
-            font-size: 20px;
-            animation: fall linear forwards;
-            z-index: 1;
-            opacity: 0.6;
-        }
-
-        /* Hiệu ứng chuột */
-        .cursor-heart {
-            position: absolute;
-            width: 15px;
-            height: 15px;
-            background: #ff4d6d;
-            transform: rotate(45deg);
-            pointer-events: none;
-            animation: fadeOut 1s forwards;
-            z-index: 100;
-        }
-        .cursor-heart::before, .cursor-heart::after {
-            content: '';
-            position: absolute;
-            width: 15px;
-            height: 15px;
-            background: #ff4d6d;
-            border-radius: 50%;
-        }
-        .cursor-heart::before { left: -8px; }
-        .cursor-heart::after { top: -8px; }
-
-        /* Animation Keyframes */
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(360deg); }
-        }
-
-        @keyframes popIn {
-            0% { transform: scale(0); opacity: 0; }
-            80% { transform: scale(1.1); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        @keyframes fadeOut {
-            0% { transform: scale(1) rotate(45deg); opacity: 1; }
-            100% { transform: scale(0) rotate(45deg); opacity: 0; top: -50px; }
-        }
-
-        /* Popup kết quả */
-        #success-msg {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 20;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            color: white;
-        }
-        #success-msg h2 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 4em;
-            color: #ff4d6d;
-            animation: heartbeat 1s infinite;
-        }
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-    </style>
-</head>
-<body>
-
-    <div class="card">
-        <h1>Chào Hà! ❤️</h1>
-        <p>
-            Có một người luôn âm thầm quan tâm cậu.<br>
-            Hôm nay lấy hết can đảm để hỏi <span class="name-highlight">Nguyễn Thành Hà</span> một câu thôi:
-            <br><br>
-            <b>Làm người yêu tớ nhé?</b>
-        </p>
-        <div class="btn-group">
-            <button class="btn-yes" onclick="acceptLove()">Đồng ý luôn!</button>
-            <button class="btn-no" id="btnNo" onmouseover="moveButton()">Không nha</button>
-        </div>
-    </div>
-
-    <div id="success-msg">
-        <h2>Tớ biết Hà sẽ đồng ý mà! ❤️</h2>
-        <p>Yêu cậu nhiều lắm! (Chụp màn hình gửi lại tớ nhé)</p>
-        <canvas id="confetti"></canvas>
-    </div>
-
+<html lang="vi" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>THPT Hương Khê</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
-        /* 1. Logic nút "Không" bỏ chạy */
-        const btnNo = document.getElementById('btnNo');
-        
-        function moveButton() {
-            const x = Math.random() * (window.innerWidth - 100);
-            const y = Math.random() * (window.innerHeight - 100);
-            btnNo.style.position = 'fixed'; // Chuyển sang fixed để chạy khắp màn hình
-            btnNo.style.left = `${x}px`;
-            btnNo.style.top = `${y}px`;
-        }
-
-        /* 2. Tạo mưa trái tim nền */
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart-bg');
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
-            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
-            
-            document.body.appendChild(heart);
-
-            setTimeout(() => {
-                heart.remove();
-            }, 5000);
-        }
-        setInterval(createHeart, 200);
-
-        /* 3. Hiệu ứng chuột */
-        document.addEventListener('mousemove', function(e) {
-            const heart = document.createElement('div');
-            heart.className = 'cursor-heart';
-            heart.style.left = e.pageX + 'px';
-            heart.style.top = e.pageY + 'px';
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 1000);
-        });
-
-        /* 4. Xử lý khi bấm Đồng ý */
-        function acceptLove() {
-            document.getElementById('success-msg').style.display = 'flex';
-            // Tạo hiệu ứng nổ tung trời
-            for(let i=0; i<100; i++) {
-                setTimeout(createHeart, i*10); // Tăng tốc độ rơi trái tim
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Quicksand', 'sans-serif'], // Changed to Quicksand for a friendlier, rounder look
+              heading: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              primary: {
+                50: '#f0f9ff',
+                100: '#e0f2fe',
+                200: '#bae6fd',
+                300: '#7dd3fc',
+                400: '#38bdf8',
+                500: '#0ea5e9',
+                600: '#0284c7',
+                700: '#0369a1',
+                800: '#075985',
+                900: '#0c4a6e',
+              },
+              secondary: {
+                50: '#f0fdf4',
+                100: '#dcfce7',
+                200: '#bbf7d0',
+                300: '#86efac',
+                400: '#4ade80',
+                500: '#22c55e',
+                600: '#16a34a',
+                700: '#15803d',
+                800: '#166534',
+                900: '#14532d',
+              },
+              slate: {
+                50: '#f8fafc',
+                100: '#f1f5f9',
+                200: '#e2e8f0',
+                300: '#cbd5e1',
+                400: '#94a3b8',
+                500: '#64748b',
+                600: '#475569',
+                700: '#334155',
+                800: '#1e293b',
+                900: '#0f172a',
+              }
+            },
+            animation: {
+              'float': 'float 6s ease-in-out infinite',
+              'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+            },
+            keyframes: {
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-10px)' },
+              },
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              }
             }
+          }
         }
+      }
     </script>
+    <style>
+      body {
+        font-family: 'Quicksand', sans-serif;
+        color: #334155;
+        background-color: #f8fafc;
+        /* Subtle noise texture for a premium feel */
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+      }
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Inter', sans-serif;
+        color: #0f172a;
+        letter-spacing: -0.025em; /* Tighter heading tracking */
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+      }
+      .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.38.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "react-router-dom": "https://esm.sh/react-router-dom@6.22.3"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
 </body>
 </html>

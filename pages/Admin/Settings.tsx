@@ -1,0 +1,66 @@
+import React from 'react';
+import { Settings as SettingsIcon, Bell, Lock, Globe } from 'lucide-react';
+
+const Settings: React.FC = () => {
+  return (
+    <div>
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold font-heading text-slate-900">Cấu hình Hệ thống</h1>
+        <p className="text-slate-600 text-sm font-medium">Điều chỉnh các thiết lập chung cho website.</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* General Settings */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+            <h3 className="font-bold text-slate-900 flex items-center gap-2 mb-4">
+                <Globe className="h-5 w-5 text-primary-600" /> Thông tin chung
+            </h3>
+            <div className="space-y-4">
+                <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-1">Tên website</label>
+                    <input type="text" disabled value="THPT Hương Khê" className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded text-slate-600 text-sm cursor-not-allowed" />
+                </div>
+                <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-1">Email liên hệ</label>
+                    <input type="email" disabled value="c3huongkhe@hatinh.edu.vn" className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded text-slate-600 text-sm cursor-not-allowed" />
+                </div>
+            </div>
+        </div>
+
+        {/* Security */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+             <h3 className="font-bold text-slate-900 flex items-center gap-2 mb-4">
+                <Lock className="h-5 w-5 text-red-600" /> Bảo mật
+            </h3>
+             <div className="space-y-4">
+                 <button className="w-full py-2 px-4 border border-slate-300 rounded text-slate-700 font-bold hover:bg-slate-50 transition-colors">
+                     Đổi mật khẩu Admin
+                 </button>
+                 <button className="w-full py-2 px-4 border border-slate-300 rounded text-slate-700 font-bold hover:bg-slate-50 transition-colors">
+                     Xem nhật ký hoạt động
+                 </button>
+             </div>
+        </div>
+
+        {/* Notifications */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 opacity-50">
+             <h3 className="font-bold text-slate-900 flex items-center gap-2 mb-4">
+                <Bell className="h-5 w-5 text-yellow-600" /> Thông báo (Sắp ra mắt)
+            </h3>
+             <div className="space-y-3">
+                 <div className="flex items-center justify-between">
+                     <span className="text-sm text-slate-700">Gửi email khi có tin mới</span>
+                     <div className="w-10 h-5 bg-slate-200 rounded-full relative"><div className="w-4 h-4 bg-white rounded-full absolute left-0.5 top-0.5 shadow-sm"></div></div>
+                 </div>
+                 <div className="flex items-center justify-between">
+                     <span className="text-sm text-slate-700">Thông báo hệ thống</span>
+                     <div className="w-10 h-5 bg-primary-600 rounded-full relative"><div className="w-4 h-4 bg-white rounded-full absolute right-0.5 top-0.5 shadow-sm"></div></div>
+                 </div>
+             </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Settings;
