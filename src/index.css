@@ -4,8 +4,30 @@
 @tailwind utilities;
 
 /* Custom dark mode toggle button */
+
 .darkmode-toggle {
-	@apply fixed top-4 right-4 z-50 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full shadow-lg px-4 py-2 flex items-center gap-2 cursor-pointer transition;
+	@apply bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full shadow-lg px-4 py-2 flex items-center gap-2 cursor-pointer transition;
+}
+
+/* Custom dark theme for main UI */
+.dark body, .dark .bg-white, .dark .bg-slate-100, .dark .bg-slate-50, .dark .bg-white\/50, .dark .bg-white\/80 {
+	background-color: #181f2a !important;
+	color: #f1f5f9 !important;
+}
+.dark .text-slate-800, .dark .text-slate-900 {
+	color: #f1f5f9 !important;
+}
+.dark .text-slate-400 {
+	color: #a0aec0 !important;
+}
+.dark .text-primary-600, .dark .text-primary-700 {
+	color: #60a5fa !important;
+}
+.dark .border-slate-200, .dark .border-white, .dark .border-white\/40, .dark .border-white\/10, .dark .border-slate-800 {
+	border-color: #334155 !important;
+}
+.dark .shadow-sm, .dark .shadow-lg {
+	box-shadow: 0 2px 8px 0 #0f172a33 !important;
 }
 
 body.dark {

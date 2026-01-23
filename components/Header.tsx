@@ -63,30 +63,6 @@ const Header: React.FC = () => {
             
             {/* Logo Section */}
             <Link to="/" onClick={handleLinkClick} className="flex items-center space-x-3 cursor-pointer group">
-              {/* Dark mode toggle */}
-              <button
-                className="darkmode-toggle"
-                aria-label="Toggle dark mode"
-                onClick={() => setDarkMode((d) => !d)}
-              >
-                <span className="hidden md:inline font-bold text-xs">
-                  {darkMode ? 'Chế độ tối' : 'Chế độ sáng'}
-                </span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-5 h-5"
-                >
-                  {darkMode ? (
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0112 21.75c-5.385 0-9.75-4.365-9.75-9.75 0-4.136 2.635-7.626 6.348-9.049a.75.75 0 01.908.911A7.501 7.501 0 0019.5 12c0 1.61-.508 3.104-1.385 4.335a.75.75 0 01.911.908z" />
-                  ) : (
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1.5m0 15V21m8.485-8.485l-1.06 1.06M4.515 4.515l1.06 1.06M21 12h-1.5M4.5 12H3m15.485 7.485l-1.06-1.06M4.515 19.485l1.06-1.06M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
-                  )}
-                </svg>
-              </button>
 
               <div className="transition-all duration-500 group-hover:scale-110 overflow-hidden">
                  <img src={globalImages.logo} alt="Logo THPT Hương Khê" className="h-8 w-8 object-cover" />

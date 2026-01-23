@@ -1,3 +1,47 @@
+import React, { useState, useEffect } from 'react';
+  // Dark mode state (moved from Header)
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('theme') === 'dark';
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [darkMode]);
+        {/* Dark mode toggle in footer */}
+        <div className="flex justify-center mb-6">
+          <button
+            className="darkmode-toggle relative"
+            aria-label="Toggle dark mode"
+            onClick={() => setDarkMode((d) => !d)}
+          >
+            <span className="font-bold text-xs mr-2">
+              {darkMode ? 'Chế độ tối' : 'Chế độ sáng'}
+            </span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-5 h-5"
+            >
+              {darkMode ? (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0112 21.75c-5.385 0-9.75-4.365-9.75-9.75 0-4.136 2.635-7.626 6.348-9.049a.75.75 0 01.908.911A7.501 7.501 0 0019.5 12c0 1.61-.508 3.104-1.385 4.335a.75.75 0 01.911.908z" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1.5m0 15V21m8.485-8.485l-1.06 1.06M4.515 4.515l1.06 1.06M21 12h-1.5M4.5 12H3m15.485 7.485l-1.06-1.06M4.515 19.485l1.06-1.06M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+              )}
+            </svg>
+          </button>
+        </div>
 import React from 'react';
 import { MapPin, Phone, Mail, Facebook, Youtube, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
