@@ -44,10 +44,10 @@ export enum LoadingState {
 }
 
 export interface GlobalImages {
+  logo: string;
   homeHero: string;
   principal: string;
   introHistory: string;
-  logo: string;
 }
 
 export interface Teacher {

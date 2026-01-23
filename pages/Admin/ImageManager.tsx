@@ -47,6 +47,11 @@ const ImageManager: React.FC = () => {
 
   const imageFields: { key: keyof GlobalImages; label: string; description: string }[] = [
     { 
+        key: 'logo', 
+        label: 'Logo Trường', 
+        description: 'Logo chính thức của trường THPT Hương Khê.' 
+    },
+    { 
         key: 'homeHero', 
         label: 'Banner Trang Chủ', 
         description: 'Hình ảnh lớn hiển thị đầu tiên trên trang chủ (Nên dùng ảnh ngang, chất lượng cao).' 
@@ -60,11 +65,6 @@ const ImageManager: React.FC = () => {
         key: 'introHistory', 
         label: 'Ảnh Lịch Sử', 
         description: 'Hình ảnh hiển thị trong trang Giới thiệu phần Lịch sử hình thành.' 
-    },
-    { 
-        key: 'logo', 
-        label: 'Logo Trường', 
-        description: 'Logo chính thức của trường THPT Hương Khê.' 
     },
   ];
 

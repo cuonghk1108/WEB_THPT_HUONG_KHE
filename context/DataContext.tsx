@@ -9,8 +9,6 @@ interface DataContextType {
   
   globalImages: GlobalImages;
   updateGlobalImages: (images: GlobalImages) => void;
-  imageVersion: number;
-  getImageSrc: (src: string) => string;
 
   teachers: Teacher[];
   addTeacher: (item: Omit<Teacher, 'id'>) => void;
@@ -161,10 +159,10 @@ const INITIAL_NEWS: NewsItem[] = [
 ];
 
 const INITIAL_IMAGES: GlobalImages = {
+  logo: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=400&auto=format&fit=crop',
   homeHero: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1000&auto=format&fit=crop',
   principal: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400&auto=format&fit=crop',
-  introHistory: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=800&auto=format&fit=crop',
-  logo: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=200&auto=format&fit=crop'
+  introHistory: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=800&auto=format&fit=crop'
 };
 
 const INITIAL_TEACHERS: Teacher[] = [
@@ -203,11 +201,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return saved ? JSON.parse(saved) : INITIAL_IMAGES;
   });
 
-  const [imageVersion, setImageVersion] = useState<number>(() => {
-    const saved = localStorage.getItem('image_version');
-    return saved ? parseInt(saved) : 0;
-  });
-
   // Dynamic Data States with persistence
   const [teachers, setTeachers] = useState<Teacher[]>(() => {
     const saved = localStorage.getItem('school_teachers');
@@ -237,10 +230,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     localStorage.setItem('school_images', JSON.stringify(globalImages));
   }, [globalImages]);
-
-  useEffect(() => {
-    localStorage.setItem('image_version', imageVersion.toString());
-  }, [imageVersion]);
 
   useEffect(() => {
     localStorage.setItem('school_teachers', JSON.stringify(teachers));
@@ -276,7 +265,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Global Images
   const updateGlobalImages = (images: GlobalImages) => {
     setGlobalImages(images);
-    setImageVersion(prev => prev + 1);
   };
 
   // Teachers
@@ -312,15 +300,13 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setGallery(gallery.filter(g => g.id !== id));
   };
 
-  const getImageSrc = (src: string) => `${src}?v=${imageVersion}`;
-
   const login = () => setIsAuthenticated(true);
   const logout = () => setIsAuthenticated(false);
 
   return (
     <DataContext.Provider value={{ 
       news, addNews, updateNews, deleteNews, 
-      globalImages, updateGlobalImages, imageVersion, getImageSrc,
+      globalImages, updateGlobalImages,
       teachers, addTeacher, updateTeacher, deleteTeacher,
       clubs, addClub, updateClub, deleteClub,
       gallery, addGalleryItem, deleteGalleryItem,
