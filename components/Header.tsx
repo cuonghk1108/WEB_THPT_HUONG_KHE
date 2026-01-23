@@ -46,13 +46,13 @@ const Header: React.FC = () => {
             
             {/* Logo Section */}
             <Link to="/" onClick={handleLinkClick} className="flex items-center space-x-3 cursor-pointer group">
-              <div className={`p-2.5 rounded-xl transition-all duration-500 shadow-lg group-hover:scale-110 overflow-hidden ${
-                scrolled 
-                  ? 'bg-gradient-to-br from-primary-600 to-primary-800 rotate-0' 
-                  : 'bg-gradient-to-br from-primary-500 to-primary-700 -rotate-3'
-              }`}>
-                 <img src={globalImages.logo} alt="Logo THPT Hương Khê" className="h-6 w-6 object-cover" />
-              </div>
+              <img 
+                src={globalImages.logo} 
+                alt="Logo THPT Hương Khê" 
+                className={`h-8 w-8 object-cover transition-all duration-500 group-hover:scale-110 ${
+                  scrolled ? 'rotate-0' : '-rotate-3'
+                }`} 
+              />
               <div className="flex flex-col">
                 <h1 className={`text-xl font-bold font-heading leading-none transition-colors ${scrolled ? 'text-slate-900' : 'text-slate-800'}`}>
                   {SCHOOL_NAME}
