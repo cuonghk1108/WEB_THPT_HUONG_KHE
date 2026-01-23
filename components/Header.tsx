@@ -46,11 +46,7 @@ const Header: React.FC = () => {
             
             {/* Logo Section */}
             <Link to="/" onClick={handleLinkClick} className="flex items-center space-x-3 cursor-pointer group">
-              <div className={`p-1 rounded-xl transition-all duration-500 shadow-lg group-hover:scale-110 overflow-hidden ${
-                scrolled 
-                  ? 'bg-white rotate-0' 
-                  : 'bg-white/90 -rotate-3'
-              }`}>
+              <div className="transition-all duration-500 group-hover:scale-110 overflow-hidden">
                  <img src={globalImages.logo} alt="Logo THPT Hương Khê" className="h-8 w-8 object-cover" />
               </div>
               <div className="flex flex-col">
