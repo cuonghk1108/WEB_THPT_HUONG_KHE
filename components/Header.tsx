@@ -8,9 +8,8 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
-  const [logoVersion, setLogoVersion] = useState(0);
-  const { globalImages } = useData();
-  const logoSrc = `${globalImages.logo}?v=${logoVersion}`;
+  const { globalImages, imageVersion, getImageSrc } = useData();
+  const logoSrc = getImageSrc(globalImages.logo);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,10 +21,6 @@ const Header: React.FC = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-  useEffect(() => {
-    setLogoVersion(prev => prev + 1);
-  }, [globalImages.logo]);
 
   useEffect(() => {
     setIsMenuOpen(false);

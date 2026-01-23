@@ -9,6 +9,8 @@ interface DataContextType {
   
   globalImages: GlobalImages;
   updateGlobalImages: (images: GlobalImages) => void;
+  imageVersion: number;
+  getImageSrc: (src: string) => string;
 
   teachers: Teacher[];
   addTeacher: (item: Omit<Teacher, 'id'>) => void;
@@ -201,6 +203,11 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return saved ? JSON.parse(saved) : INITIAL_IMAGES;
   });
 
+  const [imageVersion, setImageVersion] = useState<number>(() => {
+    const saved = localStorage.getItem('image_version');
+    return saved ? parseInt(saved) : 0;
+  });
+
   // Dynamic Data States with persistence
   const [teachers, setTeachers] = useState<Teacher[]>(() => {
     const saved = localStorage.getItem('school_teachers');
@@ -230,6 +237,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     localStorage.setItem('school_images', JSON.stringify(globalImages));
   }, [globalImages]);
+
+  useEffect(() => {
+    localStorage.setItem('image_version', imageVersion.toString());
+  }, [imageVersion]);
 
   useEffect(() => {
     localStorage.setItem('school_teachers', JSON.stringify(teachers));
@@ -265,6 +276,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Global Images
   const updateGlobalImages = (images: GlobalImages) => {
     setGlobalImages(images);
+    setImageVersion(prev => prev + 1);
   };
 
   // Teachers
@@ -300,13 +312,15 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setGallery(gallery.filter(g => g.id !== id));
   };
 
+  const getImageSrc = (src: string) => `${src}?v=${imageVersion}`;
+
   const login = () => setIsAuthenticated(true);
   const logout = () => setIsAuthenticated(false);
 
   return (
     <DataContext.Provider value={{ 
       news, addNews, updateNews, deleteNews, 
-      globalImages, updateGlobalImages,
+      globalImages, updateGlobalImages, imageVersion, getImageSrc,
       teachers, addTeacher, updateTeacher, deleteTeacher,
       clubs, addClub, updateClub, deleteClub,
       gallery, addGalleryItem, deleteGalleryItem,

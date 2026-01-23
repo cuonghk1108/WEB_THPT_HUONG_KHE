@@ -3,7 +3,7 @@ import { useData } from '../context/DataContext';
 import { Users, Calendar, ArrowRight } from 'lucide-react';
 
 const Clubs: React.FC = () => {
-  const { clubs } = useData();
+  const { clubs, getImageSrc } = useData();
 
   const handleRegister = (clubName: string) => {
     alert(`Cảm ơn bạn đã quan tâm đến ${clubName}. Vui lòng liên hệ Văn phòng Đoàn trường để nhận đơn đăng ký!`);
@@ -31,7 +31,7 @@ const Clubs: React.FC = () => {
             <div key={club.id} className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 group flex flex-col md:flex-row h-full md:h-64">
               <div className="md:w-2/5 h-48 md:h-full relative overflow-hidden">
                 <img 
-                  src={club.imageUrl} 
+                  src={getImageSrc(club.imageUrl)} 
                   alt={club.name} 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />

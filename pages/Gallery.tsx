@@ -3,7 +3,7 @@ import { useData } from '../context/DataContext';
 import { Maximize2, X } from 'lucide-react';
 
 const Gallery: React.FC = () => {
-  const { gallery } = useData();
+  const { gallery, getImageSrc } = useData();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   return (
@@ -18,11 +18,11 @@ const Gallery: React.FC = () => {
           {gallery.map((item, idx) => (
             <div 
               key={item.id} 
-              onClick={() => setSelectedImage(item.imageUrl)}
+              onClick={() => setSelectedImage(getImageSrc(item.imageUrl))}
               className={`relative rounded-xl overflow-hidden cursor-pointer group ${idx % 3 === 0 ? 'md:col-span-2 md:row-span-2' : ''}`}
             >
               <img 
-                src={item.imageUrl} 
+                src={getImageSrc(item.imageUrl)} 
                 alt={item.title} 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
