@@ -2,6 +2,7 @@
   "name": "thpt-hương-khê---website-chính-thức",
   "private": true,
   "version": "0.0.0",
+  "author": "cuongdev1108",
   "type": "module",
   "scripts": {
     "dev": "vite",
