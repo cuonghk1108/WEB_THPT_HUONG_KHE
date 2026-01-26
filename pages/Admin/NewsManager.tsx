@@ -20,6 +20,7 @@ const NewsManager: React.FC = () => {
     date: new Date().toLocaleDateString('vi-VN')
   });
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const resetForm = () => {
     setFormData({
@@ -50,23 +51,40 @@ const NewsManager: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Validate
-    if (!formData.title || !formData.excerpt) return;
-
-    if (editingItem) {
-        updateNews(editingItem.id, formData);
-    } else {
-        addNews({
-            ...formData,
-            // Fallback image if empty
-            imageUrl: formData.imageUrl || 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=800' 
-        });
+    if (!formData.title || !formData.excerpt) {
+      alert('Vui lòng điền đầy đủ tiêu đề và tóm tắt!');
+      return;
     }
-    setIsModalOpen(false);
-    resetForm();
+
+    setSubmitting(true);
+    
+    try {
+      if (editingItem) {
+          updateNews(editingItem.id, formData);
+      } else {
+          addNews({
+              ...formData,
+              // Fallback image if empty
+              imageUrl: formData.imageUrl || 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=800' 
+          });
+      }
+      
+      // Đợi một chút để localStorage update và trigger useEffect trong DataContext
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      alert(editingItem ? '✅ Cập nhật tin tức thành công!' : '✅ Thêm tin tức thành công!');
+      setIsModalOpen(false);
+      resetForm();
+    } catch (error) {
+      console.error('Submit error:', error);
+      alert('❌ Có lỗi xảy ra khi lưu tin tức. Vui lòng thử lại!');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -320,10 +338,11 @@ const NewsManager: React.FC = () => {
                         </button>
                         <button 
                             type="submit" 
-                            className="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-lg shadow-lg shadow-primary-500/30 transition-colors flex items-center gap-2"
+                            disabled={submitting || uploadingImage}
+                            className="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-lg shadow-lg shadow-primary-500/30 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <Save className="h-4 w-4" />
-                            {editingItem ? 'Cập nhật' : 'Đăng bài'}
+                            {submitting ? 'Đang lưu...' : (editingItem ? 'Cập nhật' : 'Đăng bài')}
                         </button>
                     </div>
                 </form>
