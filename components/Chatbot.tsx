@@ -130,9 +130,9 @@ const Chatbot: React.FC = () => {
             <div>
               <h3 className="font-bold text-sm font-heading">Trợ lý ảo AI</h3>
               <div className="flex items-center space-x-1.5">
-                <span className={`w-2 h-2 rounded-full ${chatSessionRef.current ? 'bg-green-400 animate-pulse' : 'bg-gray-300'}`}></span>
+                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
                 <span className="text-xs text-primary-100 font-medium">
-                  {chatSessionRef.current ? 'Sẵn sàng hỗ trợ' : 'Đang kết nối...'}
+                  Sẵn sàng hỗ trợ
                 </span>
               </div>
             </div>
