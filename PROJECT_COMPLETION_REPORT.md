@@ -371,7 +371,7 @@ Build Time:             ~2 seconds
 
 ## 👨‍💻 Project Information
 
-**Created By**: cuongdev1108 (Cuong Hoang)  
+**Created By**: cuongdev1108 (Võ Xuân Cường)  
 **Team**: Team The First  
 **Repository**: https://github.com/cuonghk1108/WEB_THPT_HUONG_KHE  
 **License**: MIT  

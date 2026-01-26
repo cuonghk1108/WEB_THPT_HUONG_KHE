@@ -647,7 +647,7 @@ All rights reserved.
 ## 👨‍💻 Tác Giả & Contributors
 
 ### 👤 Main Developer
-- **cuongdev1108** (Cuong Hoang)
+- **cuongdev1108** (Võ Xuân Cường)
   - Full Stack Developer
   - GitHub: [@cuonghk1108](https://github.com/cuonghk1108)
   - Email: cuonghk1108@gmail.com

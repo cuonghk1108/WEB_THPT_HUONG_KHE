@@ -1249,7 +1249,7 @@ After this presentation, audience should:
 **Giải pháp của chúng tôi:**
 
 **Chatbot AI - Trợ lý ảo 24/7:**
-- Công nghệ: Google Gemini 2.5 Flash (AI thế hệ mới)
+- Công nghệ: Google Gemini 1.5 Flash (AI thế hệ mới)
 - Training với knowledge base về THPT Hương Khê
 - Trả lời tức thì, không cần chờ đợi
 - Miễn phí, không giới hạn câu hỏi
@@ -1374,7 +1374,7 @@ Website được thiết kế dựa trên 3 trụ cột chính:
 - Nội quy, quy định
 
 #### 🤖 Chatbot AI - Trợ lý ảo thông minh
-- **Công nghệ:** Google Gemini 2.5 Flash
+- **Công nghệ:** Google Gemini 1.5 Flash
 - **Khả năng:**
   - Trả lời thông tin về trường (lịch sử, địa chỉ, liên hệ)
   - Hướng dẫn tuyển sinh
@@ -1476,7 +1476,7 @@ Website được thiết kế dựa trên 3 trụ cột chính:
 #### Google Gemini AI
 **Tại sao chọn?**
 - API miễn phí (60 requests/phút)
-- Model Gemini 2.5 Flash - nhanh, chính xác
+- Model Gemini 1.5 Flash - nhanh, chính xác
 - Hỗ trợ tiếng Việt tốt
 - Có thể custom system instruction
 - **Kết quả:** Chatbot trả lời thông minh, tự nhiên
