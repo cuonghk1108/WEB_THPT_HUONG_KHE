@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, Send, X, GraduationCap, Loader2, Bot } from 'lucide-react';
-import { createChatSession } from '../services/geminiService';
+import { getChatResponse } from '../services/geminiService';
 import { ChatMessage, LoadingState } from '../types';
 
 const Chatbot: React.FC = () => {
@@ -18,7 +18,6 @@ const Chatbot: React.FC = () => {
   const [input, setInput] = useState('');
   const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.IDLE);
   
-  const chatSessionRef = useRef<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -27,14 +26,6 @@ const Chatbot: React.FC = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => setShowTooltip(false), 5000);
-    
-    const session = createChatSession();
-    if (session) {
-      chatSessionRef.current = session;
-    } else {
-      console.error("Không thể khởi tạo Chatbot.");
-    }
-
     return () => clearTimeout(timer);
   }, []);
 
@@ -62,26 +53,8 @@ const Chatbot: React.FC = () => {
     setInput('');
     setLoadingState(LoadingState.LOADING);
 
-    if (!chatSessionRef.current) {
-        const session = createChatSession();
-        if (session) {
-            chatSessionRef.current = session;
-        } else {
-            setMessages(prev => [...prev, {
-                id: (Date.now() + 1).toString(),
-                role: 'model',
-                text: "Hệ thống đang bảo trì hoặc chưa được cấu hình (Thiếu API Key). Vui lòng liên hệ quản trị viên.",
-                timestamp: new Date()
-            }]);
-            setLoadingState(LoadingState.IDLE);
-            return;
-        }
-    }
-
     try {
-      const result = await chatSessionRef.current.sendMessage(userMessageText);
-      const response = result.response;
-      const responseText = (await response).text();
+      const responseText = await getChatResponse(userMessageText);
 
       const botMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),

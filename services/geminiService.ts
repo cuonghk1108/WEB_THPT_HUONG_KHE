@@ -1,37 +1,26 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import { SCHOOL_KNOWLEDGE_BASE } from "../constants";
-
 /**
- * Creates a new Chat Session with the school's knowledge base.
+ * Sends a chat message to the Gemini API via secure server endpoint.
+ * API key is stored server-side for security.
  */
-export const createChatSession = () => {
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-  
-  if (!apiKey || apiKey === "") {
-    console.warn("Chưa cấu hình Gemini API Key.");
-    return null;
-  }
-
+export const getChatResponse = async (message: string): Promise<string> => {
   try {
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ 
-      model: "gemini-2.5-flash",
-      systemInstruction: SCHOOL_KNOWLEDGE_BASE,
-    });
-    
-    const chat = model.startChat({
-      generationConfig: {
-        temperature: 0.7,
-        topP: 0.95,
-        topK: 40,
-        maxOutputTokens: 8192,
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      history: [],
+      body: JSON.stringify({ message }),
     });
-    
-    return chat;
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to get response');
+    }
+
+    const data = await response.json();
+    return data.response;
   } catch (error) {
-    console.error("Error creating Gemini chat session:", error);
-    return null;
+    console.error("Error calling chat API:", error);
+    throw error;
   }
 };
