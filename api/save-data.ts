@@ -55,7 +55,9 @@ export default async function handler(
       const errorText = await response.text();
       console.error('JSONBin API error:', response.status, errorText);
       return res.status(response.status).json({ 
-        error: 'Lỗi khi lưu dữ liệu lên JSONBin' 
+        error: 'Lỗi khi lưu dữ liệu lên JSONBin',
+        status: response.status,
+        detail: errorText
       });
     }
 
@@ -64,7 +66,8 @@ export default async function handler(
   } catch (error: any) {
     console.error('Save data error:', error);
     return res.status(500).json({ 
-      error: 'Có lỗi xảy ra khi lưu dữ liệu. Vui lòng thử lại sau.' 
+      error: 'Có lỗi xảy ra khi lưu dữ liệu. Vui lòng thử lại sau.',
+      detail: error?.message || 'unknown'
     });
   }
 }
