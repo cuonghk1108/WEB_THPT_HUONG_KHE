@@ -1,8 +1,5 @@
-// Cloud storage using JSONBin.io (free tier - 100k requests/month)
-// Create your own bin at https://jsonbin.io
-// Note: API keys are handled server-side only for security
-
-const BIN_ID = import.meta.env.VITE_JSONBIN_BIN_ID || '';
+// Cloud storage using Supabase (JSONB) via serverless endpoints
+// Serverless functions handle all secret keys server-side
 
 // Cloudinary configuration (free tier - 25GB storage, 25GB bandwidth/month)
 // Get your credentials at https://cloudinary.com
@@ -28,21 +25,20 @@ interface StorageData {
 export const cloudStorage = {
   async fetchData(): Promise<StorageData | null> {
     try {
-      // Try JSONBin first (public read endpoint)
-      const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`);
-      
-      
+      // Fetch via backend to keep Supabase keys server-side
+      const response = await fetch('/api/get-data');
+
       if (response.ok) {
         const data = await response.json();
-        return data.record;
+        return data?.data || null;
       }
-      
+
       // Fallback to local file
       const localResponse = await fetch('/data/school-data.json');
       if (localResponse.ok) {
         return await localResponse.json();
       }
-      
+
       return null;
     } catch (error) {
       console.log('Using local storage only');
@@ -87,7 +83,7 @@ export const cloudStorage = {
         lastUpdate: new Date().toISOString(),
       };
 
-      // Save to JSONBin via serverless function to protect API key
+      // Save to Supabase via serverless function to protect API key
       const response = await fetch('/api/save-data', {
         method: 'POST',
         headers: {
