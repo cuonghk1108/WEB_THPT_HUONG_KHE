@@ -19,7 +19,7 @@ export default async function handler(
 
   try {
     const apiKey = (process.env.JSONBIN_API_KEY || '').trim();
-    const binId = (process.env.JSONBIN_BIN_ID || '').trim();
+    const visitorBinId = (process.env.VITE_VISITOR_BIN_ID || '').trim();
 
     if (!apiKey) {
       console.error('JSONBIN_API_KEY not configured');
@@ -28,15 +28,15 @@ export default async function handler(
       });
     }
 
-    if (!binId) {
-      console.error('JSONBIN_BIN_ID not configured');
+    if (!visitorBinId) {
+      console.error('VITE_VISITOR_BIN_ID not configured');
       return res.status(500).json({ 
-        error: 'JSONBin ID chưa được cấu hình.' 
+        error: 'Visitor Bin ID chưa được cấu hình.' 
       });
     }
 
     // Fetch current data from JSONBin
-    const fetchResponse = await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+    const fetchResponse = await fetch(`https://api.jsonbin.io/v3/b/${visitorBinId}`, {
       headers: {
         'X-Master-Key': apiKey,
       },
@@ -76,7 +76,7 @@ export default async function handler(
     }
 
     // Save to JSONBin
-    const saveResponse = await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+    const saveResponse = await fetch(`https://api.jsonbin.io/v3/b/${visitorBinId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
