@@ -87,10 +87,10 @@ export const cloudStorage = {
         return null;
       }
 
-      console.log('📤 Sending request to http://localhost:3000/api/cloudinary/upload');
+      console.log('📤 Sending request to /api/upload');
 
-      // Call backend API to upload
-      const response = await fetch('http://localhost:3000/api/cloudinary/upload', {
+      // Call backend API - use relative path for both local and production
+      const response = await fetch('/api/upload', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
