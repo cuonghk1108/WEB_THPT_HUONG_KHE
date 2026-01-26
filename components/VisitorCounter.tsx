@@ -1,21 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { visitorCounter } from '../services/visitorCounter';
 
+interface Stats {
+  today: number;
+  week: number;
+  year: number;
+  total: number;
+}
+
 export const VisitorCounter: React.FC = () => {
-  const [count, setCount] = useState<number>(0);
+  const [stats, setStats] = useState<Stats>({ today: 0, week: 0, year: 0, total: 0 });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const initCounter = async () => {
       try {
-        // Increment visitor count
-        const newCount = await visitorCounter.incrementVisitor();
-        setCount(newCount);
+        // Increment visitor count and get stats
+        const newStats = await visitorCounter.incrementVisitor();
+        setStats(newStats);
       } catch (error) {
         console.error('Failed to update visitor count:', error);
-        // Try to get count without incrementing if update fails
-        const currentCount = await visitorCounter.getVisitorCount();
-        setCount(currentCount);
+        // Try to get stats without incrementing if update fails
+        const currentStats = await visitorCounter.getVisitorStats();
+        setStats(currentStats);
       } finally {
         setLoading(false);
       }
@@ -25,18 +32,28 @@ export const VisitorCounter: React.FC = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="text-center text-gray-500 text-sm py-2">
-        Đang tải...
-      </div>
-    );
+    return null;
   }
 
   return (
-    <div className="text-center text-gray-600 dark:text-gray-400 text-sm py-2 border-t border-gray-200 dark:border-gray-700 mt-4">
-      <div className="flex items-center justify-center gap-2">
-        <span className="text-lg">👥</span>
-        <span>Lượt truy cập: <strong className="text-blue-600 dark:text-blue-400">{count.toLocaleString('vi-VN')}</strong></span>
+    <div className="mt-4 pt-4 border-t border-slate-300 dark:border-slate-800">
+      <div className="grid grid-cols-4 gap-2 text-center text-sm">
+        <div className="bg-slate-200 dark:bg-slate-800 p-3 rounded-lg">
+          <div className="text-blue-600 dark:text-blue-400 font-bold text-lg">{stats.today}</div>
+          <div className="text-slate-600 dark:text-slate-400 text-xs">Hôm nay</div>
+        </div>
+        <div className="bg-slate-200 dark:bg-slate-800 p-3 rounded-lg">
+          <div className="text-green-600 dark:text-green-400 font-bold text-lg">{stats.week}</div>
+          <div className="text-slate-600 dark:text-slate-400 text-xs">Tuần này</div>
+        </div>
+        <div className="bg-slate-200 dark:bg-slate-800 p-3 rounded-lg">
+          <div className="text-purple-600 dark:text-purple-400 font-bold text-lg">{stats.year}</div>
+          <div className="text-slate-600 dark:text-slate-400 text-xs">Năm nay</div>
+        </div>
+        <div className="bg-slate-200 dark:bg-slate-800 p-3 rounded-lg">
+          <div className="text-orange-600 dark:text-orange-400 font-bold text-lg">{stats.total}</div>
+          <div className="text-slate-600 dark:text-slate-400 text-xs">Tổng cộng</div>
+        </div>
       </div>
     </div>
   );
