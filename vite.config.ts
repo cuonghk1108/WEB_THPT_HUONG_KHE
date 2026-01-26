@@ -22,7 +22,7 @@ export default defineConfig(({ mode }) => {
         }
       },
       define: {
-        'import.meta.env.VITE_GEMINI_API_KEY': JSON.stringify(env.VITE_GEMINI_API_KEY)
+        // GEMINI_API_KEY is server-side only - never expose to client
       },
       resolve: {
         alias: {
