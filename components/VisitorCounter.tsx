@@ -14,20 +14,24 @@ export const VisitorCounter: React.FC = () => {
 
   useEffect(() => {
     // Fire-and-forget: increment and update in background, don't block render
+    console.log('VisitorCounter: Starting increment...');
     visitorCounter.incrementVisitor()
       .then(newStats => {
+        console.log('VisitorCounter: Increment success, stats:', newStats);
         setStats(newStats);
         setLoaded(true);
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error('VisitorCounter: Increment failed:', err);
         // Fallback: try to get stats without incrementing
         visitorCounter.getVisitorStats()
           .then(currentStats => {
+            console.log('VisitorCounter: Fallback success, stats:', currentStats);
             setStats(currentStats);
             setLoaded(true);
           })
           .catch(err => {
-            console.error('Failed to load visitor stats:', err);
+            console.error('VisitorCounter: Fallback failed:', err);
             setLoaded(true);
           });
       });
