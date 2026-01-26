@@ -36,24 +36,13 @@ export const VisitorCounter: React.FC = () => {
   }
 
   return (
-    <div className="mt-4 pt-4 border-t border-slate-300 dark:border-slate-800">
-      <div className="grid grid-cols-4 gap-2 text-center text-sm">
-        <div className="bg-slate-200 dark:bg-slate-800 p-3 rounded-lg">
-          <div className="text-blue-600 dark:text-blue-400 font-bold text-lg">{stats.today}</div>
-          <div className="text-slate-600 dark:text-slate-400 text-xs">Hôm nay</div>
-        </div>
-        <div className="bg-slate-200 dark:bg-slate-800 p-3 rounded-lg">
-          <div className="text-green-600 dark:text-green-400 font-bold text-lg">{stats.week}</div>
-          <div className="text-slate-600 dark:text-slate-400 text-xs">Tuần này</div>
-        </div>
-        <div className="bg-slate-200 dark:bg-slate-800 p-3 rounded-lg">
-          <div className="text-purple-600 dark:text-purple-400 font-bold text-lg">{stats.year}</div>
-          <div className="text-slate-600 dark:text-slate-400 text-xs">Năm nay</div>
-        </div>
-        <div className="bg-slate-200 dark:bg-slate-800 p-3 rounded-lg">
-          <div className="text-orange-600 dark:text-orange-400 font-bold text-lg">{stats.total}</div>
-          <div className="text-slate-600 dark:text-slate-400 text-xs">Tổng cộng</div>
-        </div>
+    <div className="bg-slate-200 dark:bg-white/5 p-6 rounded-2xl border border-slate-300 dark:border-white/10">
+      <p className="text-slate-600 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Lượt truy cập</p>
+      <div className="text-slate-700 dark:text-slate-200 text-sm space-y-1">
+        <p>Hôm nay: <span className="font-semibold text-blue-600 dark:text-blue-400">{stats.today}</span></p>
+        <p>Tuần này: <span className="font-semibold text-green-600 dark:text-green-400">{stats.week}</span></p>
+        <p>Năm nay: <span className="font-semibold text-purple-600 dark:text-purple-400">{stats.year}</span></p>
+        <p className="pt-1 border-t border-slate-300 dark:border-slate-700">Tổng: <span className="font-bold text-orange-600 dark:text-orange-400">{stats.total}</span></p>
       </div>
     </div>
   );

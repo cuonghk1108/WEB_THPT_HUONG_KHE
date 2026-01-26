@@ -82,13 +82,17 @@ const Footer: React.FC = () => {
               </a>
             </div>
             
-            <div className="bg-slate-200 dark:bg-white/5 p-6 rounded-2xl border border-slate-300 dark:border-white/10">
-              <p className="text-slate-600 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Giờ làm việc</p>
-              <div className="text-slate-700 dark:text-slate-200 text-sm space-y-1">
-                <p>Thứ 2 - Thứ 7</p>
-                <p>Sáng: 7:00 - 11:30</p>
-                <p>Chiều: 13:30 - 17:00</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-slate-200 dark:bg-white/5 p-6 rounded-2xl border border-slate-300 dark:border-white/10">
+                <p className="text-slate-600 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Giờ làm việc</p>
+                <div className="text-slate-700 dark:text-slate-200 text-sm space-y-1">
+                  <p>Thứ 2 - Thứ 7</p>
+                  <p>Sáng: 7:00 - 11:30</p>
+                  <p>Chiều: 13:30 - 17:00</p>
+                </div>
               </div>
+              
+              <VisitorCounter />
             </div>
           </div>
         </div>
@@ -97,9 +101,6 @@ const Footer: React.FC = () => {
           <p>© {new Date().getFullYear()} {SCHOOL_NAME}. All rights reserved.</p>
           <p className="mt-2 md:mt-0 font-medium opacity-70">Code by cuongdev1108 _ Team The First</p>
         </div>
-
-        {/* Visitor Counter */}
-        <VisitorCounter />
       </div>
     </footer>
   );
