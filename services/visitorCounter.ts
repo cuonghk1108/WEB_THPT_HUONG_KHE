@@ -72,15 +72,15 @@ export const visitorCounter = {
         return { today: 0, week: 0, year: 0, total: 0 };
       }
 
-      // Public read endpoint (no API key needed)
-      const response = await fetch(`https://api.jsonbin.io/v3/b/${VISITOR_BIN_ID}/latest`);
+      // Get visitor data from serverless API (handles API key securely)
+      const response = await fetch('/api/get-visitor-data');
 
       if (!response.ok) {
         return { today: 0, week: 0, year: 0, total: 0 };
       }
 
-      const data = await response.json();
-      const visitorData: VisitorData = data.record || { total: 0, lastUpdate: new Date().toISOString(), daily: [] };
+      const result = await response.json();
+      const visitorData: VisitorData = result.data || { total: 0, lastUpdate: new Date().toISOString(), daily: [] };
 
       const today = getTodayDate();
       const weekStart = getWeekStartDate();
@@ -142,13 +142,13 @@ export const visitorCounter = {
     try {
       if (!VISITOR_BIN_ID) return [];
 
-      // Public read endpoint
-      const response = await fetch(`https://api.jsonbin.io/v3/b/${VISITOR_BIN_ID}/latest`);
+      // Get visitor data from serverless API
+      const response = await fetch('/api/get-visitor-data');
 
       if (!response.ok) return [];
 
-      const data = await response.json();
-      const visitorData: VisitorData = data.record || { total: 0, lastUpdate: new Date().toISOString(), daily: [] };
+      const result = await response.json();
+      const visitorData: VisitorData = result.data || { total: 0, lastUpdate: new Date().toISOString(), daily: [] };
 
       const sorted = [...(visitorData.daily || [])].sort((a, b) => a.date.localeCompare(b.date));
       const sliced = sorted.slice(-limit);
