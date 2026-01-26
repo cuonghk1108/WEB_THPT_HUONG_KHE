@@ -52,8 +52,35 @@ export const cloudStorage = {
 
   async saveData(data: Partial<StorageData>): Promise<boolean> {
     try {
-      // Read current data
-      const currentData = await this.fetchData() || {};
+      // Read current data from localStorage first (more reliable than fetch)
+      let currentData: StorageData = {};
+      
+      try {
+        const localGlobalImages = localStorage.getItem('school_images');
+        const localNews = localStorage.getItem('school_news');
+        const localTeachers = localStorage.getItem('school_teachers');
+        const localClubs = localStorage.getItem('school_clubs');
+        const localGallery = localStorage.getItem('school_gallery');
+        const localStudentCorner = localStorage.getItem('school_student_corner');
+        const localAchievementYears = localStorage.getItem('school_achievement_years');
+        const localDigitalLibrary = localStorage.getItem('school_digital_library');
+        const localStudentPortal = localStorage.getItem('school_student_portal');
+
+        currentData = {
+          globalImages: localGlobalImages ? JSON.parse(localGlobalImages) : undefined,
+          news: localNews ? JSON.parse(localNews) : undefined,
+          teachers: localTeachers ? JSON.parse(localTeachers) : undefined,
+          clubs: localClubs ? JSON.parse(localClubs) : undefined,
+          gallery: localGallery ? JSON.parse(localGallery) : undefined,
+          studentCorner: localStudentCorner ? JSON.parse(localStudentCorner) : undefined,
+          achievementYears: localAchievementYears ? JSON.parse(localAchievementYears) : undefined,
+          digitalLibrary: localDigitalLibrary ? JSON.parse(localDigitalLibrary) : undefined,
+          studentPortal: localStudentPortal ? JSON.parse(localStudentPortal) : undefined,
+        };
+      } catch (e) {
+        console.error('Error reading localStorage:', e);
+      }
+
       const updatedData = {
         ...currentData,
         ...data,
@@ -68,6 +95,11 @@ export const cloudStorage = {
         },
         body: JSON.stringify(updatedData),
       });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Save error:', errorData);
+      }
 
       return response.ok;
     } catch (error) {
