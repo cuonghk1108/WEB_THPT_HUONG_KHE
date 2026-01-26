@@ -38,25 +38,27 @@ const ImageManager: React.FC = () => {
         const base64String = reader.result as string;
         
         try {
-          // Try to upload to ImgBB cloud
+          // Upload to Cloudinary backend
+          console.log('📤 Uploading image to Cloudinary backend for key:', key);
           const imageUrl = await cloudStorage.uploadImage(base64String, key);
           
-          // Update with cloud URL
-          const newImages = { ...formData, [key]: imageUrl };
-          setFormData(newImages);
-          updateGlobalImages(newImages);
-          
-          setStatus('success');
-          setTimeout(() => setStatus('idle'), 2000);
+          if (imageUrl) {
+            console.log('✅ Image uploaded:', imageUrl);
+            const newImages = { ...formData, [key]: imageUrl };
+            setFormData(newImages);
+            updateGlobalImages(newImages);
+            
+            setStatus('success');
+            setTimeout(() => setStatus('idle'), 2000);
+          } else {
+            console.error('❌ Backend returned null URL');
+            alert('Lỗi: Backend upload thất bại!');
+            setStatus('idle');
+          }
         } catch (error) {
-          console.error('Cloud upload failed, using base64:', error);
-          // Fallback to base64 if cloud fails
-          const newImages = { ...formData, [key]: base64String };
-          setFormData(newImages);
-          updateGlobalImages(newImages);
-          
-          setStatus('success');
-          setTimeout(() => setStatus('idle'), 2000);
+          console.error('❌ Cloud upload failed:', error);
+          alert('Lỗi: Không thể kết nối đến server upload!');
+          setStatus('idle');
         }
       };
       reader.readAsDataURL(file);

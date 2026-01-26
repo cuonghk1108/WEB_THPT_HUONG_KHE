@@ -4,6 +4,13 @@
 const JSONBIN_API_KEY = import.meta.env.VITE_JSONBIN_API_KEY || '';
 const BIN_ID = import.meta.env.VITE_JSONBIN_BIN_ID || '';
 
+// Cloudinary configuration (free tier - 25GB storage, 25GB bandwidth/month)
+// Get your credentials at https://cloudinary.com
+const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || '';
+const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || ''; // unsigned preset
+const CLOUDINARY_API_KEY = import.meta.env.VITE_CLOUDINARY_API_KEY || '';
+const CLOUDINARY_API_SECRET = import.meta.env.VITE_CLOUDINARY_API_SECRET || '';
+
 interface StorageData {
   globalImages: any;
   news: any[];
@@ -68,30 +75,80 @@ export const cloudStorage = {
     }
   },
 
-  // Upload image to ImgBB
-  async uploadImage(base64Image: string): Promise<string | null> {
+  // Upload image to Cloudinary via backend (signed upload - secure)
+  async uploadImage(base64Image: string, folder: string = 'school'): Promise<string | null> {
     try {
-      // Free ImgBB API key (you should get your own at https://api.imgbb.com/)
-      const imgbbKey = 'e4842617bd1d406a719f793133917064'; // Replace with your key
-      
-      const formData = new URLSearchParams();
-      formData.append('image', base64Image.split(',')[1]);
+      console.log('🚀 Starting upload process...');
+      console.log('📁 Folder:', folder);
+      console.log('📦 Image size:', base64Image.length, 'bytes');
 
-      const response = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbKey}`, {
+      if (!base64Image || base64Image.length === 0) {
+        console.error('❌ Image is empty!');
+        return null;
+      }
+
+      console.log('📤 Sending request to http://localhost:3000/api/cloudinary/upload');
+
+      // Call backend API to upload
+      const response = await fetch('http://localhost:3000/api/cloudinary/upload', {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          image: base64Image,
+          folder: folder,
+        }),
       });
 
+      console.log('📨 Response status:', response.status);
+      console.log('📨 Response headers:', response.headers);
+
       const data = await response.json();
-      
-      if (data.success) {
-        return data.data.url;
+      console.log('📦 Backend response:', JSON.stringify(data, null, 2));
+
+      if (data.success && data.url) {
+        console.log('✅ Upload success! URL:', data.url);
+        return data.url;
+      } else if (data.error) {
+        console.error('❌ Upload error:', data.error);
+      } else {
+        console.error('❌ Unexpected response:', data);
       }
-      
+
       return null;
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error('❌ Error uploading to Cloudinary:', error);
+      if (error instanceof Error) {
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+      }
       return null;
     }
+  },
+
+  // Get optimized image URL from Cloudinary
+  getOptimizedUrl(imageUrl: string, options?: {
+    width?: number;
+    height?: number;
+    quality?: 'auto' | number;
+    format?: 'auto' | 'webp' | 'jpg' | 'png';
+  }): string {
+    if (!imageUrl.includes('cloudinary.com')) {
+      return imageUrl; // Return original if not Cloudinary URL
+    }
+
+    const { width, height, quality = 'auto', format = 'auto' } = options || {};
+    
+    // Insert transformation parameters into Cloudinary URL
+    const transformations = [
+      width && `w_${width}`,
+      height && `h_${height}`,
+      `q_${quality}`,
+      format && `f_${format}`,
+      'c_limit', // Don't upscale
+    ].filter(Boolean).join(',');
+
+    return imageUrl.replace('/upload/', `/upload/${transformations}/`);
   },
 };

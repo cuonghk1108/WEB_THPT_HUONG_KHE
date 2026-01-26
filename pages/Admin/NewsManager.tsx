@@ -89,18 +89,21 @@ const NewsManager: React.FC = () => {
         const base64String = reader.result as string;
         
         try {
-          // Try to upload to ImgBB cloud
+          // Upload to Cloudinary backend
+          console.log('📤 Uploading image to Cloudinary backend...');
           const imageUrl = await cloudStorage.uploadImage(base64String, 'news');
+          
           if (imageUrl) {
+            console.log('✅ Image uploaded:', imageUrl);
             setFormData({...formData, imageUrl});
-            return;
+          } else {
+            console.error('❌ Backend returned null URL');
+            alert('Lỗi: Backend upload thất bại!');
           }
         } catch (error) {
-          console.error('Cloud upload failed, using base64:', error);
+          console.error('❌ Cloud upload failed:', error);
+          alert('Lỗi: Không thể kết nối đến server upload!');
         }
-
-        // Fallback to base64
-        setFormData({...formData, imageUrl: base64String});
       };
       reader.readAsDataURL(file);
     } catch (error) {

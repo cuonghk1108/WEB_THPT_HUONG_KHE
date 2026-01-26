@@ -33,20 +33,26 @@ const GalleryManager: React.FC = () => {
         const base64String = reader.result as string;
         
         try {
-          // Try to upload to ImgBB cloud
+          // Upload to Cloudinary backend
+          console.log('📤 Uploading image to Cloudinary backend...');
           const imageUrl = await cloudStorage.uploadImage(base64String, 'gallery');
+          
           if (imageUrl) {
+            console.log('✅ Image uploaded successfully:', imageUrl);
             setFormData({...formData, imageUrl});
+            setUploadingImage(false);
+            return;
+          } else {
+            console.error('❌ Backend returned null URL');
+            alert('Lỗi: Backend upload thất bại. Vui lòng kiểm tra server!');
             setUploadingImage(false);
             return;
           }
         } catch (error) {
-          console.error('Cloud upload failed, using base64:', error);
+          console.error('❌ Cloud upload failed:', error);
+          alert('Lỗi: Không thể kết nối đến server upload. Kiểm tra backend?');
+          setUploadingImage(false);
         }
-
-        // Fallback to base64
-        setFormData({...formData, imageUrl: base64String});
-        setUploadingImage(false);
       };
       reader.readAsDataURL(file);
     } catch (error) {
@@ -58,7 +64,24 @@ const GalleryManager: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate required fields
+    if (!formData.imageUrl) {
+      alert('Vui lòng upload ảnh!');
+      return;
+    }
+    if (!formData.title.trim()) {
+      alert('Vui lòng nhập tiêu đề!');
+      return;
+    }
+    if (!formData.category) {
+      alert('Vui lòng chọn danh mục!');
+      return;
+    }
+
+    // Add gallery item
     addGalleryItem(formData);
+    alert('✅ Ảnh đã được thêm thành công!');
     setIsModalOpen(false);
     resetForm();
   };
