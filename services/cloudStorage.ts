@@ -1,5 +1,8 @@
-// Cloud storage using Upstash Redis (Vercel Marketplace integration)
-// Serverless functions handle all operations server-side
+// Cloud storage using JSONBin.io (free tier - 100k requests/month)
+// Create your own bin at https://jsonbin.io
+// Note: API keys are handled server-side only for security
+
+const BIN_ID = import.meta.env.VITE_JSONBIN_BIN_ID || '';
 
 // Cloudinary configuration (free tier - 25GB storage, 25GB bandwidth/month)
 // Get your credentials at https://cloudinary.com
@@ -25,20 +28,21 @@ interface StorageData {
 export const cloudStorage = {
   async fetchData(): Promise<StorageData | null> {
     try {
-      // Fetch via backend from Upstash Redis
-      const response = await fetch('/api/get-data');
-
+      // Try JSONBin first (public read endpoint)
+      const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`);
+      
+      
       if (response.ok) {
         const data = await response.json();
-        return data?.data || null;
+        return data.record;
       }
-
+      
       // Fallback to local file
       const localResponse = await fetch('/data/school-data.json');
       if (localResponse.ok) {
         return await localResponse.json();
       }
-
+      
       return null;
     } catch (error) {
       console.log('Using local storage only');
@@ -83,7 +87,7 @@ export const cloudStorage = {
         lastUpdate: new Date().toISOString(),
       };
 
-      // Save to Supabase via serverless function to protect API key
+      // Save to JSONBin via serverless function to protect API key
       const response = await fetch('/api/save-data', {
         method: 'POST',
         headers: {
