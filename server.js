@@ -17,17 +17,21 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
-// Configure Cloudinary
+// Configure Cloudinary - support both VITE_ and non-prefixed env vars
+const cloudName = process.env.VITE_CLOUDINARY_CLOUD_NAME || process.env.CLOUDINARY_CLOUD_NAME;
+const apiKey = process.env.VITE_CLOUDINARY_API_KEY || process.env.CLOUDINARY_API_KEY;
+const apiSecret = process.env.VITE_CLOUDINARY_API_SECRET || process.env.CLOUDINARY_API_SECRET;
+
 cloudinary.config({
-  cloud_name: process.env.VITE_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.VITE_CLOUDINARY_API_KEY,
-  api_secret: process.env.VITE_CLOUDINARY_API_SECRET,
+  cloud_name: cloudName,
+  api_key: apiKey,
+  api_secret: apiSecret,
 });
 
 console.log('🔧 Cloudinary Config:');
-console.log('  Cloud name:', process.env.VITE_CLOUDINARY_CLOUD_NAME);
-console.log('  API Key:', process.env.VITE_CLOUDINARY_API_KEY ? '✅ Set' : '❌ Missing');
-console.log('  API Secret:', process.env.VITE_CLOUDINARY_API_SECRET ? '✅ Set' : '❌ Missing');
+console.log('  Cloud name:', cloudName || '❌ Missing');
+console.log('  API Key:', apiKey ? '✅ Set' : '❌ Missing');
+console.log('  API Secret:', apiSecret ? '✅ Set' : '❌ Missing');
 
 // ========== API Routes ==========
 
@@ -64,9 +68,20 @@ app.post('/api/cloudinary/upload', async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Upload error:', error.message);
+    console.error('Error details:', error);
+    
+    // Check if Cloudinary config is missing
+    if (!cloudName || !apiKey || !apiSecret) {
+      return res.status(500).json({
+        success: false,
+        error: 'Cloudinary credentials not configured',
+        details: { cloudName: !!cloudName, apiKey: !!apiKey, apiSecret: !!apiSecret }
+      });
+    }
+    
     res.status(500).json({
       success: false,
-      error: error.message,
+      error: error.message || 'Upload failed',
     });
   }
 });
