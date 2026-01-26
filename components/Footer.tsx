@@ -2,6 +2,7 @@ import React from 'react';
 import { MapPin, Phone, Mail, Facebook, Youtube, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SCHOOL_ADDRESS, SCHOOL_EMAIL, SCHOOL_NAME, SCHOOL_PHONE } from '../constants';
+import { VisitorCounter } from './VisitorCounter';
 
 const Footer: React.FC = () => {
   return (
@@ -96,6 +97,9 @@ const Footer: React.FC = () => {
           <p>© {new Date().getFullYear()} {SCHOOL_NAME}. All rights reserved.</p>
           <p className="mt-2 md:mt-0 font-medium opacity-70">Code by cuongdev1108 _ Team The First</p>
         </div>
+
+        {/* Visitor Counter */}
+        <VisitorCounter />
       </div>
     </footer>
   );
