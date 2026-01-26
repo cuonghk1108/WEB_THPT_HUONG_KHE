@@ -1,6 +1,7 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
+import { Redis } from '@upstash/redis';
 
-// Save data to Supabase table `app_data` (single row id='main')
+// Save data to Upstash Redis (Vercel KV replacement)
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -16,18 +17,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const supabaseUrl = (process.env.SUPABASE_URL || '').trim();
-    const serviceRoleKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim();
-
-    if (!supabaseUrl) {
-      console.error('SUPABASE_URL not configured');
-      return res.status(500).json({ error: 'SUPABASE_URL chưa được cấu hình.' });
-    }
-
-    if (!serviceRoleKey) {
-      console.error('SUPABASE_SERVICE_ROLE_KEY not configured');
-      return res.status(500).json({ error: 'SUPABASE_SERVICE_ROLE_KEY chưa được cấu hình.' });
-    }
+    const redis = new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL!,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+    });
 
     const data = req.body;
 
@@ -35,27 +28,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'Invalid data' });
     }
 
-    // Upsert into app_data table with id='main'
-    const response = await fetch(`${supabaseUrl}/rest/v1/app_data`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        apikey: serviceRoleKey,
-        Authorization: `Bearer ${serviceRoleKey}`,
-        Prefer: 'return=minimal,resolution=merge-duplicates',
-      },
-      body: JSON.stringify({
-        id: 'main',
-        data,
-        updated_at: new Date().toISOString(),
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Supabase API error:', response.status, errorText);
-      return res.status(response.status).json({ error: 'Lỗi khi lưu dữ liệu lên Supabase' });
-    }
+    // Save to Redis with key 'school:data'
+    await redis.set('school:data', JSON.stringify({
+      ...data,
+      lastUpdate: new Date().toISOString(),
+    }));
 
     return res.status(200).json({ success: true });
   } catch (error: any) {

@@ -1,5 +1,5 @@
-// Cloud storage using Supabase (JSONB) via serverless endpoints
-// Serverless functions handle all secret keys server-side
+// Cloud storage using Upstash Redis (Vercel Marketplace integration)
+// Serverless functions handle all operations server-side
 
 // Cloudinary configuration (free tier - 25GB storage, 25GB bandwidth/month)
 // Get your credentials at https://cloudinary.com
@@ -25,7 +25,7 @@ interface StorageData {
 export const cloudStorage = {
   async fetchData(): Promise<StorageData | null> {
     try {
-      // Fetch via backend to keep Supabase keys server-side
+      // Fetch via backend from Upstash Redis
       const response = await fetch('/api/get-data');
 
       if (response.ok) {
