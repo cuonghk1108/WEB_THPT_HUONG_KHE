@@ -5,9 +5,20 @@
     "principal": "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400&auto=format&fit=crop",
     "introHistory": "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=800&auto=format&fit=crop"
   },
-  "news": [],
+  "news": [
+    {
+      "id": "news-2026-01-26-team-the-first",
+      "title": "Team The First tham dự kỳ thi "AI First – Khai phá tư duy, làm chủ AI"",
+      "excerpt": "Thể hiện tinh thần ham học hỏi và đổi mới sáng tạo, Team The First của trường THPT Hương Khê đã chính thức đăng ký tham dự kỳ thi AI First.",
+      "content": "Thể hiện tinh thần ham học hỏi và đổi mới sáng tạo, Team The First của trường THPT Hương Khê đã chính thức đăng ký tham dự kỳ thi \"AI First – Khai phá tư duy, làm chủ AI\" - một cuộc thi uy tín dành cho học sinh trung học phổ thông toàn quốc về ứng dụng trí tuệ nhân tạo.\n\nThành viên đội thi:\n- Nhóm trưởng: Võ Xuân Cường (Lớp A1, Khóa 59) - học sinh xuất sắc với đam mê công nghệ, đã phát triển website chính thức của nhà trường\n- Thành viên: Trần Kim Nhật - học sinh giỏi quốc gia môn Tin học, đạt giải Nhì, có nền tảng vững chắc về lập trình và thuật toán\n\nVới sự kết hợp giữa kỹ năng lập trình web hiện đại và kiến thức thuật toán sâu rộng, Team The First hứa hẹn sẽ mang đến những ý tưởng sáng tạo và ứng dụng AI thiết thực trong cuộc thi lần này.\n\nKỳ thi \"AI First\" tập trung vào việc khuyến khích học sinh tìm hiểu, nghiên cứu và ứng dụng các công nghệ AI như Machine Learning, Natural Language Processing, Computer Vision vào giải quyết các bài toán thực tế trong giáo dục, y tế, môi trường và đời sống xã hội.\n\nNhà trường và thầy cô giáo tin tưởng vào khả năng của các em và mong muốn đội thi sẽ có những trải nghiệm bổ ích, học hỏi được nhiều kiến thức mới và đạt được thành tích cao tại cuộc thi.\n\nChúc Team The First thành công!",
+      "date": "2026-01-26",
+      "category": "Hoạt động",
+      "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=800&auto=format&fit=crop",
+      "author": "Ban Giám Hiệu"
+    }
+  ],
   "teachers": [],
   "clubs": [],
   "gallery": [],
-  "lastUpdate": "2026-01-23T00:00:00.000Z"
+  "lastUpdate": "2026-01-26T10:30:00.000Z"
 }
