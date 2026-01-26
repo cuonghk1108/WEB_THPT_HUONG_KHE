@@ -13,8 +13,15 @@ export const getChatResponse = async (message: string): Promise<string> => {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to get response');
+      let errorDetail: any = null;
+      try {
+        errorDetail = await response.json();
+      } catch {
+        errorDetail = await response.text();
+      }
+      const messageFromServer =
+        typeof errorDetail === 'string' ? errorDetail : errorDetail?.error;
+      throw new Error(messageFromServer || 'Failed to get response');
     }
 
     const data = await response.json();
