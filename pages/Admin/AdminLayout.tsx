@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, FileText, Settings, LogOut, Bot, Users, Image as ImageIcon, BookOpen } from 'lucide-react';
+import { LayoutDashboard, FileText, Settings, LogOut, Bot, Users, Image as ImageIcon, BookOpen, Award, Library, Notebook } from 'lucide-react';
 import { useData } from '../../context/DataContext';
+import { ensureFaviconLinks, updateFaviconHref } from '../../utils/favicon';
 
 const AdminLayout: React.FC = () => {
-  const { logout } = useData();
+  const { logout, globalImages } = useData();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    ensureFaviconLinks();
+    if (globalImages?.logo) {
+      updateFaviconHref(globalImages.logo);
+    }
+  }, [globalImages?.logo]);
 
   const handleLogout = () => {
     logout();
@@ -13,19 +21,28 @@ const AdminLayout: React.FC = () => {
   };
 
   const navItemClass = ({ isActive }: { isActive: boolean }) => 
-    `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium ${isActive ? 'bg-primary-600 text-white shadow-md' : 'text-slate-300 hover:bg-slate-800 hover:text-white'}`;
+    `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium ${isActive ? 'bg-primary-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-800'}`;
 
   return (
-    <div className="flex h-screen bg-white dark:bg-slate-900 font-sans">
+    <div className="flex h-screen bg-slate-50 font-sans">
       {/* Sidebar */}
-      <aside className="w-64 bg-slate-900 text-white flex flex-col fixed h-full z-10 shadow-2xl">
-        <div className="p-6 flex items-center gap-3 border-b border-slate-800">
-          <div className="bg-primary-600 p-2 rounded-lg shadow-lg shadow-primary-500/30">
-             <Bot className="h-6 w-6 text-white" />
-          </div>
+      <aside className="w-64 bg-white text-slate-900 flex flex-col fixed h-full z-10 shadow-lg border-r border-slate-200">
+        <div className="p-6 flex items-center gap-3 border-b border-slate-200">
+          {globalImages?.logo ? (
+            <img
+              src={globalImages.logo}
+              alt="Logo"
+              className="h-11 w-11 rounded-lg object-cover border border-slate-300"
+              loading="lazy"
+            />
+          ) : (
+            <div className="bg-primary-600 p-2 rounded-lg shadow-lg shadow-primary-500/30">
+               <Bot className="h-6 w-6 text-white" />
+            </div>
+          )}
           <div>
-            <h1 className="font-bold font-heading text-white tracking-wide">Admin Panel</h1>
-            <p className="text-xs text-slate-300 font-medium">THPT Hương Khê</p>
+            <h1 className="font-bold font-heading text-slate-900 tracking-wide">Admin Panel</h1>
+            <p className="text-xs text-slate-600 font-medium">THPT Hương Khê</p>
           </div>
         </div>
 
@@ -46,6 +63,14 @@ const AdminLayout: React.FC = () => {
             <ImageIcon className="h-5 w-5" /> Thư viện ảnh
           </NavLink>
 
+          <NavLink to="/admin/achievements" className={navItemClass}>
+            <Award className="h-5 w-5" /> Thành tích
+          </NavLink>
+
+          <NavLink to="/admin/digital-library" className={navItemClass}>
+            <Library className="h-5 w-5" /> Thư viện số
+          </NavLink>
+
           <div className="pt-4 pb-2 px-4 text-xs font-bold uppercase text-slate-500 tracking-wider">Dữ liệu</div>
           
           <NavLink to="/admin/teachers" className={navItemClass}>
@@ -58,21 +83,25 @@ const AdminLayout: React.FC = () => {
             <BookOpen className="h-5 w-5" /> Góc học sinh
           </NavLink>
 
+          <NavLink to="/admin/student-portal" className={navItemClass}>
+            <Notebook className="h-5 w-5" /> Cổng học sinh
+          </NavLink>
+
           <div className="pt-4 pb-2 px-4 text-xs font-bold uppercase text-slate-500 tracking-wider">Hệ thống</div>
            <NavLink to="/admin/settings" className={navItemClass}>
             <Settings className="h-5 w-5" /> Cấu hình
           </NavLink>
         </nav>
 
-        <div className="p-4 border-t border-slate-800">
-          <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-3 text-red-300 hover:bg-red-500/20 hover:text-red-200 w-full rounded-lg transition-colors font-medium">
+        <div className="p-4 border-t border-slate-200">
+          <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 hover:text-red-700 w-full rounded-lg transition-colors font-medium">
             <LogOut className="h-5 w-5" /> Đăng xuất
           </button>
         </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 ml-64 p-8 overflow-y-auto">
+      <main className="flex-1 ml-64 p-8 overflow-y-auto bg-slate-50">
         <Outlet />
       </main>
     </div>

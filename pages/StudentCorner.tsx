@@ -1,12 +1,18 @@
 import React, { useMemo, useState } from 'react';
-import { Calendar, Download, FileText, Bell } from 'lucide-react';
+import { Calendar, Download, FileText, Bell, BookOpen, Eye } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 
 const StudentCorner: React.FC = () => {
-  const { studentCorner } = useData();
-  const [activeTab, setActiveTab] = useState<'schedule' | 'exam' | 'forms'>('schedule');
+  const { studentCorner, digitalLibrary } = useData();
+  const [activeTab, setActiveTab] = useState<'schedule' | 'exam' | 'forms' | 'library'>('schedule');
   const [selectedClass, setSelectedClass] = useState<string>(studentCorner.scheduleByClass[0]?.className || '');
+
+  const baseUrl = useMemo(() => (typeof window !== 'undefined' ? window.location.origin : ''), []);
+  const examIcs = baseUrl ? `${baseUrl}/api/calendar?type=exam` : '/api/calendar?type=exam';
+  const scheduleIcs = baseUrl ? `${baseUrl}/api/calendar?type=schedule` : '/api/calendar?type=schedule';
+  const examGoogle = `https://calendar.google.com/calendar/r?cid=${encodeURIComponent(examIcs)}`;
+  const scheduleGoogle = `https://calendar.google.com/calendar/r?cid=${encodeURIComponent(scheduleIcs)}`;
 
   const currentSchedule = useMemo(() => {
     return studentCorner.scheduleByClass.find((item) => item.className === selectedClass) || studentCorner.scheduleByClass[0];
@@ -27,8 +33,46 @@ const StudentCorner: React.FC = () => {
     <div className="bg-white dark:bg-slate-900 min-h-screen pb-16">
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white pt-32 pb-16">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl md:text-5xl font-bold font-heading mb-4">Góc học sinh</h1>
-          <p className="text-blue-100">Cổng thông tin tra cứu lịch học, lịch thi và tài liệu dành cho học sinh.</p>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h1 className="text-3xl md:text-5xl font-bold font-heading mb-2">Góc học sinh</h1>
+              <p className="text-blue-100">Cổng thông tin tra cứu lịch học, lịch thi và tài liệu dành cho học sinh.</p>
+              <div className="mt-4 flex flex-wrap gap-3 text-sm">
+                <Link
+                  to="/cong-hoc-sinh"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white text-slate-900 font-semibold shadow border border-slate-200 hover:bg-slate-50 transition"
+                >
+                  Đến Cổng Học Sinh
+                </Link>
+                <a
+                  href={scheduleGoogle}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white text-slate-900 font-semibold shadow border border-slate-200 hover:bg-slate-50 transition"
+                  target="_blank" rel="noreferrer"
+                >
+                  Đồng bộ TKB (Google)
+                </a>
+                <a
+                  href={scheduleIcs}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white text-slate-900 font-semibold shadow border border-slate-200 hover:bg-slate-50 transition"
+                >
+                  iCal TKB (Phụ huynh)
+                </a>
+                <a
+                  href={examGoogle}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white text-slate-900 font-semibold shadow border border-slate-200 hover:bg-slate-50 transition"
+                  target="_blank" rel="noreferrer"
+                >
+                  Đồng bộ Lịch thi
+                </a>
+                <a
+                  href={examIcs}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white text-slate-900 font-semibold shadow border border-slate-200 hover:bg-slate-50 transition"
+                >
+                  iCal Lịch thi
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -53,11 +97,16 @@ const StudentCorner: React.FC = () => {
           >
             Biểu mẫu & Quy định
           </button>
+          <button 
+            onClick={() => setActiveTab('library')}
+            className={`pb-4 px-4 font-bold text-sm transition-colors border-b-2 ${activeTab === 'library' ? 'border-blue-600 text-blue-600 dark:text-blue-400' : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}
+          >
+            Thư viện tài liệu
+          </button>
         </div>
 
         {/* Content */}
-        <div className="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 min-h-[400px]">
-          {activeTab === 'schedule' && (
+        <div className="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 min-h-[400px]">{activeTab === 'schedule' && (
             <div className="animate-fade-in">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -152,6 +201,59 @@ const StudentCorner: React.FC = () => {
               <div className="col-span-1 md:col-span-2 mt-4 text-center">
                  <Link to="/van-ban" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">Xem tất cả văn bản</Link>
               </div>
+            </div>
+          )}
+
+          {activeTab === 'library' && (
+            <div className="animate-fade-in">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <BookOpen className="h-6 w-6 text-primary-600" />
+                  Thư viện tài liệu
+                </h2>
+                <Link
+                  to="/thu-vien"
+                  className="text-sm text-primary-600 dark:text-primary-400 font-semibold hover:underline"
+                >
+                  Xem tất cả →
+                </Link>
+              </div>
+
+              {digitalLibrary.length === 0 ? (
+                <p className="text-slate-600 dark:text-slate-400">Chưa có tài liệu, vui lòng quay lại sau.</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {digitalLibrary.slice(0, 9).map((res) => (
+                    <div key={res.id} className="border border-slate-200 dark:border-slate-700 rounded-xl p-4 bg-white dark:bg-slate-800 shadow-sm hover:shadow-md transition-shadow">
+                      <div className="flex items-start justify-between mb-3">
+                        <BookOpen className="h-5 w-5 text-primary-600 dark:text-primary-400 flex-shrink-0" />
+                        <span className="text-xs px-2 py-1 bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded-full">
+                          {res.type}
+                        </span>
+                      </div>
+                      <h3 className="font-bold text-slate-900 dark:text-white mb-1 text-sm leading-snug break-words">
+                        {res.title}
+                      </h3>
+                      <p className="text-xs text-slate-600 dark:text-slate-400 mb-3">{res.author}</p>
+                      <div className="flex justify-between items-center text-xs text-slate-500 dark:text-slate-500 mb-3 pb-3 border-b border-slate-200 dark:border-slate-700">
+                        <span>{res.category}</span>
+                        <span className="flex items-center gap-1">
+                          <Eye className="h-3 w-3" />
+                          {res.views}
+                        </span>
+                      </div>
+                      <a
+                        href={res.url || '#'}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="block text-center px-3 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-lg transition-colors"
+                      >
+                        Xem tài liệu
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>

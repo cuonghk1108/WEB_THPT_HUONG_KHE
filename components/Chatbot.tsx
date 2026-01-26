@@ -119,7 +119,7 @@ const Chatbot: React.FC = () => {
     <div className="fixed bottom-6 right-6 z-50 font-sans flex flex-col items-end">
       
       {/* Tooltip Bubble - Positioned to the left of the icon */}
-      <div className={`absolute bottom-2 right-20 bg-white px-4 py-3 rounded-xl rounded-br-none shadow-lg border border-gray-100 transform transition-all duration-500 origin-bottom-right max-w-[250px] ${!isOpen && showTooltip ? 'opacity-100 scale-100 translate-x-0' : 'opacity-0 scale-50 translate-x-8 pointer-events-none'}`}>
+      <div className={`absolute bottom-2 right-20 bg-white px-4 py-3 rounded-xl rounded-br-none shadow-lg border border-gray-100 transform transition-all duration-300 origin-bottom-right max-w-[250px] ${!isOpen && showTooltip ? 'opacity-100 scale-100 translate-x-0' : 'opacity-0 scale-75 translate-x-8 pointer-events-none'}`}>
         <div className="flex flex-col gap-1">
             <h4 className="font-bold text-slate-900 text-sm">Trợ lý ảo</h4>
             <p className="text-sm text-slate-600 leading-snug">Bạn cần hỗ trợ? Chúng tôi luôn sẵn sàng hỗ trợ!</p>
@@ -131,13 +131,14 @@ const Chatbot: React.FC = () => {
         onClick={handleOpen}
         className={`${
           isOpen ? 'scale-0 opacity-0 rotate-90' : 'scale-100 opacity-100 rotate-0'
-        } ${!isOpen && showTooltip ? 'animate-bounce' : ''} transition-all duration-300 absolute bottom-0 right-0 bg-gradient-to-tr from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white p-4 rounded-full shadow-xl shadow-primary-500/30 flex items-center justify-center group`}
+        } ${!isOpen && showTooltip ? 'animate-pulse' : ''} transition-all duration-200 absolute bottom-0 right-0 bg-gradient-to-tr from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white p-4 rounded-full shadow-lg shadow-primary-500/20 flex items-center justify-center group`}
+        style={{ willChange: 'transform, opacity' }}
       >
         <span className="absolute -top-1 -right-1 flex h-3 w-3">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-50"></span>
+          <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-white opacity-40"></span>
           <span className="relative inline-flex rounded-full h-3 w-3 bg-red-400 border-2 border-primary-600"></span>
         </span>
-        <Bot className="h-7 w-7 group-hover:scale-110 transition-transform" />
+        <Bot className="h-7 w-7 group-hover:scale-110 transition-transform duration-200" style={{ willChange: 'transform' }} />
       </button>
 
       {/* Chat Window */}
@@ -145,6 +146,7 @@ const Chatbot: React.FC = () => {
         className={`${
           isOpen ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-10 pointer-events-none'
         } transition-all duration-300 origin-bottom-right bg-gradient-to-br from-slate-50 to-gray-100 dark:bg-slate-900 w-[350px] sm:w-[380px] h-[550px] rounded-3xl shadow-2xl flex flex-col border border-gray-200 dark:border-slate-700 overflow-hidden ring-1 ring-gray-200 dark:ring-slate-700`}
+        style={{ willChange: 'transform, opacity' }}
       >
         {/* Header */}
         <div className="bg-gradient-to-r from-primary-600 to-primary-800 p-4 flex justify-between items-center text-white shadow-md z-10">

@@ -37,26 +37,28 @@ const Header: React.FC = () => {
   return (
     <>
       <header 
-        className={`fixed top-0 w-full z-50 transition-all duration-500 ease-out ${
+        className={`fixed top-0 w-full z-50 transition-all duration-300 ease-out ${
           scrolled 
             ? 'bg-white dark:bg-slate-950/90 backdrop-blur-md shadow-md py-3' 
             : 'bg-white dark:bg-transparent py-6'
         }`}
+        style={{ willChange: 'padding, background-color, box-shadow' }}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-<div className={`flex justify-between items-center bg-white dark:bg-slate-900/30 backdrop-blur-sm border border-transparent dark:border-slate-700/40 rounded-full px-6 py-2 transition-all duration-300 ease-out shadow-none dark:shadow-none`}>
+<div className={`flex justify-between items-center bg-white dark:bg-slate-900/30 backdrop-blur-sm border border-transparent dark:border-slate-700/40 rounded-full px-6 py-2 transition-colors duration-200 ease-out shadow-none dark:shadow-none`}>
             
             {/* Logo Section */}
             <Link to="/" onClick={handleLinkClick} className="flex items-center space-x-3 cursor-pointer group">
               <img 
                 src={globalImages.logo} 
                 alt="Logo THPT Hương Khê" 
-                className={`h-8 w-8 object-cover transition-all duration-500 group-hover:scale-110 ${
+                className={`h-8 w-8 object-cover transition-transform duration-300 group-hover:scale-110 ${
                   scrolled ? 'rotate-0' : '-rotate-3'
-                }`} 
-              />
+                }`}
+                style={{ willChange: 'transform' }}
+              /> 
               <div className="flex flex-col">
-                <h1 className={`text-xl font-bold font-heading leading-none transition-colors ${scrolled ? 'text-slate-900 dark:text-white' : 'text-slate-800 dark:text-slate-100'}`}>
+                <h1 className={`text-xl font-bold font-heading leading-none transition-colors duration-200 ${scrolled ? 'text-slate-900 dark:text-white' : 'text-slate-800 dark:text-slate-100'}`}>
                   {SCHOOL_NAME}
                 </h1>
                 <span className="text-[9px] font-bold tracking-wide text-primary-600 uppercase mt-0.5">60 NĂM HÌNH THÀNH VÀ PHÁT TRIỂN</span>

@@ -3,8 +3,11 @@ import { MapPin, Phone, Mail, Facebook, Youtube, ArrowRight } from 'lucide-react
 import { Link } from 'react-router-dom';
 import { SCHOOL_ADDRESS, SCHOOL_EMAIL, SCHOOL_NAME, SCHOOL_PHONE } from '../constants';
 import { VisitorCounter } from './VisitorCounter';
+import CurrentTime from './CurrentTime';
+import { useData } from '../context/DataContext';
 
 const Footer: React.FC = () => {
+  const { globalImages } = useData();
   return (
     <footer className="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-white pt-20 pb-10 rounded-t-[3rem] mt-10 border-t border-slate-300 dark:border-slate-900">
       <div className="container mx-auto px-4 md:px-8">
@@ -12,9 +15,19 @@ const Footer: React.FC = () => {
           
           {/* Column 1: School Info */}
           <div className="space-y-6">
-            <h3 className="text-2xl font-bold font-heading mb-6 inline-block text-slate-900 dark:text-white">
-              {SCHOOL_NAME}
-            </h3>
+            <div className="flex items-center gap-3 mb-6">
+              {globalImages?.logo && (
+                <img
+                  src={globalImages.logo}
+                  alt="Logo trường THPT Hương Khê"
+                  className="h-10 w-10 rounded-lg object-cover border border-slate-300 dark:border-slate-700"
+                  loading="lazy"
+                />
+              )}
+              <h3 className="text-2xl font-bold font-heading inline-block text-slate-900 dark:text-white">
+                {SCHOOL_NAME}
+              </h3>
+            </div>
             <p className="text-slate-600 dark:text-slate-500 text-sm leading-relaxed mb-6">
               Ngôi trường với bề dày lịch sử hơn 60 năm, nơi ươm mầm tài năng và nuôi dưỡng nhân cách cho thế hệ trẻ.
             </p>
@@ -90,6 +103,7 @@ const Footer: React.FC = () => {
                   <p>Sáng: 7:00 - 11:30</p>
                   <p>Chiều: 13:30 - 17:00</p>
                 </div>
+                <CurrentTime />
               </div>
               
               <VisitorCounter />

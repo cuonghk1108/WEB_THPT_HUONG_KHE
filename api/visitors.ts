@@ -35,29 +35,24 @@ function saveVisitorData(data: VisitorData): void {
   }
 }
 
-export default async function handler(req, res) {
+export default async function handler(req: any, res: any) {
   try {
     const method = req.method;
 
     if (method === 'GET') {
-      // Get current visitor count
       const data = getVisitorData();
-      return res.status(200).json({ success: true, count: data.count });
-    }
-
-    if (method === 'POST') {
-      // Increment visitor count
+      res.status(200).json(data);
+    } else if (method === 'POST') {
       const data = getVisitorData();
       data.count += 1;
       data.lastUpdate = new Date().toISOString();
       saveVisitorData(data);
-
-      return res.status(200).json({ success: true, count: data.count });
+      res.status(200).json(data);
+    } else {
+      res.status(405).json({ error: 'Method not allowed' });
     }
-
-    return res.status(405).json({ error: 'Method not allowed' });
   } catch (error) {
-    console.error('Visitor counter error:', error);
-    return res.status(500).json({ success: false, error: error.message });
+    console.error('Error in visitor handler:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 }

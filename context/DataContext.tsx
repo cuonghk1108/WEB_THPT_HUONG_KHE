@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { NewsItem, GlobalImages, Teacher, Club, GalleryItem, StudentCornerData, ExamItem, FormItem } from '../types';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { NewsItem, GlobalImages, Teacher, Club, GalleryItem, StudentCornerData, ExamItem, FormItem, Event, Achievement, AchievementYear, DigitalResource, StudentPortalData, GradeItem, AssignmentItem, Announcement } from '../types';
 import { cloudStorage } from '../services/cloudStorage';
 
 interface DataContextType {
@@ -32,6 +32,42 @@ interface DataContextType {
   addForm: (form: Omit<FormItem, 'id'>) => void;
   deleteForm: (id: number) => void;
 
+  events: Event[];
+  addEvent: (item: Omit<Event, 'id'>) => void;
+  updateEvent: (id: number, item: Partial<Event>) => void;
+  deleteEvent: (id: number) => void;
+
+  achievements: Achievement[];
+  addAchievement: (item: Omit<Achievement, 'id'>) => void;
+  updateAchievement: (id: number, item: Partial<Achievement>) => void;
+  deleteAchievement: (id: number) => void;
+
+  achievementYears: AchievementYear[];
+  addAchievementYear: (year: number) => void;
+  updateAchievementStats: (year: number, stats: AchievementYear['stats']) => void;
+  addAchievementToYear: (year: number, item: Omit<Achievement, 'id'>) => void;
+  updateAchievementInYear: (year: number, id: number, item: Partial<Achievement>) => void;
+  deleteAchievementInYear: (year: number, id: number) => void;
+
+  digitalLibrary: DigitalResource[];
+  addResource: (item: Omit<DigitalResource, 'id'>) => void;
+  updateResource: (id: number, item: Partial<DigitalResource>) => void;
+  deleteResource: (id: number) => void;
+
+  studentPortal: StudentPortalData;
+  updateStudentInfo: (info: StudentPortalData['info']) => void;
+  addGrade: (grade: GradeItem) => void;
+  updateGrade: (index: number, grade: Partial<GradeItem>) => void;
+  deleteGrade: (index: number) => void;
+  addAssignment: (assignment: AssignmentItem) => void;
+  updateAssignment: (index: number, assignment: Partial<AssignmentItem>) => void;
+  deleteAssignment: (index: number) => void;
+
+  announcements: Announcement[];
+  addAnnouncement: (item: Omit<Announcement, 'id'>) => void;
+  updateAnnouncement: (id: number, item: Partial<Announcement>) => void;
+  deleteAnnouncement: (id: number) => void;
+
   isAuthenticated: boolean;
   login: () => void;
   logout: () => void;
@@ -48,13 +84,19 @@ const INITIAL_NEWS: NewsItem[] = [
       content: `
         <p>Kỳ thi chọn Học sinh giỏi Quốc gia năm học 2025-2026 do Bộ Giáo dục và Đào tạo tổ chức đã chính thức công bố kết quả. Niềm vui vỡ òa đến với thầy và trò trường THPT Hương Khê khi em <strong>Trần Kim Nhật</strong>, học sinh lớp 12A1, đã xuất sắc giành giải Nhì môn Tin học.</p>
         
-        <h3>Hành trình chinh phục đỉnh cao</h3>
-        <p>Để đạt được thành tích này, Nhật đã phải trải qua những ngày tháng ôn luyện miệt mài. Chia sẻ về bí quyết học tập, Nhật cho biết: <em>"Em luôn cố gắng nắm vững kiến thức cơ bản trong sách giáo khoa, sau đó tìm tòi các bài tập nâng cao trên mạng và các diễn đàn lập trình quốc tế. Sự hướng dẫn tận tình của thầy cô tổ Tin học cũng là động lực lớn giúp em vượt qua những bài toán khó."</em></p>
+        <h3>Hành trình bền bỉ và chiến lược ôn luyện</h3>
+        <p>Để đạt được thành tích này, Nhật đã phải trải qua những ngày tháng ôn luyện miệt mài. Em chủ động xây dựng lộ trình học tập gồm ba giai đoạn: củng cố nền tảng, luyện kỹ thuật, và mô phỏng thi. Ở mỗi giai đoạn, Nhật đều đặt mục tiêu cụ thể như hoàn thành bộ đề theo từng chủ đề (graph, DP, number theory), ghi chép lỗi sai và rút ra quy tắc "không lặp lại sai lầm".</p>
+        <p>Nhật chia sẻ: <em>"Em luôn cố gắng nắm vững kiến thức cơ bản trong sách giáo khoa, sau đó tìm tòi các bài tập nâng cao trên mạng và các diễn đàn lập trình quốc tế. Sự hướng dẫn tận tình của thầy cô tổ Tin học cũng là động lực lớn giúp em vượt qua những bài toán khó."</em> Bên cạnh đó, em còn dành thời gian rèn tư duy thuật toán bằng cách giải thích lời giải cho bạn cùng lớp, bởi <em>"giải thích được tức là hiểu sâu"</em>.</p>
+        
+        <h3>Khoảnh khắc trên bục vinh quang</h3>
+        <p>Khi được xướng tên tại lễ trao giải, Nhật xúc động gửi lời cảm ơn tới gia đình, thầy cô và bạn bè: <em>"Không có sự tin tưởng và động viên của mọi người, em khó có thể đi đường dài."</em> Đại diện nhà trường đã trao tặng giấy khen và phần thưởng nhằm ghi nhận nỗ lực không ngừng của em.</p>
         
         <h3>Niềm tự hào của nhà trường</h3>
         <p>Thầy Hồ Đức Cương - Hiệu trưởng nhà trường cho biết: <em>"Thành tích của em Nhật không chỉ là niềm vinh dự cho cá nhân và gia đình em, mà còn là niềm tự hào to lớn của trường THPT Hương Khê. Đây là minh chứng rõ nét cho chất lượng đào tạo mũi nhọn của nhà trường trong những năm qua."</em></p>
+        <p>Nhà trường sẽ tiếp tục đầu tư cho các đội tuyển, xây dựng môi trường học thuật cởi mở để học sinh có thể phát huy tối đa năng lực. Sắp tới, tổ Tin học dự kiến tổ chức chuỗi workshop "Thuật toán ứng dụng" để lan tỏa tinh thần học tập và chia sẻ kinh nghiệm.</p>
         
-        <p>Hy vọng rằng tấm gương của Trần Kim Nhật sẽ lan tỏa, khích lệ tinh thần học tập của toàn thể học sinh trong trường, tiếp tục viết tiếp những trang vàng truyền thống của mái trường 60 năm tuổi.</p>
+        <h3>Thông điệp gửi tới các bạn học sinh</h3>
+        <p>Thành công của Nhật là câu chuyện về kỷ luật, sự kiên trì và tinh thần tự học. Hy vọng tấm gương của em sẽ lan tỏa, khích lệ tinh thần học tập của toàn thể học sinh trong trường, tiếp tục viết tiếp những trang vàng truyền thống của mái trường 60 năm tuổi.</p>
       `,
       date: '20/01/2026', 
       imageUrl: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=800&auto=format&fit=crop', 
@@ -67,19 +109,22 @@ const INITIAL_NEWS: NewsItem[] = [
       content: `
         <p>Trong không khí rực rỡ của hoa phượng đỏ và tiếng ve kêu râm ran báo hiệu mùa hè, sáng ngày 25/05/2025, trường THPT Hương Khê đã long trọng tổ chức <strong>Lễ tổng kết năm học 2024-2025 và Lễ Tri ân - Trưởng thành cho học sinh khối 12</strong>.</p>
         
-        <h3>Một năm học thắng lợi</h3>
+        <h3>Một năm học thắng lợi với nhiều dấu ấn</h3>
         <p>Năm học 2024-2025 là một năm học đặc biệt với nhiều thách thức và cơ hội. Tuy nhiên, với sự nỗ lực không ngừng nghỉ, thầy và trò nhà trường đã gặt hái được nhiều thành tích xuất sắc:</p>
         <ul>
           <li>Tỷ lệ học sinh đạt học lực Giỏi tăng 5% so với năm trước.</li>
           <li>Đạt 15 giải trong kỳ thi Học sinh giỏi Tỉnh.</li>
+          <li>Nhiều đề tài nghiên cứu khoa học học sinh được ứng dụng vào thực tế.</li>
           <li>Các hoạt động văn hóa, văn nghệ, thể dục thể thao diễn ra sôi nổi, tạo sân chơi bổ ích cho học sinh.</li>
         </ul>
+        <p>Ngoài thành tích học tập, nhà trường chú trọng giáo dục giá trị sống, kỹ năng mềm, tinh thần trách nhiệm cộng đồng thông qua các chương trình ngoại khóa, tình nguyện, hướng nghiệp.</p>
 
         <h3>Giây phút tri ân xúc động</h3>
         <p>Phần lắng đọng nhất của buổi lễ chính là Lễ Tri ân và Trưởng thành dành cho học sinh khối 12. Những bó hoa tươi thắm, những lời cảm ơn chân thành gửi đến cha mẹ, thầy cô đã khiến không khí buổi lễ trở nên vô cùng xúc động. </p>
         <p>Đại diện học sinh khối 12, em Nguyễn Thị Mai Anh (12D1) nghẹn ngào: <em>"Ba năm cấp 3 trôi qua nhanh như một giấc mơ. Chúng em xin hứa sẽ cố gắng hết mình trong kỳ thi tốt nghiệp sắp tới để không phụ lòng mong mỏi của thầy cô và cha mẹ."</em></p>
         
-        <p>Tiếng trống trường khép lại năm học đã vang lên, mở ra một mùa hè ý nghĩa và một kỳ thi quan trọng phía trước. Chúc các em học sinh khối 12 chân cứng đá mềm, vượt vũ môn hóa rồng thành công!</p>
+        <h3>Hướng tới tương lai</h3>
+        <p>Tiếng trống trường khép lại năm học đã vang lên, mở ra một mùa hè ý nghĩa và một kỳ thi quan trọng phía trước. Chúc các em học sinh khối 12 chân cứng đá mềm, vượt vũ môn hóa rồng thành công! Nhà trường luôn đồng hành, hỗ trợ các em trong chặng đường phía trước.</p>
       `,
       date: '25/05/2025', 
       imageUrl: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=800&auto=format&fit=crop', 
@@ -93,10 +138,10 @@ const INITIAL_NEWS: NewsItem[] = [
         <p>Căn cứ vào kế hoạch tuyển sinh của Sở Giáo dục và Đào tạo Hà Tĩnh, Trường THPT Hương Khê trân trọng thông báo kế hoạch tuyển sinh vào lớp 10 năm học 2025-2026 như sau:</p>
 
         <h3>1. Chỉ tiêu tuyển sinh</h3>
-        <p>Tổng chỉ tiêu: <strong>450 học sinh</strong>, chia thành 10 lớp (bao gồm các lớp định hướng Khoa học Tự nhiên và Khoa học Xã hội).</p>
+        <p>Tổng chỉ tiêu: <strong>450 học sinh</strong>, chia thành 10 lớp (bao gồm các lớp định hướng Khoa học Tự nhiên và Khoa học Xã hội). Nhà trường ưu tiên tạo điều kiện cho học sinh có năng khiếu tham gia các câu lạc bộ học thuật, nghệ thuật và thể thao.</p>
 
         <h3>2. Phương thức tuyển sinh</h3>
-        <p>Thực hiện theo phương thức <strong>Thi tuyển</strong> do Sở GD&ĐT tổ chức. Thí sinh sẽ thi 3 môn bắt buộc:</p>
+        <p>Thực hiện theo phương thức <strong>Thi tuyển</strong> do Sở GD&ĐT tổ chức. Thí sinh sẽ thi 3 môn bắt buộc và có thể có các môn tự chọn theo định hướng:</p>
         <ul>
             <li><strong>Toán:</strong> Thi tự luận (90 phút).</li>
             <li><strong>Ngữ văn:</strong> Thi tự luận (90 phút).</li>
@@ -114,8 +159,10 @@ const INITIAL_NEWS: NewsItem[] = [
             <li>Giấy xác nhận chế độ ưu tiên (nếu có).</li>
         </ul>
 
-        <p>Nhà trường khuyến khích phụ huynh và học sinh nộp hồ sơ trực tuyến qua cổng thông tin điện tử của trường để tiết kiệm thời gian.</p>
-        <p><em>Mọi thắc mắc xin liên hệ Văn phòng nhà trường qua số điện thoại: (0239) 3 871 234.</em></p>
+        <h3>4. Quyền lợi học sinh</h3>
+        <p>Học sinh trúng tuyển sẽ được tham gia môi trường học tập hiện đại với phòng thí nghiệm, thư viện số, câu lạc bộ đa dạng. Nhà trường có các chương trình học bổng khuyến học dành cho học sinh xuất sắc và hoàn cảnh khó khăn.</p>
+
+        <p>Nhà trường khuyến khích phụ huynh và học sinh nộp hồ sơ trực tuyến qua cổng thông tin điện tử của trường để tiết kiệm thời gian. <em>Mọi thắc mắc xin liên hệ Văn phòng nhà trường qua số điện thoại: (0239) 3 871 234.</em></p>
       `,
       date: '15/05/2025', 
       imageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=800&auto=format&fit=crop', 
@@ -128,8 +175,9 @@ const INITIAL_NEWS: NewsItem[] = [
         content: `
           <p>Hòa chung không khí tưng bừng, phấn khởi của tuổi trẻ cả nước chào mừng kỷ niệm 94 năm Ngày thành lập Đoàn TNCS Hồ Chí Minh (26/03/1931 - 26/03/2025), Đoàn trường THPT Hương Khê đã tổ chức thành công <strong>Hội thi Văn nghệ - Thể thao học đường</strong>.</p>
           
-          <h3>Sân chơi của sự sáng tạo</h3>
-          <p>Hội thi năm nay quy tụ hơn 30 tiết mục văn nghệ đặc sắc đến từ các chi đoàn. Các tiết mục đa dạng về thể loại: từ đơn ca, song ca, múa đương đại, nhảy hiện đại đến kịch nói. Nhiều tiết mục được đầu tư công phu về trang phục, đạo cụ và kịch bản, thể hiện sự sáng tạo không giới hạn của học sinh trường Hương Khê.</p>
+            <h3>Sân chơi của sự sáng tạo</h3>
+            <p>Hội thi năm nay quy tụ hơn 30 tiết mục văn nghệ đặc sắc đến từ các chi đoàn. Các tiết mục đa dạng về thể loại: từ đơn ca, song ca, múa đương đại, nhảy hiện đại đến kịch nói. Nhiều tiết mục được đầu tư công phu về trang phục, đạo cụ và kịch bản, thể hiện sự sáng tạo không giới hạn của học sinh trường Hương Khê.</p>
+            <p>Bên cạnh các tiết mục văn nghệ, khu vực trưng bày ảnh, sản phẩm handmade, truyền thông số do CLB Media thực hiện đã thu hút sự quan tâm lớn của học sinh và phụ huynh. Sự phối hợp giữa văn nghệ và công nghệ đã tạo nên một ngày hội đa sắc màu.</p>
 
           <h3>Kết quả hội thi</h3>
           <p>Ban giám khảo đã làm việc rất vất vả để chọn ra những tiết mục xuất sắc nhất:</p>
@@ -138,8 +186,10 @@ const INITIAL_NEWS: NewsItem[] = [
             <li><strong>Giải Nhì:</strong> Chi đoàn 12D2 (Nhảy Mashup) và 10A1 (Hát múa).</li>
             <li><strong>Giải Ba:</strong> Các chi đoàn 11A2, 12A1, 10D3.</li>
           </ul>
-
-          <p>Bên cạnh văn nghệ, các giải đấu bóng đá, bóng chuyền hơi và kéo co cũng diễn ra vô cùng kịch tính, thu hút sự cổ vũ nhiệt tình của đông đảo học sinh và giáo viên. Đây thực sự là ngày hội lớn, thắt chặt tình đoàn kết và rèn luyện kỹ năng sống cho đoàn viên thanh niên.</p>
+          
+            <h3>Lan tỏa tinh thần đoàn kết</h3>
+            <p>Bên cạnh văn nghệ, các giải đấu bóng đá, bóng chuyền hơi và kéo co cũng diễn ra vô cùng kịch tính, thu hút sự cổ vũ nhiệt tình của đông đảo học sinh và giáo viên. Đây thực sự là ngày hội lớn, thắt chặt tình đoàn kết và rèn luyện kỹ năng sống cho đoàn viên thanh niên.</p>
+            <p>Đoàn trường khẳng định sẽ duy trì các hoạt động định kỳ, mở rộng thêm các sân chơi về STEM, khởi nghiệp và truyền thông, để mỗi học sinh đều có cơ hội tỏa sáng ở lĩnh vực mình yêu thích.</p>
         `,
         date: '26/03/2025', 
         imageUrl: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?q=80&w=800&auto=format&fit=crop', 
@@ -150,21 +200,121 @@ const INITIAL_NEWS: NewsItem[] = [
         title: 'Hội nghị Cán bộ, Viên chức năm học mới', 
         excerpt: 'Triển khai nhiệm vụ trọng tâm năm học 2025-2026 với tinh thần đổi mới, sáng tạo và kỷ cương.', 
         content: `
-          <p>Nhằm đánh giá kết quả thực hiện nhiệm vụ năm học cũ và đề ra phương hướng, nhiệm vụ cho năm học mới, ngày 05/09/2025, trường THPT Hương Khê đã long trọng tổ chức <strong>Hội nghị Cán bộ, Viên chức, Người lao động năm học 2025-2026</strong>.</p>
+            <p>Nhằm đánh giá kết quả thực hiện nhiệm vụ năm học cũ và đề ra phương hướng, nhiệm vụ cho năm học mới, ngày 05/09/2025, trường THPT Hương Khê đã long trọng tổ chức <strong>Hội nghị Cán bộ, Viên chức, Người lao động năm học 2025-2026</strong>.</p>
 
-          <h3>Đổi mới căn bản, toàn diện</h3>
-          <p>Tại hội nghị, thầy Hồ Đức Cương - Hiệu trưởng nhà trường đã trình bày báo cáo tổng kết năm học 2024-2025 và dự thảo kế hoạch năm học 2025-2026. Báo cáo nhấn mạnh việc tiếp tục thực hiện chương trình GDPT 2018, đẩy mạnh chuyển đổi số trong quản lý và dạy học, đồng thời nâng cao chất lượng giáo dục mũi nhọn.</p>
+            <h3>Đổi mới căn bản, toàn diện</h3>
+            <p>Tại hội nghị, thầy Hồ Đức Cương - Hiệu trưởng nhà trường đã trình bày báo cáo tổng kết năm học 2024-2025 và dự thảo kế hoạch năm học 2025-2026. Báo cáo nhấn mạnh việc tiếp tục thực hiện chương trình GDPT 2018, đẩy mạnh chuyển đổi số trong quản lý và dạy học, đồng thời nâng cao chất lượng giáo dục mũi nhọn.</p>
+            <p>Nhà trường đặt mục tiêu xây dựng hệ sinh thái số phục vụ quản trị, giảng dạy và đánh giá, hướng tới mô hình “Trường học thông minh”. Các tổ chuyên môn sẽ triển khai dạy học dự án, tăng cường trải nghiệm thực tế và kết nối với doanh nghiệp địa phương.</p>
 
           <h3>Dân chủ - Kỷ cương - Tình thương - Trách nhiệm</h3>
-          <p>Hội nghị đã diễn ra trong không khí dân chủ, cởi mở. Các đại biểu đã sôi nổi thảo luận, đóng góp nhiều ý kiến thiết thực về các vấn đề như: cải thiện đời sống giáo viên, đầu tư cơ sở vật chất, giải pháp nâng cao chất lượng ôn thi tốt nghiệp THPT...</p>
+            <p>Hội nghị đã diễn ra trong không khí dân chủ, cởi mở. Các đại biểu đã sôi nổi thảo luận, đóng góp nhiều ý kiến thiết thực về các vấn đề như: cải thiện đời sống giáo viên, đầu tư cơ sở vật chất, giải pháp nâng cao chất lượng ôn thi tốt nghiệp THPT...</p>
+            <p>Kết thúc hội nghị, 100% cán bộ, viên chức đã biểu quyết nhất trí thông qua Nghị quyết Hội nghị, thể hiện sự đồng lòng, quyết tâm cao độ để hoàn thành xuất sắc nhiệm vụ năm học mới, đưa trường THPT Hương Khê ngày càng phát triển vững mạnh.</p>
           
-          <p>Kết thúc hội nghị, 100% cán bộ, viên chức đã biểu quyết nhất trí thông qua Nghị quyết Hội nghị, thể hiện sự đồng lòng, quyết tâm cao độ để hoàn thành xuất sắc nhiệm vụ năm học mới, đưa trường THPT Hương Khê ngày càng phát triển vững mạnh.</p>
+            <h3>Hành động cụ thể</h3>
+            <p>Ngay sau hội nghị, nhà trường triển khai kế hoạch tu sửa cơ sở vật chất, bổ sung trang thiết bị phòng học, cải thiện cảnh quan xanh – sạch – đẹp, và phát động phong trào thi đua năm học mới. Tất cả hướng tới mục tiêu: mỗi giờ lên lớp là một giờ học chất lượng.</p>
         `,
         date: '05/09/2025', 
         imageUrl: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800&auto=format&fit=crop', 
         category: 'Hoạt động' 
     }
 ];
+
+const INITIAL_ACHIEVEMENT_YEARS: AchievementYear[] = [
+  {
+    year: 2024,
+    stats: [
+      { label: 'Giải Quốc gia', value: 9, color: 'from-yellow-400 to-orange-500' },
+      { label: 'Giải Tỉnh', value: 22, color: 'from-blue-400 to-cyan-500' },
+      { label: 'Học sinh vinh danh', value: 33, color: 'from-purple-400 to-pink-500' },
+      { label: 'Đạt học lực giỏi', value: '85%', color: 'from-green-400 to-emerald-500' },
+    ],
+    items: [
+      { id: 1, title: 'Giải Ba HSG Quốc gia - Vật lý', description: 'Phạm Quang Huy (12A1)', date: '18/03/2024', level: 'Quốc gia', icon: 'trophy', category: 'Quốc gia' },
+      { id: 2, title: 'Giải Nhất Toán tỉnh', description: '5 học sinh', date: '20/02/2024', level: 'Tỉnh', icon: 'star', category: 'Tỉnh' },
+      { id: 3, title: 'Giải Nhì KHKT Quốc gia', description: 'Nhóm STEM HK', date: '28/03/2024', level: 'Quốc gia', icon: 'award', category: 'Quốc gia' },
+      { id: 4, title: 'Giải Nhì Olympic Tiếng Anh tỉnh', description: '3 học sinh', date: '10/04/2024', level: 'Tỉnh', icon: 'medal', category: 'Tỉnh' },
+    ],
+  },
+  {
+    year: 2025,
+    stats: [
+      { label: 'Giải Quốc gia', value: 11, color: 'from-yellow-400 to-orange-500' },
+      { label: 'Giải Tỉnh', value: 25, color: 'from-blue-400 to-cyan-500' },
+      { label: 'Học sinh vinh danh', value: 40, color: 'from-purple-400 to-pink-500' },
+      { label: 'Đạt học lực giỏi', value: '86%', color: 'from-green-400 to-emerald-500' },
+    ],
+    items: [
+      { id: 1, title: 'Giải Nhất HSG Quốc gia - Tin học', description: 'Lê Minh Đức (12A1)', date: '12/02/2025', level: 'Quốc gia', icon: 'trophy', category: 'Quốc gia' },
+      { id: 2, title: 'Giải Ba HSG Quốc gia - Sinh học', description: 'Trần Thu Hà (11A3)', date: '25/02/2025', level: 'Quốc gia', icon: 'medal', category: 'Quốc gia' },
+      { id: 3, title: 'Giải Nhì Vật lý tỉnh', description: '7 học sinh', date: '05/03/2025', level: 'Tỉnh', icon: 'star', category: 'Tỉnh' },
+      { id: 4, title: 'Giải Nhất Olympic Toán tỉnh', description: '5 học sinh', date: '20/04/2025', level: 'Tỉnh', icon: 'award', category: 'Tỉnh' },
+    ],
+  },
+  {
+    year: 2026,
+    stats: [
+      { label: 'Giải Quốc gia', value: 13, color: 'from-yellow-400 to-orange-500' },
+      { label: 'Giải Tỉnh', value: 30, color: 'from-blue-400 to-cyan-500' },
+      { label: 'Học sinh vinh danh', value: 48, color: 'from-purple-400 to-pink-500' },
+      { label: 'Đạt học lực giỏi', value: '88%', color: 'from-green-400 to-emerald-500' },
+    ],
+    items: [
+      { id: 1, title: 'Giải Nhì HSG Quốc gia - Tin học', description: 'Trần Kim Nhật (12A1)', date: '20/01/2026', level: 'Quốc gia', icon: 'trophy', category: 'Quốc gia' },
+      { id: 2, title: 'Giải Nhất Violympic Toán', description: 'Nguyễn Văn A (11A2)', date: '15/01/2026', level: 'Quốc gia', icon: 'medal', category: 'Quốc gia' },
+      { id: 3, title: 'Giải Ba Tiếng Anh - Quốc tế', description: 'Lê Thị B (12B1)', date: '10/01/2026', level: 'Quốc tế', icon: 'trophy', category: 'Quốc tế' },
+      { id: 4, title: 'Giải Nhất Toán tỉnh', description: '5 học sinh', date: '25/12/2026', level: 'Tỉnh', icon: 'star', category: 'Tỉnh' },
+    ],
+  },
+];
+
+const INITIAL_RESOURCES: DigitalResource[] = [
+  { id: 1, title: 'Hóa học lớp 12 - Sách giáo khoa', author: 'NXB Giáo dục', category: 'Sách giáo khoa', year: 2024, type: 'PDF', views: 2450, url: '#' },
+  { id: 2, title: 'Toán nâng cao - Giải phương trình', author: 'GS. Lê Quý Đôn', category: 'Tham khảo', year: 2024, type: 'PDF', views: 1820, url: '#' },
+  { id: 3, title: 'Tiếng Anh - IELTS Preparation', author: 'Cambridge', category: 'E-book', year: 2023, type: 'EPUB', views: 3200, url: '#' },
+  { id: 4, title: 'Vật lý - Cơ học và Sóng', author: 'PGS. Trần Hữu Dân', category: 'Sách giáo khoa', year: 2024, type: 'PDF', views: 1650, url: '#' },
+  { id: 5, title: 'Lịch sử Việt Nam', author: 'TS. Phạm Văn Sơn', category: 'Tham khảo', year: 2023, type: 'PDF', views: 980, url: '#' },
+  { id: 6, title: 'Sinh học tế bào và di truyền', author: 'NXB Khoa học', category: 'Tài liệu học tập', year: 2024, type: 'PDF', views: 1340, url: '#' },
+];
+
+const INITIAL_STUDENT_PORTAL: StudentPortalData = {
+  info: {
+    name: 'Nguyễn Văn A',
+    class: '12A1',
+    gpa: '8.5',
+    attendanceRate: '97%',
+    credits: '145/160',
+  },
+  grades: [
+    { subject: 'Toán học', midterm: '8.5', final: '8.8' },
+    { subject: 'Tiếng Anh', midterm: '8.0', final: '8.3' },
+    { subject: 'Lịch sử', midterm: '9.0', final: '9.2' },
+    { subject: 'Hóa học', midterm: '7.5', final: '8.0' },
+  ],
+  assignments: [
+    { subject: 'Tiếng Anh', title: 'Essay on Climate Change', dueDate: '30/01/2026', status: 'submitted' },
+    { subject: 'Toán học', title: 'Calculus Problem Set', dueDate: '02/02/2026', status: 'pending' },
+    { subject: 'Sinh học', title: 'Project Report', dueDate: '05/02/2026', status: 'not-started' },
+  ],
+};
+
+// Auto-expansion: if news content is too short, enrich with longer content
+const EXPANDED_NEWS_BY_ID: Record<number, { excerpt?: string; content?: string }> = {
+  0: {
+    excerpt: 'Hành trình bền bỉ của Trần Kim Nhật với thuật toán, kỷ luật và niềm đam mê đã mang về giải Nhì Quốc gia môn Tin học – niềm tự hào lớn của THPT Hương Khê.',
+  },
+  1: {
+    excerpt: 'Lễ tổng kết năm học: điểm lại thành tựu, tri ân phụ huynh – thầy cô, và tiếp thêm động lực cho học sinh khối 12 bước vào kỳ thi quan trọng phía trước.',
+  },
+  2: {
+    excerpt: 'Thông tin tuyển sinh lớp 10 năm học 2025-2026: chỉ tiêu, phương thức thi, thời gian – hồ sơ và quyền lợi dành cho học sinh trúng tuyển.',
+  },
+  3: {
+    excerpt: 'Ngày hội Văn nghệ – Thể thao chào mừng 26/3: sân chơi sáng tạo, kết quả nổi bật và thông điệp đoàn kết cho tuổi trẻ THPT Hương Khê.',
+  },
+  4: {
+    excerpt: 'Hội nghị Cán bộ, Viên chức năm học mới: định hướng đổi mới, chuyển đổi số và hành động cụ thể để nâng cao chất lượng giáo dục toàn diện.',
+  },
+};
 
 const INITIAL_IMAGES: GlobalImages = {
   logo: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=400&auto=format&fit=crop',
@@ -285,6 +435,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return INITIAL_NEWS;
   });
 
+
+
   // Global Images State
   const [globalImages, setGlobalImages] = useState<GlobalImages>(() => {
     try {
@@ -374,85 +526,148 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return localStorage.getItem('admin_auth') === 'true';
   });
 
-  // Load from cloud on first mount (only if cloud has data)
-  useEffect(() => {
-    const loadData = async () => {
-      const cloudData = await cloudStorage.fetchData();
-      if (cloudData) {
-        // Only update if cloud actually has data (not empty)
-        if (cloudData.globalImages && Object.keys(cloudData.globalImages).length > 0) {
-          setGlobalImages(cloudData.globalImages);
-          localStorage.setItem('school_images', JSON.stringify(cloudData.globalImages));
-        }
-        if (cloudData.news && cloudData.news.length > 0) {
-          setNews(cloudData.news);
-          localStorage.setItem('school_news', JSON.stringify(cloudData.news));
-        }
-        if (cloudData.teachers && cloudData.teachers.length > 0) {
-          setTeachers(cloudData.teachers);
-          localStorage.setItem('school_teachers', JSON.stringify(cloudData.teachers));
-        }
-        if (cloudData.clubs && cloudData.clubs.length > 0) {
-          setClubs(cloudData.clubs);
-          localStorage.setItem('school_clubs', JSON.stringify(cloudData.clubs));
-        }
-        if (cloudData.gallery && cloudData.gallery.length > 0) {
-          setGallery(cloudData.gallery);
-          localStorage.setItem('school_gallery', JSON.stringify(cloudData.gallery));
-        }
+  const [achievementYears, setAchievementYears] = useState<AchievementYear[]>(() => {
+    try {
+      const saved = localStorage.getItem('school_achievement_years');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return (parsed && parsed.length > 0) ? parsed : INITIAL_ACHIEVEMENT_YEARS;
       }
-    };
-    loadData();
+    } catch (error) {
+      console.error('Error loading achievement years from localStorage:', error);
+    }
+    return INITIAL_ACHIEVEMENT_YEARS;
+  });
+
+  const [digitalLibrary, setDigitalLibrary] = useState<DigitalResource[]>(() => {
+    try {
+      const saved = localStorage.getItem('school_digital_library');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return (parsed && parsed.length > 0) ? parsed : INITIAL_RESOURCES;
+      }
+    } catch (error) {
+      console.error('Error loading digital library from localStorage:', error);
+    }
+    return INITIAL_RESOURCES;
+  });
+
+  const [studentPortal, setStudentPortal] = useState<StudentPortalData>(() => {
+    try {
+      const saved = localStorage.getItem('school_student_portal');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed && parsed.info ? parsed : INITIAL_STUDENT_PORTAL;
+      }
+    } catch (error) {
+      console.error('Error loading student portal from localStorage:', error);
+    }
+    return INITIAL_STUDENT_PORTAL;
+  });
+
+  // Load from cloud on first mount (non-blocking)
+  useEffect(() => {
+    cloudStorage.fetchData().then(cloudData => {
+      if (!cloudData) return;
+
+      if (cloudData.globalImages && Object.keys(cloudData.globalImages).length > 0) {
+        setGlobalImages(cloudData.globalImages);
+        localStorage.setItem('school_images', JSON.stringify(cloudData.globalImages));
+      }
+      if (cloudData.gallery && cloudData.gallery.length > 0) {
+        setGallery(cloudData.gallery);
+        localStorage.setItem('school_gallery', JSON.stringify(cloudData.gallery));
+      }
+      if (cloudData.news && cloudData.news.length > 0) {
+        setNews(cloudData.news);
+        localStorage.setItem('school_news', JSON.stringify(cloudData.news));
+      }
+      if (cloudData.teachers && cloudData.teachers.length > 0) {
+        setTeachers(cloudData.teachers);
+        localStorage.setItem('school_teachers', JSON.stringify(cloudData.teachers));
+      }
+      if (cloudData.clubs && cloudData.clubs.length > 0) {
+        setClubs(cloudData.clubs);
+        localStorage.setItem('school_clubs', JSON.stringify(cloudData.clubs));
+      }
+      if (cloudData.studentCorner && cloudData.studentCorner.scheduleByClass) {
+        setStudentCorner(cloudData.studentCorner);
+        localStorage.setItem('school_student_corner', JSON.stringify(cloudData.studentCorner));
+      }
+      if (cloudData.achievementYears && cloudData.achievementYears.length > 0) {
+        setAchievementYears(cloudData.achievementYears);
+        localStorage.setItem('school_achievement_years', JSON.stringify(cloudData.achievementYears));
+      }
+      if (cloudData.digitalLibrary && cloudData.digitalLibrary.length > 0) {
+        setDigitalLibrary(cloudData.digitalLibrary);
+        localStorage.setItem('school_digital_library', JSON.stringify(cloudData.digitalLibrary));
+      }
+      if (cloudData.studentPortal && cloudData.studentPortal.info) {
+        setStudentPortal(cloudData.studentPortal);
+        localStorage.setItem('school_student_portal', JSON.stringify(cloudData.studentPortal));
+      }
+    }).catch(() => {}); // Silently fail, use localStorage
   }, []);
 
-  // Save to both localStorage and cloud
   useEffect(() => {
     localStorage.setItem('school_images', JSON.stringify(globalImages));
     const timer = setTimeout(() => {
-      cloudStorage.saveData({ globalImages });
-    }, 1000);
+      cloudStorage.saveData({ globalImages }).catch(() => {});
+    }, 2000);
     return () => clearTimeout(timer);
   }, [globalImages]);
 
   useEffect(() => {
     localStorage.setItem('school_news', JSON.stringify(news));
     const timer = setTimeout(() => {
-      cloudStorage.saveData({ news });
-    }, 1000);
+      cloudStorage.saveData({ news }).catch(() => {});
+    }, 3000);
     return () => clearTimeout(timer);
   }, [news]);
 
   useEffect(() => {
     localStorage.setItem('school_teachers', JSON.stringify(teachers));
     const timer = setTimeout(() => {
-      cloudStorage.saveData({ teachers });
-    }, 1000);
+      cloudStorage.saveData({ teachers }).catch(() => {});
+    }, 3000);
     return () => clearTimeout(timer);
   }, [teachers]);
 
   useEffect(() => {
     localStorage.setItem('school_clubs', JSON.stringify(clubs));
     const timer = setTimeout(() => {
-      cloudStorage.saveData({ clubs });
-    }, 1000);
+      cloudStorage.saveData({ clubs }).catch(() => {});
+    }, 3000);
     return () => clearTimeout(timer);
   }, [clubs]);
 
   useEffect(() => {
     localStorage.setItem('school_gallery', JSON.stringify(gallery));
     const timer = setTimeout(() => {
-      cloudStorage.saveData({ gallery });
-    }, 1000);
+      cloudStorage.saveData({ gallery }).catch(() => {});
+    }, 3000);
     return () => clearTimeout(timer);
   }, [gallery]);
 
   useEffect(() => {
     localStorage.setItem('school_student_corner', JSON.stringify(studentCorner));
     const timer = setTimeout(() => {
-      cloudStorage.saveData({ studentCorner });
-    }, 1000);
+      cloudStorage.saveData({ studentCorner }).catch(() => {});
+    }, 3000);
     return () => clearTimeout(timer);
   }, [studentCorner]);
+
+  useEffect(() => {
+    localStorage.setItem('school_achievement_years', JSON.stringify(achievementYears));
+  }, [achievementYears]);
+
+  useEffect(() => {
+    localStorage.setItem('school_digital_library', JSON.stringify(digitalLibrary));
+  }, [digitalLibrary]);
+
+  useEffect(() => {
+    localStorage.setItem('school_student_portal', JSON.stringify(studentPortal));
+  }, [studentPortal]);
 
   useEffect(() => {
       localStorage.setItem('admin_auth', String(isAuthenticated));
@@ -542,6 +757,114 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
 
+  // Events State
+  const [events, setEvents] = useState<Event[]>([]);
+  const addEvent = (item: Omit<Event, 'id'>) => {
+    const newId = Math.max(0, ...events.map(e => e.id), 0) + 1;
+    setEvents([...events, { ...item, id: newId }]);
+  };
+  const updateEvent = (id: number, item: Partial<Event>) => {
+    setEvents(events.map(e => e.id === id ? { ...e, ...item } : e));
+  };
+  const deleteEvent = (id: number) => {
+    setEvents(events.filter(e => e.id !== id));
+  };
+
+  // Achievements State
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const addAchievement = (item: Omit<Achievement, 'id'>) => {
+    const newId = Math.max(0, ...achievements.map(a => a.id), 0) + 1;
+    setAchievements([...achievements, { ...item, id: newId }]);
+  };
+  const updateAchievement = (id: number, item: Partial<Achievement>) => {
+    setAchievements(achievements.map(a => a.id === id ? { ...a, ...item } : a));
+  };
+  const deleteAchievement = (id: number) => {
+    setAchievements(achievements.filter(a => a.id !== id));
+  };
+
+  // Achievement years (yearly datasets)
+  const addAchievementYear = (year: number) => {
+    if (achievementYears.some(y => y.year === year)) return;
+    setAchievementYears([...achievementYears, { year, stats: [], items: [] }]);
+  };
+  const updateAchievementStats = (year: number, stats: AchievementYear['stats']) => {
+    setAchievementYears(achievementYears.map(y => y.year === year ? { ...y, stats } : y));
+  };
+  const addAchievementToYear = (year: number, item: Omit<Achievement, 'id'>) => {
+    setAchievementYears(achievementYears.map(y => {
+      if (y.year !== year) return y;
+      const newId = y.items.length > 0 ? Math.max(...y.items.map(a => a.id)) + 1 : 1;
+      return { ...y, items: [...y.items, { ...item, id: newId }] };
+    }));
+  };
+  const updateAchievementInYear = (year: number, id: number, item: Partial<Achievement>) => {
+    setAchievementYears(achievementYears.map(y => y.year === year ? { ...y, items: y.items.map(a => a.id === id ? { ...a, ...item } : a) } : y));
+  };
+  const deleteAchievementInYear = (year: number, id: number) => {
+    setAchievementYears(achievementYears.map(y => y.year === year ? { ...y, items: y.items.filter(a => a.id !== id) } : y));
+  };
+
+  // Digital library
+  const addResource = (item: Omit<DigitalResource, 'id'>) => {
+    const newId = digitalLibrary.length > 0 ? Math.max(...digitalLibrary.map(r => r.id)) + 1 : 1;
+    setDigitalLibrary([...digitalLibrary, { ...item, id: newId }]);
+  };
+  const updateResource = (id: number, item: Partial<DigitalResource>) => {
+    setDigitalLibrary(digitalLibrary.map(r => r.id === id ? { ...r, ...item } : r));
+  };
+  const deleteResource = (id: number) => {
+    setDigitalLibrary(digitalLibrary.filter(r => r.id !== id));
+  };
+
+  // Student portal
+  const updateStudentInfo = (info: StudentPortalData['info']) => {
+    setStudentPortal({ ...studentPortal, info });
+  };
+  const addGrade = (grade: GradeItem) => {
+    setStudentPortal({ ...studentPortal, grades: [...studentPortal.grades, grade] });
+  };
+  const updateGrade = (index: number, grade: Partial<GradeItem>) => {
+    setStudentPortal({
+      ...studentPortal,
+      grades: studentPortal.grades.map((g, i) => i === index ? { ...g, ...grade } : g)
+    });
+  };
+  const deleteGrade = (index: number) => {
+    setStudentPortal({
+      ...studentPortal,
+      grades: studentPortal.grades.filter((_, i) => i !== index)
+    });
+  };
+  const addAssignment = (assignment: AssignmentItem) => {
+    setStudentPortal({ ...studentPortal, assignments: [...studentPortal.assignments, assignment] });
+  };
+  const updateAssignment = (index: number, assignment: Partial<AssignmentItem>) => {
+    setStudentPortal({
+      ...studentPortal,
+      assignments: studentPortal.assignments.map((a, i) => i === index ? { ...a, ...assignment } : a)
+    });
+  };
+  const deleteAssignment = (index: number) => {
+    setStudentPortal({
+      ...studentPortal,
+      assignments: studentPortal.assignments.filter((_, i) => i !== index)
+    });
+  };
+
+  // Announcements State
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const addAnnouncement = (item: Omit<Announcement, 'id'>) => {
+    const newId = Math.max(0, ...announcements.map(a => a.id), 0) + 1;
+    setAnnouncements([...announcements, { ...item, id: newId }]);
+  };
+  const updateAnnouncement = (id: number, item: Partial<Announcement>) => {
+    setAnnouncements(announcements.map(a => a.id === id ? { ...a, ...item } : a));
+  };
+  const deleteAnnouncement = (id: number) => {
+    setAnnouncements(announcements.filter(a => a.id !== id));
+  };
+
   const login = () => setIsAuthenticated(true);
   const logout = () => setIsAuthenticated(false);
 
@@ -553,6 +876,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       clubs, addClub, updateClub, deleteClub,
       gallery, addGalleryItem, deleteGalleryItem,
       studentCorner, updateStudentCorner, addExam, deleteExam, addForm, deleteForm,
+      events, addEvent, updateEvent, deleteEvent,
+      achievements, addAchievement, updateAchievement, deleteAchievement,
+      achievementYears, addAchievementYear, updateAchievementStats, addAchievementToYear, updateAchievementInYear, deleteAchievementInYear,
+      digitalLibrary, addResource, updateResource, deleteResource,
+      studentPortal, updateStudentInfo, addGrade, updateGrade, deleteGrade, addAssignment, updateAssignment, deleteAssignment,
+      announcements, addAnnouncement, updateAnnouncement, deleteAnnouncement,
       isAuthenticated, login, logout 
     }}>
       {children}

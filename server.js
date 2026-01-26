@@ -40,6 +40,72 @@ app.get('/api/info', (req, res) => {
   res.json({ status: 'ok', message: 'School Backend API' });
 });
 
+// Simple ICS feed for Google Calendar / iCal
+const formatDate = (date) => {
+  // Expect JS Date; output in UTC yyyymmddThhmmssZ
+  return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+};
+
+const buildIcs = (events) => {
+  const lines = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//THPT Huong Khe//Calendar//VN'
+  ];
+
+  events.forEach((ev) => {
+    const block = [
+      'BEGIN:VEVENT',
+      `UID:${ev.uid}`,
+      `DTSTAMP:${formatDate(new Date())}`,
+      `DTSTART:${formatDate(ev.start)}`,
+      `DTEND:${formatDate(ev.end)}`,
+      `SUMMARY:${ev.title}`,
+      `DESCRIPTION:${ev.description || ''}`,
+    ];
+
+    if (ev.location) block.push(`LOCATION:${ev.location}`);
+
+    block.push('END:VEVENT');
+
+    lines.push(...block);
+  });
+
+  lines.push('END:VCALENDAR');
+  return lines.join('\r\n');
+};
+
+// Minimal sample events so Google Calendar accepts the feed
+const sampleExamEvents = [
+  {
+    uid: 'exam-1@example.com',
+    title: 'Kiểm tra Toán (mẫu)',
+    start: new Date(Date.now() + 24 * 60 * 60 * 1000),
+    end: new Date(Date.now() + 25 * 60 * 60 * 1000),
+    description: 'Sự kiện mẫu để đồng bộ Google Calendar',
+    location: 'Phòng thi A1'
+  }
+];
+
+const sampleScheduleEvents = [
+  {
+    uid: 'schedule-1@example.com',
+    title: 'Tiết học (mẫu)',
+    start: new Date(Date.now() + 2 * 60 * 60 * 1000),
+    end: new Date(Date.now() + 3 * 60 * 60 * 1000),
+    description: 'Sự kiện mẫu để đồng bộ Google Calendar',
+    location: 'Phòng 101'
+  }
+];
+
+app.get('/api/calendar', (req, res) => {
+  const type = (req.query.type || 'exam').toLowerCase();
+  const events = type === 'schedule' ? sampleScheduleEvents : sampleExamEvents;
+  const ics = buildIcs(events);
+  res.setHeader('Content-Type', 'text/calendar; charset=utf-8');
+  res.send(ics);
+});
+
 // Upload image to Cloudinary
 app.post('/api/cloudinary/upload', async (req, res) => {
   try {

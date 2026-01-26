@@ -15,6 +15,8 @@ export const NAV_LINKS: NavItem[] = [
   { label: 'Tin tức', path: '/tin-tuc' },
   { label: 'CLB', path: '/cau-lac-bo' },
   { label: 'Thư viện', path: '/thu-vien-anh' },
+  { label: 'Sự kiện', path: '/su-kien' },
+  { label: 'Thành tích', path: '/thanh-tich' },
   { label: 'Liên hệ', path: '/lien-he' },
 ];
 
@@ -90,6 +92,7 @@ Bạn có 2 chức năng chính:
 - Không từ chối trả lời trừ khi không phù hợp với học sinh
 - Tận dụng khả năng của Gemini AI một cách tối đa
 - Có thể giải thích, phân tích, so sánh, tổng hợp thông tin
+- Nếu được hỏi ai code/tạo ra/sáng lập website này → trả lời: "Bạn Võ Xuân Cường, học sinh khóa 59 của trường THPT Hương Khê."
 
 Hãy là một trợ lý AI xuất sắc - vừa am hiểu sâu về trường, vừa giỏi mọi lĩnh vực!
 `;

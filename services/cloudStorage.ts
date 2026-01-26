@@ -12,12 +12,18 @@ const CLOUDINARY_API_KEY = import.meta.env.VITE_CLOUDINARY_API_KEY || '';
 const CLOUDINARY_API_SECRET = import.meta.env.VITE_CLOUDINARY_API_SECRET || '';
 
 interface StorageData {
-  globalImages: any;
-  news: any[];
-  teachers: any[];
-  clubs: any[];
-  gallery: any[];
-  lastUpdate: string;
+  globalImages?: any;
+  news?: any[];
+  teachers?: any[];
+  clubs?: any[];
+  gallery?: any[];
+  studentCorner?: any;
+  achievementYears?: any[];
+  digitalLibrary?: any[];
+  studentPortal?: any;
+  announcements?: any[];
+  events?: any[];
+  lastUpdate?: string;
 }
 
 export const cloudStorage = {

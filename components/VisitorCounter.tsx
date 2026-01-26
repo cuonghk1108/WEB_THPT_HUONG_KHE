@@ -10,33 +10,31 @@ interface Stats {
 
 export const VisitorCounter: React.FC = () => {
   const [stats, setStats] = useState<Stats>({ today: 0, week: 0, year: 0, total: 0 });
-  const [loading, setLoading] = useState(true);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const initCounter = async () => {
-      try {
-        // Increment visitor count and get stats
-        const newStats = await visitorCounter.incrementVisitor();
+    // Fire-and-forget: increment and update in background, don't block render
+    visitorCounter.incrementVisitor()
+      .then(newStats => {
         setStats(newStats);
-      } catch (error) {
-        console.error('Failed to update visitor count:', error);
-        // Try to get stats without incrementing if update fails
-        const currentStats = await visitorCounter.getVisitorStats();
-        setStats(currentStats);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    initCounter();
+        setLoaded(true);
+      })
+      .catch(() => {
+        // Fallback: try to get stats without incrementing
+        visitorCounter.getVisitorStats()
+          .then(currentStats => {
+            setStats(currentStats);
+            setLoaded(true);
+          })
+          .catch(err => {
+            console.error('Failed to load visitor stats:', err);
+            setLoaded(true);
+          });
+      });
   }, []);
 
-  if (loading) {
-    return null;
-  }
-
   return (
-    <div className="bg-slate-200 dark:bg-white/5 p-6 rounded-2xl border border-slate-300 dark:border-white/10">
+    <div className={`bg-slate-200 dark:bg-white/5 p-6 rounded-2xl border border-slate-300 dark:border-white/10 transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-75'}`}>
       <p className="text-slate-600 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Lượt truy cập</p>
       <div className="text-slate-700 dark:text-slate-200 text-sm space-y-1">
         <p>Hôm nay: <span className="font-semibold text-blue-600 dark:text-blue-400">{stats.today}</span></p>

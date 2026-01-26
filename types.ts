@@ -108,3 +108,91 @@ export interface StudentCornerData {
   formTitle: string;
   forms: FormItem[];
 }
+export interface Event {
+  id: number;
+  title: string;
+  description: string;
+  date: string;
+  time?: string;
+  location?: string;
+  imageUrl?: string;
+  fullContent?: string;
+}
+
+export type AchievementScope = 'Quốc tế' | 'Quốc gia' | 'Tỉnh' | 'Huyện' | 'Trường';
+
+export type AchievementIcon = 'trophy' | 'star' | 'award' | 'medal';
+export type AchievementTier = 'Giải Nhất' | 'Giải Nhì' | 'Giải Ba' | 'Khuyến khích';
+
+export interface Achievement {
+  id: number;
+  title: string;
+  description: string;
+  date: string;
+  icon?: AchievementIcon;
+  category: string; // legacy label
+  scope?: AchievementScope;
+  tier?: AchievementTier;
+  medalColor?: string;
+}
+
+export interface AchievementStat {
+  label: string;
+  value: string | number;
+  color: string;
+}
+
+export interface AchievementYear {
+  year: number;
+  stats: AchievementStat[];
+  items: Achievement[];
+}
+
+export interface DigitalResource {
+  id: number;
+  title: string;
+  author: string;
+  category: string;
+  year: number;
+  type: string;
+  views: number;
+  url?: string;
+}
+
+export interface StudentInfo {
+  name: string;
+  class: string;
+  gpa: string;
+  attendanceRate: string;
+  credits: string;
+}
+
+export interface GradeItem {
+  subject: string;
+  midterm: string;
+  final: string;
+}
+
+export type AssignmentStatus = 'submitted' | 'pending' | 'not-started';
+
+export interface AssignmentItem {
+  subject: string;
+  title: string;
+  dueDate: string;
+  status: AssignmentStatus;
+}
+
+export interface StudentPortalData {
+  info: StudentInfo;
+  grades: GradeItem[];
+  assignments: AssignmentItem[];
+}
+
+export interface Announcement {
+  id: number;
+  title: string;
+  content: string;
+  date: string;
+  priority: 'low' | 'normal' | 'high';
+  imageUrl?: string;
+}

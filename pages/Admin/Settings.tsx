@@ -1,7 +1,40 @@
-import React from 'react';
-import { Settings as SettingsIcon, Bell, Lock, Globe } from 'lucide-react';
+import React, { useState } from 'react';
+import { Settings as SettingsIcon, Bell, Lock, Globe, Upload } from 'lucide-react';
+import { useData } from '../../context/DataContext';
+import { cloudStorage } from '../../services/cloudStorage';
 
 const Settings: React.FC = () => {
+  const { globalImages, news, teachers, clubs, gallery, studentCorner, achievementYears, digitalLibrary, studentPortal } = useData();
+  const [syncing, setSyncing] = useState(false);
+  const [syncMessage, setSyncMessage] = useState('');
+
+  const handleSyncToBin = async () => {
+    setSyncing(true);
+    setSyncMessage('');
+    try {
+      const dataToSync = {
+        globalImages,
+        news,
+        teachers,
+        clubs,
+        gallery,
+        studentCorner,
+        achievementYears,
+        digitalLibrary,
+        studentPortal,
+      };
+      const success = await cloudStorage.saveData(dataToSync);
+      if (success) {
+        setSyncMessage('✅ Đồng bộ thành công lên JSONBin!');
+      } else {
+        setSyncMessage('❌ Đồng bộ thất bại, kiểm tra API key.');
+      }
+    } catch (error) {
+      setSyncMessage('❌ Lỗi: ' + (error instanceof Error ? error.message : 'Không rõ'));
+    } finally {
+      setSyncing(false);
+    }
+  };
   return (
     <div>
       <div className="mb-8">
@@ -40,6 +73,28 @@ const Settings: React.FC = () => {
                      Xem nhật ký hoạt động
                  </button>
              </div>
+        </div>
+
+        {/* Cloud Sync */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+            <h3 className="font-bold text-slate-900 flex items-center gap-2 mb-4">
+                <Upload className="h-5 w-5 text-blue-600" /> Đồng bộ dữ liệu
+            </h3>
+            <div className="space-y-4">
+                <p className="text-sm text-slate-600">Đẩy tất cả dữ liệu hiện tại lên JSONBin để sao lưu.</p>
+                <button
+                  onClick={handleSyncToBin}
+                  disabled={syncing}
+                  className="w-full py-2 px-4 bg-primary-600 hover:bg-primary-700 disabled:bg-slate-400 text-white font-bold rounded transition-colors"
+                >
+                  {syncing ? 'Đang đồng bộ...' : 'Đồng bộ lên JSONBin'}
+                </button>
+                {syncMessage && (
+                  <p className={`text-sm p-2 rounded ${syncMessage.includes('✅') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                    {syncMessage}
+                  </p>
+                )}
+            </div>
         </div>
 
         {/* Notifications */}

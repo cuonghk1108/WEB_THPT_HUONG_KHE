@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
-import { Plus, Edit, Trash2, X, Save, Users, Calendar } from 'lucide-react';
+import { Plus, Edit, Trash2, X, Save, Users, Calendar, Upload } from 'lucide-react';
 import { Club } from '../../types';
+import { cloudStorage } from '../../services/cloudStorage';
 
 const ClubManager: React.FC = () => {
   const { clubs, addClub, updateClub, deleteClub } = useData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<Club | null>(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -19,6 +21,44 @@ const ClubManager: React.FC = () => {
   const resetForm = () => {
     setFormData({ name: '', description: '', members: 0, schedule: '', imageUrl: '' });
     setEditingItem(null);
+  };
+
+  const handleFileUpload = async (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      alert('Vui lòng chọn file ảnh hợp lệ!');
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      alert('Kích thước ảnh quá lớn! Vui lòng chọn ảnh dưới 2MB.');
+      return;
+    }
+
+    setUploadingImage(true);
+
+    try {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64String = reader.result as string;
+        try {
+          const imageUrl = await cloudStorage.uploadImage(base64String, 'club_image');
+          if (imageUrl) {
+            setFormData(prev => ({ ...prev, imageUrl }));
+          } else {
+            alert('Lỗi: Backend upload thất bại!');
+          }
+        } catch (error) {
+          console.error('Upload failed:', error);
+          alert('Lỗi: Không thể kết nối đến server upload!');
+        }
+        setUploadingImage(false);
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Lỗi khi tải ảnh lên. Vui lòng thử lại!');
+      setUploadingImage(false);
+    }
   };
 
   const handleOpenModal = (item?: Club) => {
@@ -112,8 +152,29 @@ const ClubManager: React.FC = () => {
                         </div>
                     </div>
                     <div>
-                        <label className="block text-sm font-bold text-slate-800 mb-1">Link ảnh bìa CLB</label>
-                        <input type="text" className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none" value={formData.imageUrl} onChange={e => setFormData({...formData, imageUrl: e.target.value})} placeholder="https://..." />
+                        <label className="block text-sm font-bold text-slate-800 mb-2">Ảnh bìa CLB</label>
+                        <div className="flex gap-2 items-center mb-2">
+                          <input type="text" className="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none text-sm" value={formData.imageUrl} onChange={e => setFormData({...formData, imageUrl: e.target.value})} placeholder="https://... hoặc upload ảnh" />
+                          <label className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg cursor-pointer transition-colors text-sm font-semibold inline-flex items-center gap-1 whitespace-nowrap">
+                            <Upload className="h-4 w-4" />
+                            Upload
+                            <input 
+                              type="file" 
+                              accept="image/*"
+                              className="hidden"
+                              disabled={uploadingImage}
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) handleFileUpload(file);
+                              }}
+                            />
+                          </label>
+                        </div>
+                        {formData.imageUrl && (
+                          <div className="w-32 h-20 rounded-lg overflow-hidden border border-slate-200">
+                            <img src={formData.imageUrl} alt="Preview" className="w-full h-full object-cover" onError={(e) => {(e.target as HTMLImageElement).src = 'https://via.placeholder.com/128?text=Error';}} />
+                          </div>
+                        )}
                     </div>
                     <div className="pt-4 flex justify-end gap-3">
                         <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-slate-700 hover:bg-slate-100 font-bold rounded-lg border border-slate-300">Hủy</button>

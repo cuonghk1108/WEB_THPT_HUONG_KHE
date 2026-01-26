@@ -212,9 +212,9 @@ const StudentCornerManager: React.FC = () => {
       {/* Schedule Tab */}
       {activeTab === 'schedule' && (
         <div className="space-y-6">
-          <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Quản lý Thời khóa biểu</h3>
+              <h3 className="text-lg font-bold text-slate-900">Quản lý Thời khóa biểu</h3>
               {!isScheduleEditOpen && (
                 <button
                   onClick={() => setIsScheduleEditOpen(true)}
@@ -228,19 +228,19 @@ const StudentCornerManager: React.FC = () => {
             {isScheduleEditOpen ? (
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Tiêu đề</label>
+                  <label className="block text-sm font-bold text-slate-800 mb-1">Tiêu đề</label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-slate-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white text-slate-900"
                     value={scheduleData.scheduleTitle}
                     onChange={(e) => setScheduleData({ ...scheduleData, scheduleTitle: e.target.value })}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Mô tả</label>
+                  <label className="block text-sm font-bold text-slate-800 mb-1">Mô tả</label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-slate-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white text-slate-900"
                     value={scheduleData.scheduleDescription}
                     onChange={(e) => setScheduleData({ ...scheduleData, scheduleDescription: e.target.value })}
                   />
@@ -248,9 +248,9 @@ const StudentCornerManager: React.FC = () => {
 
                 <div>
                   <div className="flex items-center gap-3 mb-3">
-                    <label className="block text-sm font-bold text-slate-800 dark:text-slate-200">Chọn lớp</label>
+                    <label className="block text-sm font-bold text-slate-800">Chọn lớp</label>
                     <select
-                      className="px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-700 dark:text-white"
+                      className="px-3 py-2 border border-slate-300 rounded-lg bg-white text-slate-900"
                       value={selectedClass}
                       onChange={(e) => setSelectedClass(e.target.value)}
                     >
@@ -260,19 +260,19 @@ const StudentCornerManager: React.FC = () => {
                     </select>
                   </div>
                   <div className="flex items-center justify-between mb-2">
-                    <label className="block text-sm font-bold text-slate-800 dark:text-slate-200">Dòng thời khóa biểu ({selectedClass})</label>
+                    <label className="block text-sm font-bold text-slate-800">Dòng thời khóa biểu ({selectedClass})</label>
                     <div className="flex gap-2 text-xs">
                       <button
                         type="button"
                         onClick={handleAddPeriod}
-                        className="px-3 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg hover:bg-blue-100 dark:bg-blue-900 dark:text-blue-200 dark:border-blue-700"
+                        className="px-3 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg hover:bg-blue-100"
                       >
                         + Thêm tiết
                       </button>
                       <button
                         type="button"
                         onClick={handleRemovePeriod}
-                        className="px-3 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600"
+                        className="px-3 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-lg hover:bg-slate-200"
                       >
                         − Bớt tiết
                       </button>
@@ -284,7 +284,7 @@ const StudentCornerManager: React.FC = () => {
                         <input
                           type="text"
                           placeholder="Thứ 2"
-                          className="w-24 px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-slate-700 dark:text-white"
+                          className="w-24 px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white text-slate-900"
                           value={row.day}
                           onChange={(e) => handleUpdateScheduleRow(idx, 'day', e.target.value)}
                         />
@@ -294,7 +294,7 @@ const StudentCornerManager: React.FC = () => {
                               key={pIdx}
                               type="text"
                               placeholder={`Tiết ${pIdx + 1}`}
-                              className="flex-1 px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-slate-700 dark:text-white text-sm"
+                              className="flex-1 px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white text-slate-900 text-sm"
                               value={period}
                               onChange={(e) => {
                                 const newPeriods = [...row.periods];
@@ -322,9 +322,9 @@ const StudentCornerManager: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Ghi chú</label>
+                  <label className="block text-sm font-bold text-slate-800 mb-1">Ghi chú</label>
                   <textarea
-                    className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-slate-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white text-slate-900"
                     rows={2}
                     value={scheduleData.scheduleNote}
                     onChange={(e) => setScheduleData({ ...scheduleData, scheduleNote: e.target.value })}
@@ -347,15 +347,15 @@ const StudentCornerManager: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <div className="text-slate-600 dark:text-slate-300">
+              <div className="text-slate-600">
                 <p className="font-bold mb-2">{scheduleData.scheduleTitle}</p>
                 <p className="text-sm mb-4">{scheduleData.scheduleDescription}</p>
                 <div className="mb-4 flex items-center gap-3">
-                  <label className="text-sm font-bold text-slate-800 dark:text-slate-200">Chọn lớp:</label>
+                  <label className="text-sm font-bold text-slate-800">Chọn lớp:</label>
                   <select
                     value={selectedClass}
                     onChange={(e) => setSelectedClass(e.target.value)}
-                    className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white font-semibold focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="px-4 py-2 border border-slate-300 rounded-lg bg-white text-slate-900 font-semibold focus:ring-2 focus:ring-blue-500 outline-none"
                   >
                     {scheduleData.scheduleByClass.map((cls) => (
                       <option key={cls.className} value={cls.className}>
@@ -364,21 +364,21 @@ const StudentCornerManager: React.FC = () => {
                     ))}
                   </select>
                 </div>
-                <table className="w-full table-fixed border border-slate-200 dark:border-slate-600 text-sm">
+                <table className="w-full table-fixed border border-slate-200 text-sm">
                   <thead>
-                    <tr className="bg-slate-100 dark:bg-slate-700">
-                      <th className="border border-slate-200 dark:border-slate-600 p-2 h-12 align-middle text-left">Tiết / Thứ</th>
+                    <tr className="bg-slate-100">
+                      <th className="border border-slate-200 p-2 h-12 align-middle text-left">Tiết / Thứ</th>
                       {currentClassSchedule?.scheduleRows.map((row, idx) => (
-                        <th key={idx} className="border border-slate-200 dark:border-slate-600 p-2 h-12 align-middle text-center">{row.day}</th>
+                        <th key={idx} className="border border-slate-200 p-2 h-12 align-middle text-center">{row.day}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {Array.from({ length: Math.max(0, ...(currentClassSchedule?.scheduleRows.map(r => r.periods.length) ?? [])) }).map((_, periodIndex) => (
                       <tr key={periodIndex}>
-                        <td className="border border-slate-200 dark:border-slate-600 p-2 h-12 align-middle font-bold bg-slate-50 dark:bg-slate-700 text-left">Tiết {periodIndex + 1}</td>
+                        <td className="border border-slate-200 p-2 h-12 align-middle font-bold bg-slate-50 text-left">Tiết {periodIndex + 1}</td>
                         {currentClassSchedule?.scheduleRows.map((row, dayIdx) => (
-                          <td key={dayIdx} className="border border-slate-200 dark:border-slate-600 p-2 h-12 align-middle text-center">
+                          <td key={dayIdx} className="border border-slate-200 p-2 h-12 align-middle text-center">
                             {row.periods[periodIndex] || ''}
                           </td>
                         ))}
@@ -397,7 +397,7 @@ const StudentCornerManager: React.FC = () => {
       {activeTab === 'exams' && (
         <div className="space-y-6">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Lịch kiểm tra</h3>
+            <h3 className="text-lg font-bold text-slate-900">Lịch kiểm tra</h3>
             <button
               onClick={() => handleOpenExamModal()}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold"
@@ -410,23 +410,23 @@ const StudentCornerManager: React.FC = () => {
             {studentCorner.exams.map((exam) => (
               <div
                 key={exam.id}
-                className="bg-white dark:bg-slate-800 p-4 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-between"
+                className="bg-white p-4 rounded-lg border border-slate-200 flex items-center justify-between"
               >
                 <div>
-                  <p className="font-bold text-slate-900 dark:text-white">{exam.subject}</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">{exam.time}</p>
-                  <p className="text-sm text-blue-600 dark:text-blue-400 font-bold">{exam.date}</p>
+                  <p className="font-bold text-slate-900">{exam.subject}</p>
+                  <p className="text-sm text-slate-600">{exam.time}</p>
+                  <p className="text-sm text-blue-600 font-bold">{exam.date}</p>
                 </div>
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleOpenExamModal(exam)}
-                    className="p-2 bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-300 rounded-lg"
+                    className="p-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg"
                   >
                     <Edit className="h-4 w-4" />
                   </button>
                   <button
                     onClick={() => deleteExam(exam.id)}
-                    className="p-2 bg-red-100 dark:bg-red-900 hover:bg-red-200 dark:hover:bg-red-800 text-red-700 dark:text-red-300 rounded-lg"
+                    className="p-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -437,48 +437,48 @@ const StudentCornerManager: React.FC = () => {
 
           {isExamModalOpen && (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-              <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-lg shadow-2xl animate-scale-up border border-slate-200 dark:border-slate-700">
-                <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
-                  <h3 className="text-xl font-bold font-heading text-slate-900 dark:text-white">
+              <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl animate-scale-up border border-slate-200">
+                <div className="p-6 border-b border-slate-200 flex justify-between items-center">
+                  <h3 className="text-xl font-bold font-heading text-slate-900">
                     {editingExam ? 'Sửa lịch thi' : 'Thêm lịch thi mới'}
                   </h3>
                   <button
                     onClick={() => setIsExamModalOpen(false)}
-                    className="text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 p-2 rounded-full"
+                    className="text-slate-500 hover:bg-slate-100 p-2 rounded-full"
                   >
                     <X className="h-6 w-6" />
                   </button>
                 </div>
                 <form onSubmit={handleSaveExam} className="p-6 space-y-4">
                   <div>
-                    <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Ngày thi (DD/MM/YYYY)</label>
+                    <label className="block text-sm font-bold text-slate-800 mb-1">Ngày thi (DD/MM/YYYY)</label>
                     <input
                       required
                       type="text"
                       placeholder="15/10/2025"
-                      className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-slate-700 dark:text-white"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white text-slate-900"
                       value={examData.date}
                       onChange={(e) => setExamData({ ...examData, date: e.target.value })}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Môn thi</label>
+                    <label className="block text-sm font-bold text-slate-800 mb-1">Môn thi</label>
                     <input
                       required
                       type="text"
                       placeholder="Toán học (1 tiết)"
-                      className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-slate-700 dark:text-white"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white text-slate-900"
                       value={examData.subject}
                       onChange={(e) => setExamData({ ...examData, subject: e.target.value })}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Giờ thi</label>
+                    <label className="block text-sm font-bold text-slate-800 mb-1">Giờ thi</label>
                     <input
                       required
                       type="text"
                       placeholder="7:00 - 7:45"
-                      className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-slate-700 dark:text-white"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white text-slate-900"
                       value={examData.time}
                       onChange={(e) => setExamData({ ...examData, time: e.target.value })}
                     />
@@ -493,7 +493,7 @@ const StudentCornerManager: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setIsExamModalOpen(false)}
-                      className="flex-1 bg-slate-300 dark:bg-slate-600 hover:bg-slate-400 dark:hover:bg-slate-700 text-slate-800 dark:text-white py-2 rounded-lg font-bold"
+                      className="flex-1 bg-slate-300 hover:bg-slate-400 text-slate-800 py-2 rounded-lg font-bold"
                     >
                       Hủy
                     </button>
@@ -509,7 +509,7 @@ const StudentCornerManager: React.FC = () => {
       {activeTab === 'forms' && (
         <div className="space-y-6">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Biểu mẫu & Quy định</h3>
+            <h3 className="text-lg font-bold text-slate-900">Biểu mẫu & Quy định</h3>
             <button
               onClick={() => handleOpenFormModal()}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold"
@@ -522,22 +522,22 @@ const StudentCornerManager: React.FC = () => {
             {studentCorner.forms.map((form) => (
               <div
                 key={form.id}
-                className="bg-white dark:bg-slate-800 p-4 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-between"
+                className="bg-white p-4 rounded-lg border border-slate-200 flex items-center justify-between"
               >
                 <div className="flex items-center gap-3">
-                  <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                  <span className="font-medium text-slate-900 dark:text-white">{form.name}</span>
+                  <FileText className="h-5 w-5 text-blue-600" />
+                  <span className="font-medium text-slate-900">{form.name}</span>
                 </div>
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleOpenFormModal(form)}
-                    className="p-2 bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-300 rounded-lg"
+                    className="p-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg"
                   >
                     <Edit className="h-4 w-4" />
                   </button>
                   <button
                     onClick={() => deleteForm(form.id)}
-                    className="p-2 bg-red-100 dark:bg-red-900 hover:bg-red-200 dark:hover:bg-red-800 text-red-700 dark:text-red-300 rounded-lg"
+                    className="p-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -548,26 +548,26 @@ const StudentCornerManager: React.FC = () => {
 
           {isFormModalOpen && (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-              <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-lg shadow-2xl animate-scale-up border border-slate-200 dark:border-slate-700">
-                <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
-                  <h3 className="text-xl font-bold font-heading text-slate-900 dark:text-white">
+              <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl animate-scale-up border border-slate-200">
+                <div className="p-6 border-b border-slate-200 flex justify-between items-center">
+                  <h3 className="text-xl font-bold font-heading text-slate-900">
                     {editingForm ? 'Sửa biểu mẫu' : 'Thêm biểu mẫu mới'}
                   </h3>
                   <button
                     onClick={() => setIsFormModalOpen(false)}
-                    className="text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 p-2 rounded-full"
+                    className="text-slate-500 hover:bg-slate-100 p-2 rounded-full"
                   >
                     <X className="h-6 w-6" />
                   </button>
                 </div>
                 <form onSubmit={handleSaveForm} className="p-6 space-y-4">
                   <div>
-                    <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Tên biểu mẫu</label>
+                    <label className="block text-sm font-bold text-slate-800 mb-1">Tên biểu mẫu</label>
                     <input
                       required
                       type="text"
                       placeholder="Đơn xin nghỉ học có phép"
-                      className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-slate-700 dark:text-white"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white text-slate-900"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     />
@@ -582,7 +582,7 @@ const StudentCornerManager: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setIsFormModalOpen(false)}
-                      className="flex-1 bg-slate-300 dark:bg-slate-600 hover:bg-slate-400 dark:hover:bg-slate-700 text-slate-800 dark:text-white py-2 rounded-lg font-bold"
+                      className="flex-1 bg-slate-300 hover:bg-slate-400 text-slate-800 py-2 rounded-lg font-bold"
                     >
                       Hủy
                     </button>
