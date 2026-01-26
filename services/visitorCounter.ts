@@ -115,9 +115,27 @@ export const visitorCounter = {
   },
 
   async incrementVisitor(): Promise<VisitorStats> {
-    // TODO: Implement via serverless API endpoint to protect JSONBIN_API_KEY
-    // For now, return read-only stats
-    return this.getVisitorStats();
+    try {
+      // Call serverless API to increment visitor count (protects API key)
+      const response = await fetch('/api/increment-visitor', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        // Fallback to read-only
+        return this.getVisitorStats();
+      }
+
+      const data = await response.json();
+      return data.stats || { today: 0, week: 0, year: 0, total: 0 };
+    } catch (error) {
+      console.error('Error incrementing visitor:', error);
+      // Fallback to read-only
+      return this.getVisitorStats();
+    }
   },
 
   async getVisitorHistory(limit: number = 14): Promise<VisitorHistoryEntry[]> {
