@@ -57,7 +57,7 @@ Xây dựng nền tảng website cơ bản với các tính năng thiết yếu 
 - [x] Quản lý hình ảnh (logo, banner)
 
 #### 4. AI Chatbot ✅
-- [x] Tích hợp Google Gemini 1.5 Flash
+- [x] Tích hợp Google Gemini 2.5 Flash
 - [x] Knowledge base về THPT Hương Khê
 - [x] Giao diện chat hiện đại
 - [x] Markdown formatting support
