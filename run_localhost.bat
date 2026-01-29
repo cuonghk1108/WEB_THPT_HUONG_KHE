@@ -1,4 +1,0 @@
-@echo off
-echo Starting local development server...
-npm run dev
-pause
