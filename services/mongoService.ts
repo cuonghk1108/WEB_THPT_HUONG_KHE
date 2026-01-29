@@ -8,46 +8,30 @@ const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 export const mongoService = {
   // ===== NEWS =====
   async getAllNews() {
-    try {
-      const response = await fetch(`${API_BASE}/news`);
-      return await response.json();
-    } catch (error) {
-      console.error('❌ Error fetching news:', error);
-      return [];
-    }
+    const response = await fetch(`${API_BASE}/news`);
+    return await response.json();
   },
 
   async addNews(newsData: any) {
-    try {
-      const response = await fetch(`${API_BASE}/news`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newsData)
-      });
-      return await response.json();
-    } catch (error) {
-      console.error('❌ Error adding news:', error);
-      return null;
-    }
+    const response = await fetch(`${API_BASE}/news`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newsData)
+    });
+    return await response.json();
   },
 
   async updateNews(id: string, newsData: any) {
-    try {
-      const response = await fetch(`${API_BASE}/news/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newsData)
-      });
-      return await response.json();
-    } catch (error) {
-      console.error('❌ Error updating news:', error);
-      return null;
-    }
+    const response = await fetch(`${API_BASE}/news/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newsData)
+    });
+    return await response.json();
   },
 
   async deleteNews(id: string) {
-    try {
-      const response = await fetch(`${API_BASE}/news/${id}`, {
+    const response = await fetch(`${API_BASE}/news/${id}`, {
         method: 'DELETE'
       });
       return await response.json();
