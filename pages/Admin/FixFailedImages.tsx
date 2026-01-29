@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Upload, CheckCircle, XCircle, Loader, RefreshCw } from 'lucide-react';
-import { uploadImageFromUrl } from '../../services/supabaseStorage';
-import { saveGalleryImage } from '../../services/supabaseService';
+// import { uploadImageFromUrl } from '../../services/supabaseStorage';
+// import { saveGalleryImage } from '../../services/supabaseService';
 
 interface FailedImage {
   url: string;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import { Plus, Edit, Trash2, Search, X, Save, Image as ImageIcon } from 'lucide-react';
 import { NewsItem } from '../../types';
-import { uploadBase64ToSupabase } from '../../services/supabaseStorage';
+// import { uploadBase64ToSupabase } from '../../services/supabaseStorage';
 
 const NewsManager: React.FC = () => {
   const { news, addNews, updateNews, deleteNews } = useData();

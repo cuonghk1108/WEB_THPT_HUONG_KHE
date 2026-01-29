@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Settings as SettingsIcon, Bell, Lock, Globe, Upload } from 'lucide-react';
 import { useData } from '../../context/DataContext';
-import { cloudStorage } from '../../services/cloudStorage';
+// import { cloudStorage } from '../../services/cloudStorage';
 
 const Settings: React.FC = () => {
   const { globalImages, news, teachers, clubs, gallery, studentCorner, achievementYears, digitalLibrary, studentPortal } = useData();

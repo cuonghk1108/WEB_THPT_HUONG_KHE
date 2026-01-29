@@ -67,7 +67,6 @@ const PublicLayout: React.FC = () => {
       </main>
       <Footer />
       <Chatbot />
-      <DataDebugStatus />
     </div>
   );
 };
@@ -84,11 +83,10 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 const App: React.FC = () => {
   return (
     <ErrorBoundary>
-      <SupabaseProvider>
-        <DataProvider>
-          <DarkModeProvider>
-          <BrowserRouter>
-              <ScrollToTop />
+      <DataProvider>
+        <DarkModeProvider>
+        <BrowserRouter>
+            <ScrollToTop />
               <Routes>
               {/* Public Routes */}
               <Route element={<PublicLayout />}>

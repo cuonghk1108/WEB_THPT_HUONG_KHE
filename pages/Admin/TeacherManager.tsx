@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import { Plus, Edit, Trash2, X, Save, User, Mail, BookOpen, Search, Upload } from 'lucide-react';
 import { Teacher } from '../../types';
-import { uploadBase64ToSupabase } from '../../services/supabaseStorage';
+// import { uploadBase64ToSupabase } from '../../services/supabaseStorage';
 
 const TeacherManager: React.FC = () => {
   const { teachers, addTeacher, updateTeacher, deleteTeacher } = useData();

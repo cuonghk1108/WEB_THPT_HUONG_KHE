@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Upload, Image as ImageIcon, CheckCircle, XCircle, Loader, AlertTriangle } from 'lucide-react';
-import { saveGalleryImage } from '../../services/supabaseService';
-import { uploadImageToSupabase } from '../../services/supabaseStorage';
+// import { saveGalleryImage } from '../../services/supabaseService';
+// import { uploadImageToSupabase } from '../../services/supabaseStorage';
 
 interface UploadResult {
   filename: string;

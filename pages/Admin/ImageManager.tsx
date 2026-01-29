@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useData } from '../../context/DataContext';
 import { Save, Image as ImageIcon, RotateCcw, Upload } from 'lucide-react';
 import { GlobalImages } from '../../types';
-import { uploadBase64ToSupabase } from '../../services/supabaseStorage';
+// import { uploadBase64ToSupabase } from '../../services/supabaseStorage';
 
 const ImageManager: React.FC = () => {
   const { globalImages, updateGlobalImages } = useData();

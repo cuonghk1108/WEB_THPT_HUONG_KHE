@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import { Plus, Edit, Trash2, X, Save, Users, Calendar, Upload } from 'lucide-react';
 import { Club } from '../../types';
-import { uploadBase64ToSupabase } from '../../services/supabaseStorage';
+// import { uploadBase64ToSupabase } from '../../services/supabaseStorage';
 
 const ClubManager: React.FC = () => {
   const { clubs, addClub, updateClub, deleteClub } = useData();

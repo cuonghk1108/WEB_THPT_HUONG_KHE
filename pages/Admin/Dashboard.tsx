@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useData } from '../../context/DataContext';
-import { visitorCounter, VisitorHistoryEntry } from '../../services/visitorCounter';
+// import { visitorCounter, VisitorHistoryEntry } from '../../services/visitorCounter';
 import BarChart from '../../components/BarChart';
 
 import { Users, Newspaper, Images, Calendar, Activity, LayoutDashboard, FolderOpen, TrendingUp, Eye, BookOpen } from 'lucide-react';
