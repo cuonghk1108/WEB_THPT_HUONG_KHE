@@ -100,7 +100,7 @@ const INITIAL_NEWS: NewsItem[] = [
         <p>Thành công của Nhật là câu chuyện về kỷ luật, sự kiên trì và tinh thần tự học. Hy vọng tấm gương của em sẽ lan tỏa, khích lệ tinh thần học tập của toàn thể học sinh trong trường, tiếp tục viết tiếp những trang vàng truyền thống của mái trường 60 năm tuổi.</p>
       `,
       date: '20/01/2026', 
-      imageUrl: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=800&auto=format&fit=crop', 
+      imageUrl: 'https://i.ibb.co/NnT8cnTg/a920ea3f6917.jpg', 
       category: 'Gương sáng' 
     },
     { 
@@ -128,7 +128,7 @@ const INITIAL_NEWS: NewsItem[] = [
         <p>Tiếng trống trường khép lại năm học đã vang lên, mở ra một mùa hè ý nghĩa và một kỳ thi quan trọng phía trước. Chúc các em học sinh khối 12 chân cứng đá mềm, vượt vũ môn hóa rồng thành công! Nhà trường luôn đồng hành, hỗ trợ các em trong chặng đường phía trước.</p>
       `,
       date: '25/05/2025', 
-      imageUrl: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=800&auto=format&fit=crop', 
+      imageUrl: 'https://vicqpnikodxcncyappes.supabase.co/storage/v1/object/public/images/501121963_1622684485234528_8378496376743383225_n.jpg', 
       category: 'Hoạt động' 
     },
     { 
@@ -166,7 +166,7 @@ const INITIAL_NEWS: NewsItem[] = [
         <p>Nhà trường khuyến khích phụ huynh và học sinh nộp hồ sơ trực tuyến qua cổng thông tin điện tử của trường để tiết kiệm thời gian. <em>Mọi thắc mắc xin liên hệ Văn phòng nhà trường qua số điện thoại: (0239) 3 871 234.</em></p>
       `,
       date: '15/05/2025', 
-      imageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=800&auto=format&fit=crop', 
+      imageUrl: 'https://vicqpnikodxcncyappes.supabase.co/storage/v1/object/public/images/mau-thong-bao-theo-nghi-dinh-30_1508130248.jpg', 
       category: 'Thông báo' 
     },
     { 
@@ -215,7 +215,7 @@ const INITIAL_NEWS: NewsItem[] = [
             <p>Ngay sau hội nghị, nhà trường triển khai kế hoạch tu sửa cơ sở vật chất, bổ sung trang thiết bị phòng học, cải thiện cảnh quan xanh – sạch – đẹp, và phát động phong trào thi đua năm học mới. Tất cả hướng tới mục tiêu: mỗi giờ lên lớp là một giờ học chất lượng.</p>
         `,
         date: '05/09/2025', 
-        imageUrl: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800&auto=format&fit=crop', 
+        imageUrl: 'https://vicqpnikodxcncyappes.supabase.co/storage/v1/object/public/images/z7081820976708_3949c15485ca2e38631fac84214bd1ad(1).jpg', 
         category: 'Hoạt động' 
     }
 ];
