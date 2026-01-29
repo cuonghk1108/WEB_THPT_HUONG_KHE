@@ -58,6 +58,78 @@ export async function deleteImageFromSupabase(filePath: string): Promise<void> {
 }
 
 /**
+ * Upload ảnh từ URL (vd: Unsplash) lên Supabase Storage
+ * @param imageUrl - URL của ảnh cần upload
+ * @param folder - Thư mục lưu trữ
+ * @returns URL công khai của ảnh
+ */
+export async function uploadImageFromUrl(imageUrl: string, folder: string = 'uploads'): Promise<string> {
+  try {
+    console.log(`📥 Fetching image from URL: ${imageUrl}`);
+
+    // Fetch ảnh từ URL với proper headers
+    const response = await fetch(imageUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Accept': 'image/*',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch image: ${response.statusText}`);
+    }
+
+    // Kiểm tra MIME type
+    const contentType = response.headers.get('content-type') || 'image/jpeg';
+    
+    if (!contentType.startsWith('image/')) {
+      throw new Error(`Invalid MIME type: ${contentType}. Expected image, got ${contentType}`);
+    }
+
+    // Convert response to blob
+    const blob = await response.blob();
+    
+    // Tạo File object
+    const fileExt = contentType.split('/')[1] || 'jpg';
+    const fileName = `${folder}/${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+
+    console.log(`📤 Uploading to Supabase Storage: ${fileName}`);
+
+    // Upload
+    const { data, error } = await supabase.storage
+      .from(BUCKET_NAME)
+      .upload(fileName, blob, {
+        contentType: contentType,
+        cacheControl: '3600',
+        upsert: false
+      });
+
+    if (error) {
+      console.error('❌ Upload error:', error);
+      throw new Error(`Upload failed: ${error.message}`);
+    }
+
+    console.log('✅ Upload successful:', data);
+
+    // Lấy URL công khai
+    const { data: urlData } = supabase.storage
+      .from(BUCKET_NAME)
+      .getPublicUrl(fileName);
+
+    if (!urlData || !urlData.publicUrl) {
+      throw new Error('Failed to get public URL');
+    }
+
+    console.log('🔗 Public URL:', urlData.publicUrl);
+    return urlData.publicUrl;
+  } catch (error: any) {
+    console.error('❌ Error uploading image from URL:', error);
+    console.error('Error details:', error.message);
+    throw error;
+  }
+}
+
+/**
  * Upload base64 image lên Supabase Storage
  * @param base64String - Chuỗi base64 của ảnh
  * @param folder - Thư mục lưu trữ

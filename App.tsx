@@ -45,6 +45,7 @@ const Settings = lazy(() => import('./pages/Admin/Settings'));
 const DataMigration = lazy(() => import('./pages/Admin/DataMigration'));
 const BulkImageUpload = lazy(() => import('./pages/Admin/BulkImageUpload'));
 const StorageSetup = lazy(() => import('./pages/Admin/StorageSetup'));
+const FixFailedImages = lazy(() => import('./pages/Admin/FixFailedImages'));
 
 // ScrollToTop Component handles window scroll on route change
 const ScrollToTop = () => {
@@ -138,6 +139,7 @@ const App: React.FC = () => {
                  <Route path="storage-setup" element={<StorageSetup />} />
                  <Route path="data-migration" element={<DataMigration />} />
                  <Route path="bulk-upload" element={<BulkImageUpload />} />
+                 <Route path="fix-images" element={<FixFailedImages />} />
                  <Route path="*" element={<Navigate to="dashboard" replace />} />
               </Route>
 
