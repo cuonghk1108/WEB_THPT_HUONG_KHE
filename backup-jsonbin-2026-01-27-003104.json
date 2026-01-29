@@ -1,9 +1,9 @@
 ﻿{
     "globalImages":  {
-                         "logo":  "https://i.ibb.co/8nxYtc3S/21a573804548.jpg",
-                         "homeHero":  "https://i.ibb.co/bMf3L5ZN/5e7faf2ca419.png",
-                         "principal":  "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80\u0026w=400\u0026auto=format\u0026fit=crop",
-                         "introHistory":  "https://i.ibb.co/8DfGdXhg/f5b2ba0c0d6a.jpg"
+    "logo": "https://vicqpnikodxcncyappes.supabase.co/storage/v1/object/public/images/global/1769688475269-co1orl5ea.jpeg",
+    "homeHero": "https://vicqpnikodxcncyappes.supabase.co/storage/v1/object/public/images/global/1769688480990-4j5ihattu.png",
+    "principal": "https://vicqpnikodxcncyappes.supabase.co/storage/v1/object/public/images/global/1769688486459-yzgofttc7.png",
+    "introHistory": "https://vicqpnikodxcncyappes.supabase.co/storage/v1/object/public/images/global/1769688490858-984vf7238.jpeg"
                      },
     "news":  [
                  {
