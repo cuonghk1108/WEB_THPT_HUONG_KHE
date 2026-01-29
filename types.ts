@@ -6,9 +6,10 @@ export interface NavItem {
 
 export interface NewsItem {
   id: number;
+  mongoId?: string;
   title: string;
   excerpt: string;
-  content: string; // Added field for full HTML content
+  content: string;
   date: string;
   imageUrl: string;
   category: string;
@@ -52,6 +53,7 @@ export interface GlobalImages {
 
 export interface Teacher {
   id: number;
+  mongoId?: string;
   name: string;
   position: string;
   subject: string;
@@ -62,6 +64,7 @@ export interface Teacher {
 
 export interface Club {
   id: number;
+  mongoId?: string;
   name: string;
   description: string;
   members: number;
@@ -71,6 +74,7 @@ export interface Club {
 
 export interface GalleryItem {
   id: number;
+  mongoId?: string;
   title: string;
   imageUrl: string;
   category: string;
@@ -110,6 +114,7 @@ export interface StudentCornerData {
 }
 export interface Event {
   id: number;
+  mongoId?: string;
   title: string;
   description: string;
   date: string;

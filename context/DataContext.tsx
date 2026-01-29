@@ -2,33 +2,8 @@ import React, { createContext, useContext, useState, useEffect, useRef } from 'r
 import { NewsItem, GlobalImages, Teacher, Club, GalleryItem, StudentCornerData, ExamItem, FormItem, Event, Achievement, AchievementYear, DigitalResource, StudentPortalData, GradeItem, AssignmentItem, Announcement } from '../types';
 import { cloudStorage } from '../services/cloudStorage';
 import { getBackupImageUrl } from '../utils/backupImageLoader';
-import { 
-  subscribeToNews, 
-  subscribeToTeachers, 
-  subscribeToClubs, 
-  subscribeToGallery, 
-  subscribeToEvents, 
-  unsubscribeAll 
-} from '../services/supabaseRealtimeService';
-import { 
-  saveNews as saveNewsToSupabase, 
-  saveTeacher as saveTeacherToSupabase, 
-  saveClub as saveClubToSupabase, 
-  saveGalleryImage as saveGalleryToSupabase, 
-  saveEvent as saveEventToSupabase, 
-  saveAchievement as saveAchievementToSupabase,
-  getAllNews as getAllNewsFromSupabase,
-  getAllTeachers as getAllTeachersFromSupabase,
-  getAllClubs as getAllClubsFromSupabase,
-  getAllGalleryImages as getAllGalleryFromSupabase,
-  getAllEvents as getAllEventsFromSupabase,
-  deleteNews as deleteNewsFromSupabase,
-  deleteTeacher as deleteTeacherFromSupabase,
-  deleteClub as deleteClubFromSupabase,
-  deleteGalleryImage as deleteGalleryFromSupabase,
-  deleteEvent as deleteEventFromSupabase,
-  deleteAchievement as deleteAchievementFromSupabase
-} from '../services/supabaseService';
+import { mongoService } from '../services/mongoService';
+import { socketService } from '../services/socketService';
 
 interface DataContextType {
   news: NewsItem[];
@@ -593,77 +568,89 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return INITIAL_STUDENT_PORTAL;
   });
 
-  const hasLoadedSupabaseRef = useRef(false);
+  const hasLoadedMongoRef = useRef(false);
 
-  // Normalize data from Supabase (convert snake_case to camelCase)
+  // Normalize data from MongoDB
   const normalizeNews = (newsArray: any[]): NewsItem[] => {
-    return newsArray.map(item => ({
-      id: typeof item.id === 'string' ? parseInt(item.id.replace('news-', '')) || 0 : item.id,
+    return newsArray.map((item, index) => ({
+      id: typeof item.id === 'number' ? item.id : index + 1,
+      mongoId: item._id || item.id,
       title: item.title || '',
       excerpt: item.excerpt || '',
       content: item.content || '',
-      date: item.date || '',
-      // Handle images field - can be URL string or array, with backup fallback
-      imageUrl: (typeof item.images === 'string' && item.images) 
-        ? item.images 
-        : item.imageUrl || getBackupImageUrl(typeof item.id === 'string' ? parseInt(item.id.replace('news-', '')) || 0 : item.id, 'news') || '',
+      date: typeof item.date === 'string' ? item.date : (item.createdAt ? new Date(item.createdAt).toLocaleDateString('vi-VN') : ''),
+      imageUrl: item.imageUrl || item.image || getBackupImageUrl(index + 1, 'news') || '',
       category: item.category || ''
     }));
   };
 
   const normalizeTeachers = (teachersArray: any[]): Teacher[] => {
-    return teachersArray.map(item => ({
-      id: typeof item.id === 'string' ? parseInt(item.id.replace('teacher-', '')) || 0 : item.id,
+    return teachersArray.map((item, index) => ({
+      id: typeof item.id === 'number' ? item.id : index + 1,
+      mongoId: item._id || item.id,
       name: item.name || '',
       subject: item.subject || '',
-      imageUrl: item.image_url || item.imageUrl || getBackupImageUrl(typeof item.id === 'string' ? parseInt(item.id.replace('teacher-', '')) || 0 : item.id, 'teachers') || '',
-      bio: item.bio || '',
+      position: item.position || '',
+      department: item.department || '',
       email: item.email || '',
-      phone: item.phone || ''
+      imageUrl: item.imageUrl || getBackupImageUrl(index + 1, 'teachers') || ''
     }));
   };
 
   const normalizeClubs = (clubsArray: any[]): Club[] => {
-    return clubsArray.map(item => ({
-      id: typeof item.id === 'string' ? parseInt(item.id.replace('club-', '')) || 0 : item.id,
+    return clubsArray.map((item, index) => ({
+      id: typeof item.id === 'number' ? item.id : index + 1,
+      mongoId: item._id || item.id,
       name: item.name || '',
       description: item.description || '',
-      imageUrl: item.image_url || item.imageUrl || getBackupImageUrl(typeof item.id === 'string' ? parseInt(item.id.replace('club-', '')) || 0 : item.id, 'clubs') || '',
-      members: item.members || 0
+      imageUrl: item.imageUrl || getBackupImageUrl(index + 1, 'clubs') || '',
+      members: item.members || 0,
+      schedule: item.schedule || ''
     }));
   };
 
   const normalizeGallery = (galleryArray: any[]): GalleryItem[] => {
-    return galleryArray.map(item => ({
-      id: typeof item.id === 'string' ? parseInt(item.id.replace('gallery-', '')) || 0 : item.id,
+    return galleryArray.map((item, index) => ({
+      id: typeof item.id === 'number' ? item.id : index + 1,
+      mongoId: item._id || item.id,
       title: item.title || '',
-      imageUrl: item.image_url || item.imageUrl || getBackupImageUrl(typeof item.id === 'string' ? parseInt(item.id.replace('gallery-', '')) || 0 : item.id, 'gallery') || '',
+      imageUrl: item.imageUrl || getBackupImageUrl(index + 1, 'gallery') || '',
       category: item.category || ''
     }));
   };
 
-  // Load from Supabase on first mount (primary source)
+  const normalizeEvents = (eventsArray: any[]): Event[] => {
+    return eventsArray.map((item, index) => ({
+      id: typeof item.id === 'number' ? item.id : index + 1,
+      mongoId: item._id || item.id,
+      title: item.title || '',
+      description: item.description || '',
+      date: typeof item.date === 'string' ? item.date : (item.date ? new Date(item.date).toISOString() : ''),
+      location: item.location || '',
+      imageUrl: item.imageUrl || ''
+    }));
+  };
+
+  // Load from MongoDB backend on first mount (primary source)
   useEffect(() => {
-    const loadSupabaseData = async () => {
-      console.log('📡 [DataContext] Starting Supabase data load...');
+    const loadMongoData = async () => {
+      console.log('📡 [DataContext] Starting MongoDB data load...');
       try {
         const [newsData, teachersData, clubsData, galleryData, eventsData] = await Promise.all([
-          getAllNewsFromSupabase(),
-          getAllTeachersFromSupabase(),
-          getAllClubsFromSupabase(),
-          getAllGalleryFromSupabase(),
-          getAllEventsFromSupabase()
+          mongoService.getAllNews(),
+          mongoService.getAllTeachers(),
+          mongoService.getAllClubs(),
+          mongoService.getAllGallery(),
+          mongoService.getAllEvents()
         ]);
 
-        // Use Supabase data if available, otherwise use localStorage or initial data
         if (newsData && newsData.length > 0) {
           const normalized = normalizeNews(newsData);
-          console.log(`✅ [News] Loaded ${normalized.length} items from Supabase`);
+          console.log(`✅ [News] Loaded ${normalized.length} items from MongoDB`);
           setNews(normalized);
           localStorage.setItem('school_news', JSON.stringify(normalized));
         } else {
-          console.log('⚠️ [News] Supabase returned empty, using fallback...');
-          // Fallback: use localStorage if available, otherwise use initial data
+          console.log('⚠️ [News] MongoDB returned empty, using fallback...');
           const saved = localStorage.getItem('school_news');
           if (saved) {
             try {
@@ -680,11 +667,11 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         if (teachersData && teachersData.length > 0) {
           const normalized = normalizeTeachers(teachersData);
-          console.log(`✅ [Teachers] Loaded ${normalized.length} items from Supabase`);
+          console.log(`✅ [Teachers] Loaded ${normalized.length} items from MongoDB`);
           setTeachers(normalized);
           localStorage.setItem('school_teachers', JSON.stringify(normalized));
         } else {
-          console.log('⚠️ [Teachers] Supabase returned empty, using fallback...');
+          console.log('⚠️ [Teachers] MongoDB returned empty, using fallback...');
           const saved = localStorage.getItem('school_teachers');
           if (saved) {
             try {
@@ -701,11 +688,11 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         if (clubsData && clubsData.length > 0) {
           const normalized = normalizeClubs(clubsData);
-          console.log(`✅ [Clubs] Loaded ${normalized.length} items from Supabase`);
+          console.log(`✅ [Clubs] Loaded ${normalized.length} items from MongoDB`);
           setClubs(normalized);
           localStorage.setItem('school_clubs', JSON.stringify(normalized));
         } else {
-          console.log('⚠️ [Clubs] Supabase returned empty, using fallback...');
+          console.log('⚠️ [Clubs] MongoDB returned empty, using fallback...');
           const saved = localStorage.getItem('school_clubs');
           if (saved) {
             try {
@@ -722,11 +709,11 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         if (galleryData && galleryData.length > 0) {
           const normalized = normalizeGallery(galleryData);
-          console.log(`✅ [Gallery] Loaded ${normalized.length} items from Supabase`);
+          console.log(`✅ [Gallery] Loaded ${normalized.length} items from MongoDB`);
           setGallery(normalized);
           localStorage.setItem('school_gallery', JSON.stringify(normalized));
         } else {
-          console.log('⚠️ [Gallery] Supabase returned empty, using fallback...');
+          console.log('⚠️ [Gallery] MongoDB returned empty, using fallback...');
           const saved = localStorage.getItem('school_gallery');
           if (saved) {
             try {
@@ -742,11 +729,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
 
         if (eventsData && eventsData.length > 0) {
-          console.log(`✅ [Events] Loaded ${eventsData.length} items from Supabase`);
-          setEvents(eventsData);
-          localStorage.setItem('school_events', JSON.stringify(eventsData));
+          const normalized = normalizeEvents(eventsData);
+          console.log(`✅ [Events] Loaded ${normalized.length} items from MongoDB`);
+          setEvents(normalized);
+          localStorage.setItem('school_events', JSON.stringify(normalized));
         } else {
-          console.log('⚠️ [Events] Supabase returned empty, using fallback...');
+          console.log('⚠️ [Events] MongoDB returned empty, using fallback...');
           const saved = localStorage.getItem('school_events');
           if (saved) {
             try {
@@ -761,88 +749,144 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           }
         }
 
-        hasLoadedSupabaseRef.current = true;
-        console.log('✅ [DataContext] Supabase data load complete');
+        hasLoadedMongoRef.current = true;
+        console.log('✅ [DataContext] MongoDB data load complete');
       } catch (error) {
-        console.error('❌ [DataContext] Error loading Supabase data:', error);
-        // If Supabase fails completely, ensure we at least use localStorage/initial data
-        // The initial state should already be set from the useState initializers
-        hasLoadedSupabaseRef.current = true;
+        console.error('❌ [DataContext] Error loading MongoDB data:', error);
+        hasLoadedMongoRef.current = true;
       }
     };
 
-    loadSupabaseData();
+    loadMongoData();
   }, []);
 
-  // Setup real-time subscriptions
+  // Setup real-time subscriptions (Socket.io)
   useEffect(() => {
-    console.log('🔴 [Real-time] Setting up Supabase real-time subscriptions...');
+    console.log('🔴 [Real-time] Setting up Socket.io subscriptions...');
 
-    // Create a callback to refresh data when changes occur
-    const handleDataUpdate = async () => {
-      console.log('🔄 [Real-time] Data changed detected, refreshing...');
-      
-      try {
-        const [newsData, teachersData, clubsData, galleryData, eventsData] = await Promise.all([
-          getAllNewsFromSupabase(),
-          getAllTeachersFromSupabase(),
-          getAllClubsFromSupabase(),
-          getAllGalleryFromSupabase(),
-          getAllEventsFromSupabase()
-        ]);
+    socketService.connect();
 
-        // Update state with new data
-        if (newsData && newsData.length > 0) {
-          const normalized = normalizeNews(newsData);
-          setNews(normalized);
-          localStorage.setItem('school_news', JSON.stringify(normalized));
-          console.log('✅ [Real-time] News updated');
+    const upsertNews = (raw: any) => {
+      const [normalized] = normalizeNews([raw]);
+      setNews(prev => {
+        const index = prev.findIndex(n => n.mongoId && normalized.mongoId && n.mongoId === normalized.mongoId);
+        if (index >= 0) {
+          const updated = [...prev];
+          updated[index] = { ...prev[index], ...normalized };
+          return updated;
         }
-
-        if (teachersData && teachersData.length > 0) {
-          const normalized = normalizeTeachers(teachersData);
-          setTeachers(normalized);
-          localStorage.setItem('school_teachers', JSON.stringify(normalized));
-          console.log('✅ [Real-time] Teachers updated');
-        }
-
-        if (clubsData && clubsData.length > 0) {
-          const normalized = normalizeClubs(clubsData);
-          setClubs(normalized);
-          localStorage.setItem('school_clubs', JSON.stringify(normalized));
-          console.log('✅ [Real-time] Clubs updated');
-        }
-
-        if (galleryData && galleryData.length > 0) {
-          const normalized = normalizeGallery(galleryData);
-          setGallery(normalized);
-          localStorage.setItem('school_gallery', JSON.stringify(normalized));
-          console.log('✅ [Real-time] Gallery updated');
-        }
-
-        if (eventsData && eventsData.length > 0) {
-          setEvents(eventsData);
-          localStorage.setItem('school_events', JSON.stringify(eventsData));
-          console.log('✅ [Real-time] Events updated');
-        }
-      } catch (error) {
-        console.error('❌ [Real-time] Error refreshing data:', error);
-      }
+        return [normalized, ...prev];
+      });
     };
 
-    // Subscribe to real-time changes
-    subscribeToNews(handleDataUpdate);
-    subscribeToTeachers(handleDataUpdate);
-    subscribeToClubs(handleDataUpdate);
-    subscribeToGallery(handleDataUpdate);
-    subscribeToEvents(handleDataUpdate);
+    const upsertTeachers = (raw: any) => {
+      const [normalized] = normalizeTeachers([raw]);
+      setTeachers(prev => {
+        const index = prev.findIndex(t => t.mongoId && normalized.mongoId && t.mongoId === normalized.mongoId);
+        if (index >= 0) {
+          const updated = [...prev];
+          updated[index] = { ...prev[index], ...normalized };
+          return updated;
+        }
+        return [...prev, normalized];
+      });
+    };
 
-    console.log('✅ [Real-time] All subscriptions active');
+    const upsertClubs = (raw: any) => {
+      const [normalized] = normalizeClubs([raw]);
+      setClubs(prev => {
+        const index = prev.findIndex(c => c.mongoId && normalized.mongoId && c.mongoId === normalized.mongoId);
+        if (index >= 0) {
+          const updated = [...prev];
+          updated[index] = { ...prev[index], ...normalized };
+          return updated;
+        }
+        return [...prev, normalized];
+      });
+    };
 
-    // Cleanup: unsubscribe when component unmounts
+    const upsertGallery = (raw: any) => {
+      const [normalized] = normalizeGallery([raw]);
+      setGallery(prev => {
+        const index = prev.findIndex(g => g.mongoId && normalized.mongoId && g.mongoId === normalized.mongoId);
+        if (index >= 0) {
+          const updated = [...prev];
+          updated[index] = { ...prev[index], ...normalized };
+          return updated;
+        }
+        return [...prev, normalized];
+      });
+    };
+
+    const upsertEvents = (raw: any) => {
+      const [normalized] = normalizeEvents([raw]);
+      setEvents(prev => {
+        const index = prev.findIndex(e => e.mongoId && normalized.mongoId && e.mongoId === normalized.mongoId);
+        if (index >= 0) {
+          const updated = [...prev];
+          updated[index] = { ...prev[index], ...normalized };
+          return updated;
+        }
+        return [...prev, normalized];
+      });
+    };
+
+    socketService.onNewsCreated(upsertNews);
+    socketService.onNewsUpdated(upsertNews);
+    socketService.onNewsDeleted((mongoId) => {
+      setNews(prev => prev.filter(n => n.mongoId !== mongoId));
+    });
+
+    socketService.onTeacherCreated(upsertTeachers);
+    socketService.onTeacherUpdated(upsertTeachers);
+    socketService.onTeacherDeleted((mongoId) => {
+      setTeachers(prev => prev.filter(t => t.mongoId !== mongoId));
+    });
+
+    socketService.onClubCreated(upsertClubs);
+    socketService.onClubUpdated(upsertClubs);
+    socketService.onClubDeleted((mongoId) => {
+      setClubs(prev => prev.filter(c => c.mongoId !== mongoId));
+    });
+
+    socketService.onGalleryCreated(upsertGallery);
+    socketService.onGalleryUpdated(upsertGallery);
+    socketService.onGalleryDeleted((mongoId) => {
+      setGallery(prev => prev.filter(g => g.mongoId !== mongoId));
+    });
+
+    socketService.onEventCreated(upsertEvents);
+    socketService.onEventUpdated(upsertEvents);
+    socketService.onEventDeleted((mongoId) => {
+      setEvents(prev => prev.filter(e => e.mongoId !== mongoId));
+    });
+
+    console.log('✅ [Real-time] Socket.io subscriptions active');
+
+    const pollingInterval = setInterval(async () => {
+      try {
+        const [newsData, teachersData, clubsData, galleryData, eventsData] = await Promise.all([
+          mongoService.getAllNews(),
+          mongoService.getAllTeachers(),
+          mongoService.getAllClubs(),
+          mongoService.getAllGallery(),
+          mongoService.getAllEvents()
+        ]);
+
+        if (newsData && newsData.length > 0) setNews(normalizeNews(newsData));
+        if (teachersData && teachersData.length > 0) setTeachers(normalizeTeachers(teachersData));
+        if (clubsData && clubsData.length > 0) setClubs(normalizeClubs(clubsData));
+        if (galleryData && galleryData.length > 0) setGallery(normalizeGallery(galleryData));
+        if (eventsData && eventsData.length > 0) setEvents(normalizeEvents(eventsData));
+      } catch (error) {
+        console.error('❌ [Polling] Error refreshing data:', error);
+      }
+    }, 5000);
+
     return () => {
       console.log('🔴 [Real-time] Cleaning up subscriptions...');
-      unsubscribeAll();
+      clearInterval(pollingInterval);
+      socketService.disconnect();
     };
   }, []);
 
@@ -855,19 +899,19 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setGlobalImages(cloudData.globalImages);
         localStorage.setItem('school_images', JSON.stringify(cloudData.globalImages));
       }
-      if (!hasLoadedSupabaseRef.current && cloudData.gallery && cloudData.gallery.length > 0) {
+      if (!hasLoadedMongoRef.current && cloudData.gallery && cloudData.gallery.length > 0) {
         setGallery(cloudData.gallery);
         localStorage.setItem('school_gallery', JSON.stringify(cloudData.gallery));
       }
-      if (!hasLoadedSupabaseRef.current && cloudData.news && cloudData.news.length > 0) {
+      if (!hasLoadedMongoRef.current && cloudData.news && cloudData.news.length > 0) {
         setNews(cloudData.news);
         localStorage.setItem('school_news', JSON.stringify(cloudData.news));
       }
-      if (!hasLoadedSupabaseRef.current && cloudData.teachers && cloudData.teachers.length > 0) {
+      if (!hasLoadedMongoRef.current && cloudData.teachers && cloudData.teachers.length > 0) {
         setTeachers(cloudData.teachers);
         localStorage.setItem('school_teachers', JSON.stringify(cloudData.teachers));
       }
-      if (!hasLoadedSupabaseRef.current && cloudData.clubs && cloudData.clubs.length > 0) {
+      if (!hasLoadedMongoRef.current && cloudData.clubs && cloudData.clubs.length > 0) {
         setClubs(cloudData.clubs);
         localStorage.setItem('school_clubs', JSON.stringify(cloudData.clubs));
       }
@@ -959,46 +1003,45 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // News
   const addNews = async (item: Omit<NewsItem, 'id'>) => {
     const newId = news.length > 0 ? Math.max(...news.map(n => n.id)) + 1 : 0;
-    const newItem = { ...item, id: newId };
+    const newItem: NewsItem = { ...item, id: newId };
     setNews([newItem, ...news]);
     
-    // Save to Supabase
     try {
-      await saveNewsToSupabase({
-        id: `news-${Date.now()}-${newId}`,
+      const created = await mongoService.addNews({
         title: newItem.title,
         excerpt: newItem.excerpt,
         content: newItem.content,
         date: newItem.date,
         category: newItem.category,
-        image: newItem.imageUrl,
+        imageUrl: newItem.imageUrl,
         author: 'Admin'
       });
-      console.log('✅ News saved to Supabase');
+      if (created?._id) {
+        setNews(prev => prev.map(n => n.id === newId ? { ...n, mongoId: created._id } : n));
+      }
+      console.log('✅ News saved to MongoDB');
     } catch (error) {
-      console.error('❌ Failed to save news to Supabase:', error);
+      console.error('❌ Failed to save news to MongoDB:', error);
     }
   };
   const updateNews = async (id: number, updatedItem: Partial<NewsItem>) => {
     setNews(news.map(item => item.id === id ? { ...item, ...updatedItem } : item));
     
-    // Update in Supabase
     const newsItem = news.find(n => n.id === id);
-    if (newsItem) {
+    if (newsItem?.mongoId) {
       try {
-        await saveNewsToSupabase({
-          id: `news-${Date.now()}-${id}`,
+        await mongoService.updateNews(newsItem.mongoId, {
           title: updatedItem.title || newsItem.title,
           excerpt: updatedItem.excerpt || newsItem.excerpt,
           content: updatedItem.content || newsItem.content,
           date: updatedItem.date || newsItem.date,
           category: updatedItem.category || newsItem.category,
-          image: updatedItem.imageUrl || newsItem.imageUrl,
+          imageUrl: updatedItem.imageUrl || newsItem.imageUrl,
           author: 'Admin'
         });
-        console.log('✅ News updated in Supabase');
+        console.log('✅ News updated in MongoDB');
       } catch (error) {
-        console.error('❌ Failed to update news in Supabase:', error);
+        console.error('❌ Failed to update news in MongoDB:', error);
       }
     }
   };
@@ -1006,13 +1049,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const newsItem = news.find(n => n.id === id);
     setNews(news.filter(item => item.id !== id));
     
-    // Delete from Supabase
-    if (newsItem) {
+    if (newsItem?.mongoId) {
       try {
-        await deleteNewsFromSupabase(`news-${Date.now()}-${id}`);
-        console.log('✅ News deleted from Supabase');
+        await mongoService.deleteNews(newsItem.mongoId);
+        console.log('✅ News deleted from MongoDB');
       } catch (error) {
-        console.error('❌ Failed to delete news from Supabase:', error);
+        console.error('❌ Failed to delete news from MongoDB:', error);
       }
     }
   };
@@ -1027,51 +1069,56 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const newId = teachers.length > 0 ? Math.max(...teachers.map(t => t.id)) + 1 : 1;
     setTeachers([...teachers, { ...item, id: newId }]);
     
-    // Save to Supabase
     try {
-      await saveTeacherToSupabase({
-        id: `teacher-${Date.now()}-${newId}`,
+      const created = await mongoService.addTeacher({
         name: item.name,
         subject: item.subject,
-        image: item.imageUrl,
-        bio: item.bio || '',
-        email: '',
-        phone: ''
+        position: item.position,
+        department: item.department,
+        email: item.email,
+        imageUrl: item.imageUrl,
+        bio: item.bio || ''
       });
-      console.log('✅ Teacher saved to Supabase');
+      if (created?._id) {
+        setTeachers(prev => prev.map(t => t.id === newId ? { ...t, mongoId: created._id } : t));
+      }
+      console.log('✅ Teacher saved to MongoDB');
     } catch (error) {
-      console.error('❌ Failed to save teacher to Supabase:', error);
+      console.error('❌ Failed to save teacher to MongoDB:', error);
     }
   };
   const updateTeacher = async (id: number, updatedItem: Partial<Teacher>) => {
     setTeachers(teachers.map(t => t.id === id ? { ...t, ...updatedItem } : t));
     
     const teacher = teachers.find(t => t.id === id);
-    if (teacher) {
+    if (teacher?.mongoId) {
       try {
-        await saveTeacherToSupabase({
-          id: `teacher-${Date.now()}-${id}`,
+        await mongoService.updateTeacher(teacher.mongoId, {
           name: updatedItem.name || teacher.name,
           subject: updatedItem.subject || teacher.subject,
-          image: updatedItem.imageUrl || teacher.imageUrl,
-          bio: updatedItem.bio || teacher.bio || '',
-          email: '',
-          phone: ''
+          position: updatedItem.position || teacher.position,
+          department: updatedItem.department || teacher.department,
+          email: updatedItem.email || teacher.email,
+          imageUrl: updatedItem.imageUrl || teacher.imageUrl,
+          bio: updatedItem.bio || teacher.bio || ''
         });
-        console.log('✅ Teacher updated in Supabase');
+        console.log('✅ Teacher updated in MongoDB');
       } catch (error) {
-        console.error('❌ Failed to update teacher in Supabase:', error);
+        console.error('❌ Failed to update teacher in MongoDB:', error);
       }
     }
   };
   const deleteTeacher = async (id: number) => {
+    const teacher = teachers.find(t => t.id === id);
     setTeachers(teachers.filter(t => t.id !== id));
     
-    try {
-      await deleteTeacherFromSupabase(`teacher-${Date.now()}-${id}`);
-      console.log('✅ Teacher deleted from Supabase');
-    } catch (error) {
-      console.error('❌ Failed to delete teacher from Supabase:', error);
+    if (teacher?.mongoId) {
+      try {
+        await mongoService.deleteTeacher(teacher.mongoId);
+        console.log('✅ Teacher deleted from MongoDB');
+      } catch (error) {
+        console.error('❌ Failed to delete teacher from MongoDB:', error);
+      }
     }
   };
 
@@ -1080,80 +1127,92 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const newId = clubs.length > 0 ? Math.max(...clubs.map(c => c.id)) + 1 : 1;
     setClubs([...clubs, { ...item, id: newId }]);
     
-    // Save to Supabase
     try {
-      await saveClubToSupabase({
-        id: `club-${Date.now()}-${newId}`,
+      const created = await mongoService.addClub({
         name: item.name,
         description: item.description,
-        image: item.imageUrl,
-        members: 0,
-        advisor: ''
+        imageUrl: item.imageUrl,
+        members: item.members || 0,
+        schedule: item.schedule || ''
       });
-      console.log('✅ Club saved to Supabase');
+      if (created?._id) {
+        setClubs(prev => prev.map(c => c.id === newId ? { ...c, mongoId: created._id } : c));
+      }
+      console.log('✅ Club saved to MongoDB');
     } catch (error) {
-      console.error('❌ Failed to save club to Supabase:', error);
+      console.error('❌ Failed to save club to MongoDB:', error);
     }
   };
   const updateClub = async (id: number, updatedItem: Partial<Club>) => {
     setClubs(clubs.map(c => c.id === id ? { ...c, ...updatedItem } : c));
     
     const club = clubs.find(c => c.id === id);
-    if (club) {
+    if (club?.mongoId) {
       try {
-        await saveClubToSupabase({
-          id: `club-${Date.now()}-${id}`,
+        await mongoService.updateClub(club.mongoId, {
           name: updatedItem.name || club.name,
           description: updatedItem.description || club.description,
-          image: updatedItem.imageUrl || club.imageUrl,
-          members: 0,
-          advisor: ''
+          imageUrl: updatedItem.imageUrl || club.imageUrl,
+          members: updatedItem.members ?? club.members,
+          schedule: updatedItem.schedule || club.schedule
         });
-        console.log('✅ Club updated in Supabase');
+        console.log('✅ Club updated in MongoDB');
       } catch (error) {
-        console.error('❌ Failed to update club in Supabase:', error);
+        console.error('❌ Failed to update club in MongoDB:', error);
       }
     }
   };
   const deleteClub = async (id: number) => {
+    const club = clubs.find(c => c.id === id);
     setClubs(clubs.filter(c => c.id !== id));
     
-    try {
-      await deleteClubFromSupabase(`club-${Date.now()}-${id}`);
-      console.log('✅ Club deleted from Supabase');
-    } catch (error) {
-      console.error('❌ Failed to delete club from Supabase:', error);
+    if (club?.mongoId) {
+      try {
+        await mongoService.deleteClub(club.mongoId);
+        console.log('✅ Club deleted from MongoDB');
+      } catch (error) {
+        console.error('❌ Failed to delete club from MongoDB:', error);
+      }
     }
   };
 
   // Gallery
   const addGalleryItem = async (item: Omit<GalleryItem, 'id'>) => {
     const newId = gallery.length > 0 ? Math.max(...gallery.map(g => g.id)) + 1 : 1;
-    setGallery([...gallery, { ...item, id: newId }]);
+    const newItem: GalleryItem = { ...item, id: newId };
     
-    // Save to Supabase
+    // Cập nhật state ngay (optimistic update)
+    setGallery([...gallery, newItem]);
+    console.log('✅ [Frontend] Gallery item added to state:', newItem);
+    
+    // Lưu vào MongoDB (backend sẽ broadcast qua Socket.io)
     try {
-      await saveGalleryToSupabase({
-        id: `gallery-${Date.now()}-${newId}`,
-        url: item.imageUrl,
+      const created = await mongoService.addGalleryImage({
         title: item.title,
+        imageUrl: item.imageUrl,
         category: item.category,
-        description: '',
-        uploaded_at: new Date().toISOString()
+        description: ''
       });
-      console.log('✅ Gallery image saved to Supabase');
+      if (created?._id) {
+        console.log('✅ [MongoDB] Gallery image saved:', created._id);
+        setGallery(prev => prev.map(g => g.id === newId ? { ...g, mongoId: created._id } : g));
+      }
     } catch (error) {
-      console.error('❌ Failed to save gallery image to Supabase:', error);
+      console.error('❌ Failed to save gallery to MongoDB:', error);
+      // Vẫn hiển thị ảnh trên frontend dù lưu MongoDB fail
     }
   };
   const deleteGalleryItem = async (id: number) => {
+    const galleryItem = gallery.find(g => g.id === id);
     setGallery(gallery.filter(g => g.id !== id));
     
-    try {
-      await deleteGalleryFromSupabase(`gallery-${Date.now()}-${id}`);
-      console.log('✅ Gallery item deleted from Supabase');
-    } catch (error) {
-      console.error('❌ Failed to delete gallery item from Supabase:', error);
+    if (galleryItem?.mongoId) {
+      try {
+        await mongoService.deleteGalleryImage(galleryItem.mongoId);
+        console.log('✅ Gallery item deleted from MongoDB');
+      } catch (error) {
+        console.error('❌ Failed to delete gallery from MongoDB:', error);
+      }
     }
   };
 
@@ -1190,15 +1249,57 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Events State
   const [events, setEvents] = useState<Event[]>([]);
-  const addEvent = (item: Omit<Event, 'id'>) => {
+  const addEvent = async (item: Omit<Event, 'id'>) => {
     const newId = Math.max(0, ...events.map(e => e.id), 0) + 1;
     setEvents([...events, { ...item, id: newId }]);
+
+    try {
+      const created = await mongoService.addEvent({
+        title: item.title,
+        description: item.description,
+        date: item.date,
+        location: item.location,
+        imageUrl: item.imageUrl
+      });
+      if (created?._id) {
+        setEvents(prev => prev.map(e => e.id === newId ? { ...e, mongoId: created._id } : e));
+      }
+      console.log('✅ Event saved to MongoDB');
+    } catch (error) {
+      console.error('❌ Failed to save event to MongoDB:', error);
+    }
   };
-  const updateEvent = (id: number, item: Partial<Event>) => {
+  const updateEvent = async (id: number, item: Partial<Event>) => {
     setEvents(events.map(e => e.id === id ? { ...e, ...item } : e));
+
+    const eventItem = events.find(e => e.id === id);
+    if (eventItem?.mongoId) {
+      try {
+        await mongoService.updateEvent(eventItem.mongoId, {
+          title: item.title || eventItem.title,
+          description: item.description || eventItem.description,
+          date: item.date || eventItem.date,
+          location: item.location || eventItem.location,
+          imageUrl: item.imageUrl || eventItem.imageUrl
+        });
+        console.log('✅ Event updated in MongoDB');
+      } catch (error) {
+        console.error('❌ Failed to update event in MongoDB:', error);
+      }
+    }
   };
-  const deleteEvent = (id: number) => {
+  const deleteEvent = async (id: number) => {
+    const eventItem = events.find(e => e.id === id);
     setEvents(events.filter(e => e.id !== id));
+
+    if (eventItem?.mongoId) {
+      try {
+        await mongoService.deleteEvent(eventItem.mongoId);
+        console.log('✅ Event deleted from MongoDB');
+      } catch (error) {
+        console.error('❌ Failed to delete event from MongoDB:', error);
+      }
+    }
   };
 
   // Achievements State
