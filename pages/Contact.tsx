@@ -158,7 +158,7 @@ const Contact: React.FC = () => {
              <div className="bg-white p-2 rounded-xl border border-slate-100 shadow-sm h-64">
                <iframe 
                 title="Google Map - THPT Hương Khê"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3833.8179419506167!2d105.72843!3d18.33455!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3139296f0000000d%3A0x5mgx9f2!2s5MGX%2B9F2%20Kh%E1%BB%91i%204%2C%20H%C6%B0%C6%A1ng%20Kh%C3%AA%2C%20H%C3%a0%20T%C4%A9nh%2C%20Vi%E1%BB%87t%20Nam!5e0!3m2!1svi!2s!4v1674000000000"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3826.5442828885937!2d105.69862883184445!3d18.175913211664728!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTjCsDEwJzMzLjMiTiAxMDXCsDQxJzU1LjEiRQ!5e0!3m2!1svi!2s!4v1674000000000"
                 width="100%" 
                 height="100%" 
                 style={{border:0}} 
