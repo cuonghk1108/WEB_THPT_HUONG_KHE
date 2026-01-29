@@ -3,6 +3,14 @@ import { NewsItem, GlobalImages, Teacher, Club, GalleryItem, StudentCornerData, 
 import { cloudStorage } from '../services/cloudStorage';
 import { getBackupImageUrl } from '../utils/backupImageLoader';
 import { 
+  subscribeToNews, 
+  subscribeToTeachers, 
+  subscribeToClubs, 
+  subscribeToGallery, 
+  subscribeToEvents, 
+  unsubscribeAll 
+} from '../services/supabaseRealtimeService';
+import { 
   saveNews as saveNewsToSupabase, 
   saveTeacher as saveTeacherToSupabase, 
   saveClub as saveClubToSupabase, 
@@ -764,6 +772,78 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     loadSupabaseData();
+  }, []);
+
+  // Setup real-time subscriptions
+  useEffect(() => {
+    console.log('🔴 [Real-time] Setting up Supabase real-time subscriptions...');
+
+    // Create a callback to refresh data when changes occur
+    const handleDataUpdate = async () => {
+      console.log('🔄 [Real-time] Data changed detected, refreshing...');
+      
+      try {
+        const [newsData, teachersData, clubsData, galleryData, eventsData] = await Promise.all([
+          getAllNewsFromSupabase(),
+          getAllTeachersFromSupabase(),
+          getAllClubsFromSupabase(),
+          getAllGalleryFromSupabase(),
+          getAllEventsFromSupabase()
+        ]);
+
+        // Update state with new data
+        if (newsData && newsData.length > 0) {
+          const normalized = normalizeNews(newsData);
+          setNews(normalized);
+          localStorage.setItem('school_news', JSON.stringify(normalized));
+          console.log('✅ [Real-time] News updated');
+        }
+
+        if (teachersData && teachersData.length > 0) {
+          const normalized = normalizeTeachers(teachersData);
+          setTeachers(normalized);
+          localStorage.setItem('school_teachers', JSON.stringify(normalized));
+          console.log('✅ [Real-time] Teachers updated');
+        }
+
+        if (clubsData && clubsData.length > 0) {
+          const normalized = normalizeClubs(clubsData);
+          setClubs(normalized);
+          localStorage.setItem('school_clubs', JSON.stringify(normalized));
+          console.log('✅ [Real-time] Clubs updated');
+        }
+
+        if (galleryData && galleryData.length > 0) {
+          const normalized = normalizeGallery(galleryData);
+          setGallery(normalized);
+          localStorage.setItem('school_gallery', JSON.stringify(normalized));
+          console.log('✅ [Real-time] Gallery updated');
+        }
+
+        if (eventsData && eventsData.length > 0) {
+          setEvents(eventsData);
+          localStorage.setItem('school_events', JSON.stringify(eventsData));
+          console.log('✅ [Real-time] Events updated');
+        }
+      } catch (error) {
+        console.error('❌ [Real-time] Error refreshing data:', error);
+      }
+    };
+
+    // Subscribe to real-time changes
+    subscribeToNews(handleDataUpdate);
+    subscribeToTeachers(handleDataUpdate);
+    subscribeToClubs(handleDataUpdate);
+    subscribeToGallery(handleDataUpdate);
+    subscribeToEvents(handleDataUpdate);
+
+    console.log('✅ [Real-time] All subscriptions active');
+
+    // Cleanup: unsubscribe when component unmounts
+    return () => {
+      console.log('🔴 [Real-time] Cleaning up subscriptions...');
+      unsubscribeAll();
+    };
   }, []);
 
   // Load from cloud on first mount (non-blocking)
