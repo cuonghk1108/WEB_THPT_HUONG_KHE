@@ -79,7 +79,7 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 // Initial Mock Data (News)
 const INITIAL_NEWS: NewsItem[] = [
     { 
-      id: 0, 
+      id: 1, 
       title: 'Trần Kim Nhật đạt giải Nhì học sinh giỏi quốc gia môn Tin học', 
       excerpt: 'Vượt qua hàng ngàn thí sinh xuất sắc trên cả nước, em Trần Kim Nhật (lớp 12A1) đã xuất sắc giành giải Nhì môn Tin học trong kỳ thi chọn Học sinh giỏi Quốc gia năm học 2025-2026.', 
       content: `
@@ -104,7 +104,7 @@ const INITIAL_NEWS: NewsItem[] = [
       category: 'Gương sáng' 
     },
     { 
-      id: 1, 
+      id: 2, 
       title: 'Lễ tổng kết năm học 2024-2025 và Tri ân trưởng thành', 
       excerpt: 'Nhà trường long trọng tổ chức lễ tổng kết, đánh dấu một năm học thắng lợi với nhiều thành tích đáng tự hào.', 
       content: `
@@ -132,7 +132,7 @@ const INITIAL_NEWS: NewsItem[] = [
       category: 'Hoạt động' 
     },
     { 
-      id: 2, 
+      id: 3, 
       title: 'Thông báo tuyển sinh vào lớp 10 năm học 2025-2026', 
       excerpt: 'Trường THPT Hương Khê thông báo kế hoạch tuyển sinh lớp 10 với 450 chỉ tiêu. Hình thức thi tuyển kết hợp xét tuyển.', 
       content: `
@@ -170,31 +170,34 @@ const INITIAL_NEWS: NewsItem[] = [
       category: 'Thông báo' 
     },
     { 
-        id: 3, 
-        title: 'Hội thi văn nghệ chào mừng ngày 26/3', 
-        excerpt: 'Sôi nổi các hoạt động văn nghệ, thể thao chào mừng ngày thành lập Đoàn TNCS Hồ Chí Minh.', 
+        id: 0, 
+        title: 'Team The First tham dự kỳ thi "AI First – Khai phá tư duy, làm chủ AI"', 
+        excerpt: 'Thể hiện tinh thần ham học hỏi và đổi mới sáng tạo, Team The First của trường THPT Hương Khê đã chính thức đăng ký tham dự kỳ thi AI First.', 
         content: `
-          <p>Hòa chung không khí tưng bừng, phấn khởi của tuổi trẻ cả nước chào mừng kỷ niệm 94 năm Ngày thành lập Đoàn TNCS Hồ Chí Minh (26/03/1931 - 26/03/2025), Đoàn trường THPT Hương Khê đã tổ chức thành công <strong>Hội thi Văn nghệ - Thể thao học đường</strong>.</p>
-          
-            <h3>Sân chơi của sự sáng tạo</h3>
-            <p>Hội thi năm nay quy tụ hơn 30 tiết mục văn nghệ đặc sắc đến từ các chi đoàn. Các tiết mục đa dạng về thể loại: từ đơn ca, song ca, múa đương đại, nhảy hiện đại đến kịch nói. Nhiều tiết mục được đầu tư công phu về trang phục, đạo cụ và kịch bản, thể hiện sự sáng tạo không giới hạn của học sinh trường Hương Khê.</p>
-            <p>Bên cạnh các tiết mục văn nghệ, khu vực trưng bày ảnh, sản phẩm handmade, truyền thông số do CLB Media thực hiện đã thu hút sự quan tâm lớn của học sinh và phụ huynh. Sự phối hợp giữa văn nghệ và công nghệ đã tạo nên một ngày hội đa sắc màu.</p>
+          <p>Thể hiện tinh thần ham học hỏi và khát vọng đổi mới sáng tạo, Team The First của trường THPT Hương Khê đã chính thức đăng ký tham dự kỳ thi <strong>“AI First – Khai phá tư duy, làm chủ AI”</strong> – một sân chơi học thuật uy tín dành cho học sinh trung học phổ thông trên toàn quốc về ứng dụng trí tuệ nhân tạo.</p>
 
-          <h3>Kết quả hội thi</h3>
-          <p>Ban giám khảo đã làm việc rất vất vả để chọn ra những tiết mục xuất sắc nhất:</p>
-          <ul>
-            <li><strong>Giải Nhất:</strong> Chi đoàn 11A5 với tiết mục múa "Hào khí Việt Nam".</li>
-            <li><strong>Giải Nhì:</strong> Chi đoàn 12D2 (Nhảy Mashup) và 10A1 (Hát múa).</li>
-            <li><strong>Giải Ba:</strong> Các chi đoàn 11A2, 12A1, 10D3.</li>
-          </ul>
-          
-            <h3>Lan tỏa tinh thần đoàn kết</h3>
-            <p>Bên cạnh văn nghệ, các giải đấu bóng đá, bóng chuyền hơi và kéo co cũng diễn ra vô cùng kịch tính, thu hút sự cổ vũ nhiệt tình của đông đảo học sinh và giáo viên. Đây thực sự là ngày hội lớn, thắt chặt tình đoàn kết và rèn luyện kỹ năng sống cho đoàn viên thanh niên.</p>
-            <p>Đoàn trường khẳng định sẽ duy trì các hoạt động định kỳ, mở rộng thêm các sân chơi về STEM, khởi nghiệp và truyền thông, để mỗi học sinh đều có cơ hội tỏa sáng ở lĩnh vực mình yêu thích.</p>
+          <h3>Sự kết hợp giữa đam mê công nghệ và nền tảng học thuật vững chắc</h3>
+          <p>Team The First gồm hai thành viên tiêu biểu của khối 12: em <strong>Võ Xuân Cường</strong> (lớp 12A1) – nhóm trưởng, học sinh có niềm đam mê công nghệ và định hướng phát triển các sản phẩm số phục vụ giáo dục; cùng em <strong>Trần Kim Nhật</strong> (lớp 12A1) – học sinh giỏi Quốc gia môn Tin học, đạt giải Nhì, sở hữu nền tảng vững chắc về lập trình và tư duy thuật toán.</p>
+          <p>Với sự kết hợp giữa kỹ năng phát triển hệ thống và kiến thức chuyên sâu về thuật toán, đội thi đã xây dựng kế hoạch chuẩn bị bài bản, tập trung nghiên cứu các lĩnh vực cốt lõi của AI như Machine Learning, Natural Language Processing và phân tích dữ liệu, đồng thời tìm hiểu cách ứng dụng các công nghệ này vào giải quyết những bài toán thực tiễn trong môi trường học đường.</p>
+
+          <h3>Quyết tâm chinh phục sân chơi trí tuệ</h3>
+          <p>Chia sẻ về hành trình tham gia cuộc thi, đại diện đội cho biết: <em>“Đây không chỉ là cơ hội để chúng em thử sức với AI mà còn là dịp rèn luyện tư duy, kỹ năng làm việc nhóm và tinh thần tự học.”</em> Trong quá trình chuẩn bị, cả hai thành viên đều chủ động nghiên cứu tài liệu, trao đổi ý tưởng và thử nghiệm các giải pháp nhằm hướng tới một sản phẩm mang tính ứng dụng cao.</p>
+
+          <h3>Niềm tin và sự đồng hành từ nhà trường</h3>
+          <p>Đại diện Ban Giám hiệu nhà trường khẳng định: <em>“Việc học sinh mạnh dạn tham gia các cuộc thi về công nghệ và trí tuệ nhân tạo cho thấy tinh thần hội nhập và đổi mới của thế hệ trẻ THPT Hương Khê. Nhà trường luôn khuyến khích và tạo điều kiện để các em phát huy tối đa năng lực của mình.”</em></p>
+          <p>Trong suốt quá trình chuẩn bị, Team The First luôn nhận được sự quan tâm, hỗ trợ từ thầy cô tổ Tin học cùng sự động viên nhiệt tình của bạn bè trong trường, tạo động lực lớn giúp các em thêm tự tin trên hành trình chinh phục sân chơi trí tuệ.</p>
+
+          <h3>Định hướng sản phẩm: Cổng thông tin điện tử hiện đại</h3>
+          <p>Trong khuôn khổ cuộc thi, Team The First đang xây dựng ý tưởng phát triển <strong>Cổng thông tin điện tử hiện đại – Kết nối nhà trường, phụ huynh và học sinh</strong>. Sản phẩm hướng tới việc tích hợp các chức năng quản lý thông tin học tập, thông báo nhà trường, trao đổi hai chiều giữa giáo viên – phụ huynh – học sinh, đồng thời ứng dụng AI để hỗ trợ tra cứu dữ liệu, tổng hợp nội dung và gợi ý thông tin phù hợp cho từng đối tượng người dùng.</p>
+          <p>Dự án không chỉ góp phần nâng cao hiệu quả truyền thông nội bộ mà còn hướng tới xây dựng môi trường học đường số hóa, thân thiện và tiện lợi. Thời gian tới, đội thi sẽ tiếp tục hoàn thiện các tính năng cốt lõi, thử nghiệm các mô-đun AI như xử lý ngôn ngữ tự nhiên và phân tích dữ liệu, song song với việc tối ưu giao diện nhằm đảm bảo tính dễ sử dụng và phù hợp với thực tiễn nhà trường.</p>
+
+          <h3>Lan tỏa tinh thần học tập và sáng tạo</h3>
+          <p>Sự tham gia của Team The First là minh chứng cho tinh thần chủ động học tập, dám nghĩ dám làm của học sinh THPT Hương Khê trong thời đại chuyển đổi số. Tin rằng hành trình của các em sẽ truyền cảm hứng tới đông đảo học sinh trong toàn trường, góp phần lan tỏa phong trào nghiên cứu khoa học và ứng dụng công nghệ trong học đường.</p>
+          <p>Nhà trường kêu gọi cán bộ, giáo viên và học sinh toàn trường cùng theo dõi, cổ vũ và tiếp thêm động lực cho Team The First trên chặng đường phía trước, góp phần viết tiếp những dấu ấn đẹp trong phong trào học tập và sáng tạo của mái trường THPT Hương Khê.</p>
         `,
         date: '26/03/2025', 
-        imageUrl: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?q=80&w=800&auto=format&fit=crop', 
-        category: 'Đoàn thể' 
+        imageUrl: 'https://vicqpnikodxcncyappes.supabase.co/storage/v1/object/public/images/Screenshot%202026-01-28%20220501.png', 
+        category: 'Hoạt động' 
     },
     { 
         id: 4, 
