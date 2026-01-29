@@ -455,6 +455,16 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return INITIAL_IMAGES;
   });
 
+  // One-time migration to force new global image URLs
+  useEffect(() => {
+    const MIGRATION_KEY = 'school_images_migrated_v2';
+    if (localStorage.getItem(MIGRATION_KEY) === 'true') return;
+
+    setGlobalImages(INITIAL_IMAGES);
+    localStorage.setItem('school_images', JSON.stringify(INITIAL_IMAGES));
+    localStorage.setItem(MIGRATION_KEY, 'true');
+  }, []);
+
   // Dynamic Data States with persistence
   const [teachers, setTeachers] = useState<Teacher[]>(() => {
     try {
