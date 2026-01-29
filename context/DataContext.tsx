@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { NewsItem, GlobalImages, Teacher, Club, GalleryItem, StudentCornerData, ExamItem, FormItem, Event, Achievement, AchievementYear, DigitalResource, StudentPortalData, GradeItem, AssignmentItem, Announcement } from '../types';
 import { cloudStorage } from '../services/cloudStorage';
+import { getBackupImageUrl } from '../utils/backupImageLoader';
 import { 
   saveNews as saveNewsToSupabase, 
   saveTeacher as saveTeacherToSupabase, 
@@ -594,8 +595,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       excerpt: item.excerpt || '',
       content: item.content || '',
       date: item.date || '',
-      // Handle images field - can be URL string or JSONB
-      imageUrl: typeof item.images === 'string' ? item.images : item.imageUrl || '',
+      // Handle images field - can be URL string or array, with backup fallback
+      imageUrl: (typeof item.images === 'string' && item.images) 
+        ? item.images 
+        : item.imageUrl || getBackupImageUrl(typeof item.id === 'string' ? parseInt(item.id.replace('news-', '')) || 0 : item.id, 'news') || '',
       category: item.category || ''
     }));
   };
@@ -605,7 +608,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       id: typeof item.id === 'string' ? parseInt(item.id.replace('teacher-', '')) || 0 : item.id,
       name: item.name || '',
       subject: item.subject || '',
-      imageUrl: item.image_url || item.imageUrl || '',
+      imageUrl: item.image_url || item.imageUrl || getBackupImageUrl(typeof item.id === 'string' ? parseInt(item.id.replace('teacher-', '')) || 0 : item.id, 'teachers') || '',
       bio: item.bio || '',
       email: item.email || '',
       phone: item.phone || ''
@@ -617,7 +620,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       id: typeof item.id === 'string' ? parseInt(item.id.replace('club-', '')) || 0 : item.id,
       name: item.name || '',
       description: item.description || '',
-      imageUrl: item.image_url || item.imageUrl || '',
+      imageUrl: item.image_url || item.imageUrl || getBackupImageUrl(typeof item.id === 'string' ? parseInt(item.id.replace('club-', '')) || 0 : item.id, 'clubs') || '',
       members: item.members || 0
     }));
   };
@@ -626,7 +629,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return galleryArray.map(item => ({
       id: typeof item.id === 'string' ? parseInt(item.id.replace('gallery-', '')) || 0 : item.id,
       title: item.title || '',
-      imageUrl: item.image_url || item.imageUrl || '',
+      imageUrl: item.image_url || item.imageUrl || getBackupImageUrl(typeof item.id === 'string' ? parseInt(item.id.replace('gallery-', '')) || 0 : item.id, 'gallery') || '',
       category: item.category || ''
     }));
   };
