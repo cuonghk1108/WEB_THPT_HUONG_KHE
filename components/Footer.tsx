@@ -2,7 +2,7 @@ import React from 'react';
 import { MapPin, Phone, Mail, Facebook, Youtube, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SCHOOL_ADDRESS, SCHOOL_EMAIL, SCHOOL_NAME, SCHOOL_PHONE } from '../constants';
-// import { VisitorCounter } from './VisitorCounter';
+import { VisitorCounter } from './VisitorCounter';
 import CurrentTime from './CurrentTime';
 import { useData } from '../context/DataContext';
 

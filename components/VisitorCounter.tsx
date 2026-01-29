@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import { visitorCounter } from '../services/visitorCounter';
+import { visitorCounter } from '../services/visitorCounter';
 
 interface Stats {
   today: number;
