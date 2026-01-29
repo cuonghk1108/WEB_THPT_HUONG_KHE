@@ -321,7 +321,7 @@ const INITIAL_IMAGES: GlobalImages = {
   logo: 'https://vicqpnikodxcncyappes.supabase.co/storage/v1/object/public/images/global/1769699010245-11r86slos.jpeg',
   homeHero: 'https://vicqpnikodxcncyappes.supabase.co/storage/v1/object/public/images/global/1769699014224-r1n354xp9.png',
   principal: 'https://vicqpnikodxcncyappes.supabase.co/storage/v1/object/public/images/global/1769699275604-m6figl4fs.png',
-  introHistory: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=800&auto=format&fit=crop'
+  introHistory: 'https://vicqpnikodxcncyappes.supabase.co/storage/v1/object/public/images/global/1769699279850-gwh3b3thc.jpeg'
 };
 
 const INITIAL_TEACHERS: Teacher[] = [
