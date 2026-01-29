@@ -41,7 +41,7 @@ Nhiệm vụ của bạn là hỗ trợ học sinh, phụ huynh và khách tham 
 - Văn bản, quy định
 - Thành tích học sinh
 
-Hãy trả lời một cách thân thiện, chuyên nghiệp và chính xác.
+Hãy trả lời một cách thân thiện, chuyên nghiệp và chính xác bằng tiếng Việt.
 Nếu không chắc chắn, hãy gợi ý liên hệ văn phòng nhà trường.`
           },
           {
@@ -49,16 +49,28 @@ Nếu không chắc chắn, hãy gợi ý liên hệ văn phòng nhà trường.
             content: message
           }
         ],
-        model: 'grok-beta',
+        model: 'grok-2-1212',
         stream: false,
         temperature: 0.7,
+        max_tokens: 1000,
       }),
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('xAI API error:', errorText);
-      return res.status(response.status).json({ 
+      let errorDetail = 'Unknown error';
+      try {
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const errorData = await response.json();
+          errorDetail = JSON.stringify(errorData);
+        } else {
+          errorDetail = await response.text();
+        }
+      } catch (e) {
+        errorDetail = `Status ${response.status}: ${response.statusText}`;
+      }
+      console.error('xAI API error:', errorDetail);
+      return res.status(500).json({ 
         error: 'Không thể kết nối với Grok AI. Vui lòng thử lại sau.' 
       });
     }
