@@ -106,7 +106,6 @@ const Footer: React.FC = () => {
                 <CurrentTime />
               </div>
               
-              <VisitorCounter />
             </div>
           </div>
         </div>

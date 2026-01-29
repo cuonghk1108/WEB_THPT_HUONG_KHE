@@ -12,6 +12,11 @@ interface VisitorStats {
   total: number;
 }
 
+interface VisitorHistoryEntry {
+  date: string;
+  count: number;
+}
+
 const StatCard: React.FC<{ icon: React.ReactNode; label: string; value: string; accent?: string }> = ({ icon, label, value, accent = 'bg-blue-100 text-blue-600' }) => (
   <div className="flex items-center gap-3 bg-white border border-slate-200 rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow">
     <div className={`h-11 w-11 rounded-xl flex items-center justify-center ${accent}`}>{icon}</div>
@@ -24,30 +29,8 @@ const StatCard: React.FC<{ icon: React.ReactNode; label: string; value: string; 
 
 const Dashboard: React.FC = () => {
   const { news, teachers, clubs, gallery } = useData();
-  const [visitorStats, setVisitorStats] = useState<VisitorStats | null>(null);
-  const [history, setHistory] = useState<VisitorHistoryEntry[]>([]);
-
-  useEffect(() => {
-    const run = async () => {
-      try {
-        const stats = await Promise.race([
-          visitorCounter.getVisitorStats(),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 2000))
-        ]);
-        const hist = await Promise.race([
-          visitorCounter.getVisitorHistory(14),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 2000))
-        ]);
-        setVisitorStats(stats as VisitorStats);
-        setHistory(hist as VisitorHistoryEntry[]);
-      } catch (error) {
-        // Use fallback empty data on timeout
-        setVisitorStats({ today: 0, week: 0, year: 0, total: 0 });
-        setHistory([]);
-      }
-    };
-    run();
-  }, []);
+  const [visitorStats] = useState<VisitorStats>({ today: 0, week: 0, year: 0, total: 0 });
+  const [history] = useState<VisitorHistoryEntry[]>([]);
 
   const contentStats = useMemo(() => ([
     { label: 'Bài viết', value: news?.length || 0, icon: <Newspaper className="h-5 w-5" />, accent: 'bg-blue-100 text-blue-700' },
