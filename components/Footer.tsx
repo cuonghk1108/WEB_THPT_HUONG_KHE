@@ -106,6 +106,9 @@ const Footer: React.FC = () => {
                 <CurrentTime />
               </div>
               
+              <div className="bg-slate-200 dark:bg-white/5 p-6 rounded-2xl border border-slate-300 dark:border-white/10">
+                <VisitorCounter />
+              </div>
             </div>
           </div>
         </div>
