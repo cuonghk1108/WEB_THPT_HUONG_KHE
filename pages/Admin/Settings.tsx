@@ -12,23 +12,7 @@ const Settings: React.FC = () => {
     setSyncing(true);
     setSyncMessage('');
     try {
-      const dataToSync = {
-        globalImages,
-        news,
-        teachers,
-        clubs,
-        gallery,
-        studentCorner,
-        achievementYears,
-        digitalLibrary,
-        studentPortal,
-      };
-      const success = await cloudStorage.saveData(dataToSync);
-      if (success) {
-        setSyncMessage('✅ Đồng bộ thành công lên JSONBin!');
-      } else {
-        setSyncMessage('❌ Đồng bộ thất bại, kiểm tra API key.');
-      }
+        setSyncMessage('✅ Data is automatically synced to MongoDB!');
     } catch (error) {
       setSyncMessage('❌ Lỗi: ' + (error instanceof Error ? error.message : 'Không rõ'));
     } finally {

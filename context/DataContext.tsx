@@ -890,7 +890,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Load from cloud on first mount (non-blocking)
   useEffect(() => {
-    cloudStorage.fetchData().then(cloudData => {
+    // cloudStorage removed - using MongoDB only
+    /* cloudStorage.fetchData().then(cloudData => {
       if (!cloudData) return;
 
       if (cloudData.globalImages && Object.keys(cloudData.globalImages).length > 0) {
@@ -929,55 +930,32 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setStudentPortal(cloudData.studentPortal);
         localStorage.setItem('school_student_portal', JSON.stringify(cloudData.studentPortal));
       }
-    }).catch(() => {}); // Silently fail, use localStorage
+    }).catch(() => {}); */
   }, []);
 
   useEffect(() => {
     localStorage.setItem('school_images', JSON.stringify(globalImages));
-    const timer = setTimeout(() => {
-      cloudStorage.saveData({ globalImages }).catch(() => {});
-    }, 2000);
-    return () => clearTimeout(timer);
+    // cloudStorage removed - using MongoDB only
   }, [globalImages]);
 
   useEffect(() => {
     localStorage.setItem('school_news', JSON.stringify(news));
-    const timer = setTimeout(() => {
-      cloudStorage.saveData({ news }).catch(() => {});
-    }, 3000);
-    return () => clearTimeout(timer);
   }, [news]);
 
   useEffect(() => {
     localStorage.setItem('school_teachers', JSON.stringify(teachers));
-    const timer = setTimeout(() => {
-      cloudStorage.saveData({ teachers }).catch(() => {});
-    }, 3000);
-    return () => clearTimeout(timer);
   }, [teachers]);
 
   useEffect(() => {
     localStorage.setItem('school_clubs', JSON.stringify(clubs));
-    const timer = setTimeout(() => {
-      cloudStorage.saveData({ clubs }).catch(() => {});
-    }, 3000);
-    return () => clearTimeout(timer);
   }, [clubs]);
 
   useEffect(() => {
     localStorage.setItem('school_gallery', JSON.stringify(gallery));
-    const timer = setTimeout(() => {
-      cloudStorage.saveData({ gallery }).catch(() => {});
-    }, 3000);
-    return () => clearTimeout(timer);
   }, [gallery]);
 
   useEffect(() => {
     localStorage.setItem('school_student_corner', JSON.stringify(studentCorner));
-    const timer = setTimeout(() => {
-      cloudStorage.saveData({ studentCorner }).catch(() => {});
-    }, 3000);
-    return () => clearTimeout(timer);
   }, [studentCorner]);
 
   useEffect(() => {
