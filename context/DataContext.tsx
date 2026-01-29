@@ -586,6 +586,51 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const hasLoadedSupabaseRef = useRef(false);
 
+  // Normalize data from Supabase (convert snake_case to camelCase)
+  const normalizeNews = (newsArray: any[]): NewsItem[] => {
+    return newsArray.map(item => ({
+      id: typeof item.id === 'string' ? parseInt(item.id.replace('news-', '')) || 0 : item.id,
+      title: item.title || '',
+      excerpt: item.excerpt || '',
+      content: item.content || '',
+      date: item.date || '',
+      // Handle images field - can be URL string or JSONB
+      imageUrl: typeof item.images === 'string' ? item.images : item.imageUrl || '',
+      category: item.category || ''
+    }));
+  };
+
+  const normalizeTeachers = (teachersArray: any[]): Teacher[] => {
+    return teachersArray.map(item => ({
+      id: typeof item.id === 'string' ? parseInt(item.id.replace('teacher-', '')) || 0 : item.id,
+      name: item.name || '',
+      subject: item.subject || '',
+      imageUrl: item.image_url || item.imageUrl || '',
+      bio: item.bio || '',
+      email: item.email || '',
+      phone: item.phone || ''
+    }));
+  };
+
+  const normalizeClubs = (clubsArray: any[]): Club[] => {
+    return clubsArray.map(item => ({
+      id: typeof item.id === 'string' ? parseInt(item.id.replace('club-', '')) || 0 : item.id,
+      name: item.name || '',
+      description: item.description || '',
+      imageUrl: item.image_url || item.imageUrl || '',
+      members: item.members || 0
+    }));
+  };
+
+  const normalizeGallery = (galleryArray: any[]): GalleryItem[] => {
+    return galleryArray.map(item => ({
+      id: typeof item.id === 'string' ? parseInt(item.id.replace('gallery-', '')) || 0 : item.id,
+      title: item.title || '',
+      imageUrl: item.image_url || item.imageUrl || '',
+      category: item.category || ''
+    }));
+  };
+
   // Load from Supabase on first mount (primary source)
   useEffect(() => {
     const loadSupabaseData = async () => {
@@ -601,9 +646,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         // Use Supabase data if available, otherwise use localStorage or initial data
         if (newsData && newsData.length > 0) {
-          console.log(`✅ [News] Loaded ${newsData.length} items from Supabase`);
-          setNews(newsData);
-          localStorage.setItem('school_news', JSON.stringify(newsData));
+          const normalized = normalizeNews(newsData);
+          console.log(`✅ [News] Loaded ${normalized.length} items from Supabase`);
+          setNews(normalized);
+          localStorage.setItem('school_news', JSON.stringify(normalized));
         } else {
           console.log('⚠️ [News] Supabase returned empty, using fallback...');
           // Fallback: use localStorage if available, otherwise use initial data
@@ -622,9 +668,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
 
         if (teachersData && teachersData.length > 0) {
-          console.log(`✅ [Teachers] Loaded ${teachersData.length} items from Supabase`);
-          setTeachers(teachersData);
-          localStorage.setItem('school_teachers', JSON.stringify(teachersData));
+          const normalized = normalizeTeachers(teachersData);
+          console.log(`✅ [Teachers] Loaded ${normalized.length} items from Supabase`);
+          setTeachers(normalized);
+          localStorage.setItem('school_teachers', JSON.stringify(normalized));
         } else {
           console.log('⚠️ [Teachers] Supabase returned empty, using fallback...');
           const saved = localStorage.getItem('school_teachers');
@@ -642,9 +689,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
 
         if (clubsData && clubsData.length > 0) {
-          console.log(`✅ [Clubs] Loaded ${clubsData.length} items from Supabase`);
-          setClubs(clubsData);
-          localStorage.setItem('school_clubs', JSON.stringify(clubsData));
+          const normalized = normalizeClubs(clubsData);
+          console.log(`✅ [Clubs] Loaded ${normalized.length} items from Supabase`);
+          setClubs(normalized);
+          localStorage.setItem('school_clubs', JSON.stringify(normalized));
         } else {
           console.log('⚠️ [Clubs] Supabase returned empty, using fallback...');
           const saved = localStorage.getItem('school_clubs');
@@ -662,9 +710,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
 
         if (galleryData && galleryData.length > 0) {
-          console.log(`✅ [Gallery] Loaded ${galleryData.length} items from Supabase`);
-          setGallery(galleryData);
-          localStorage.setItem('school_gallery', JSON.stringify(galleryData));
+          const normalized = normalizeGallery(galleryData);
+          console.log(`✅ [Gallery] Loaded ${normalized.length} items from Supabase`);
+          setGallery(normalized);
+          localStorage.setItem('school_gallery', JSON.stringify(normalized));
         } else {
           console.log('⚠️ [Gallery] Supabase returned empty, using fallback...');
           const saved = localStorage.getItem('school_gallery');

@@ -112,14 +112,13 @@ async def main():
         print('📰 Syncing News...')
         news_records = []
         for news in backup_data['news']:
+            # Store imageUrl as a JSON string in images field (JSONB)
             record = {
                 'id': f"news-{news.get('id', 0)}",
                 'title': news.get('title', ''),
                 'excerpt': news.get('excerpt', ''),
                 'content': news.get('content', ''),
-                'date': convert_date(news.get('date', '')),
-                'images': news.get('imageUrl', ''),
-                'category': news.get('category', ''),
+                'images': news.get('imageUrl', ''),  # Store URL directly
                 'author': 'Imported'
             }
             news_records.append(record)
