@@ -78,6 +78,36 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 
 // Initial Mock Data (News)
 const INITIAL_NEWS: NewsItem[] = [
+  { 
+        id: 0, 
+        title: 'Team The First tham dự kỳ thi "AI First – Khai phá tư duy, làm chủ AI"', 
+        excerpt: 'Thể hiện tinh thần ham học hỏi và đổi mới sáng tạo, Team The First của trường THPT Hương Khê đã chính thức đăng ký tham dự kỳ thi AI First.', 
+        content: `
+          <p>Thể hiện tinh thần ham học hỏi và khát vọng đổi mới sáng tạo, Team The First của trường THPT Hương Khê đã chính thức đăng ký tham dự kỳ thi <strong>“AI First – Khai phá tư duy, làm chủ AI”</strong> – một sân chơi học thuật uy tín dành cho học sinh trung học phổ thông trên toàn quốc về ứng dụng trí tuệ nhân tạo.</p>
+
+          <h3>Sự kết hợp giữa đam mê công nghệ và nền tảng học thuật vững chắc</h3>
+          <p>Team The First gồm hai thành viên tiêu biểu của khối 12: em <strong>Võ Xuân Cường</strong> (lớp 12A1) – nhóm trưởng, học sinh có niềm đam mê công nghệ và định hướng phát triển các sản phẩm số phục vụ giáo dục; cùng em <strong>Trần Kim Nhật</strong> (lớp 12A1) – học sinh giỏi Quốc gia môn Tin học, đạt giải Nhì, sở hữu nền tảng vững chắc về lập trình và tư duy thuật toán.</p>
+          <p>Với sự kết hợp giữa kỹ năng phát triển hệ thống và kiến thức chuyên sâu về thuật toán, đội thi đã xây dựng kế hoạch chuẩn bị bài bản, tập trung nghiên cứu các lĩnh vực cốt lõi của AI như Machine Learning, Natural Language Processing và phân tích dữ liệu, đồng thời tìm hiểu cách ứng dụng các công nghệ này vào giải quyết những bài toán thực tiễn trong môi trường học đường.</p>
+
+          <h3>Quyết tâm chinh phục sân chơi trí tuệ</h3>
+          <p>Chia sẻ về hành trình tham gia cuộc thi, đại diện đội cho biết: <em>“Đây không chỉ là cơ hội để chúng em thử sức với AI mà còn là dịp rèn luyện tư duy, kỹ năng làm việc nhóm và tinh thần tự học.”</em> Trong quá trình chuẩn bị, cả hai thành viên đều chủ động nghiên cứu tài liệu, trao đổi ý tưởng và thử nghiệm các giải pháp nhằm hướng tới một sản phẩm mang tính ứng dụng cao.</p>
+
+          <h3>Niềm tin và sự đồng hành từ nhà trường</h3>
+          <p>Đại diện Ban Giám hiệu nhà trường khẳng định: <em>“Việc học sinh mạnh dạn tham gia các cuộc thi về công nghệ và trí tuệ nhân tạo cho thấy tinh thần hội nhập và đổi mới của thế hệ trẻ THPT Hương Khê. Nhà trường luôn khuyến khích và tạo điều kiện để các em phát huy tối đa năng lực của mình.”</em></p>
+          <p>Trong suốt quá trình chuẩn bị, Team The First luôn nhận được sự quan tâm, hỗ trợ từ thầy cô tổ Tin học cùng sự động viên nhiệt tình của bạn bè trong trường, tạo động lực lớn giúp các em thêm tự tin trên hành trình chinh phục sân chơi trí tuệ.</p>
+
+          <h3>Định hướng sản phẩm: Cổng thông tin điện tử hiện đại</h3>
+          <p>Trong khuôn khổ cuộc thi, Team The First đang xây dựng ý tưởng phát triển <strong>Cổng thông tin điện tử hiện đại – Kết nối nhà trường, phụ huynh và học sinh</strong>. Sản phẩm hướng tới việc tích hợp các chức năng quản lý thông tin học tập, thông báo nhà trường, trao đổi hai chiều giữa giáo viên – phụ huynh – học sinh, đồng thời ứng dụng AI để hỗ trợ tra cứu dữ liệu, tổng hợp nội dung và gợi ý thông tin phù hợp cho từng đối tượng người dùng.</p>
+          <p>Dự án không chỉ góp phần nâng cao hiệu quả truyền thông nội bộ mà còn hướng tới xây dựng môi trường học đường số hóa, thân thiện và tiện lợi. Thời gian tới, đội thi sẽ tiếp tục hoàn thiện các tính năng cốt lõi, thử nghiệm các mô-đun AI như xử lý ngôn ngữ tự nhiên và phân tích dữ liệu, song song với việc tối ưu giao diện nhằm đảm bảo tính dễ sử dụng và phù hợp với thực tiễn nhà trường.</p>
+
+          <h3>Lan tỏa tinh thần học tập và sáng tạo</h3>
+          <p>Sự tham gia của Team The First là minh chứng cho tinh thần chủ động học tập, dám nghĩ dám làm của học sinh THPT Hương Khê trong thời đại chuyển đổi số. Tin rằng hành trình của các em sẽ truyền cảm hứng tới đông đảo học sinh trong toàn trường, góp phần lan tỏa phong trào nghiên cứu khoa học và ứng dụng công nghệ trong học đường.</p>
+          <p>Nhà trường kêu gọi cán bộ, giáo viên và học sinh toàn trường cùng theo dõi, cổ vũ và tiếp thêm động lực cho Team The First trên chặng đường phía trước, góp phần viết tiếp những dấu ấn đẹp trong phong trào học tập và sáng tạo của mái trường THPT Hương Khê.</p>
+        `,
+        date: '29/01/2025', 
+        imageUrl: 'https://vicqpnikodxcncyappes.supabase.co/storage/v1/object/public/images/Screenshot%202026-01-28%20220501.png', 
+        category: 'Hoạt động' 
+    },
     { 
       id: 1, 
       title: 'Trần Kim Nhật đạt giải Nhì học sinh giỏi quốc gia môn Tin học', 
@@ -168,36 +198,6 @@ const INITIAL_NEWS: NewsItem[] = [
       date: '15/05/2025', 
       imageUrl: 'https://vicqpnikodxcncyappes.supabase.co/storage/v1/object/public/images/mau-thong-bao-theo-nghi-dinh-30_1508130248.jpg', 
       category: 'Thông báo' 
-    },
-    { 
-        id: 0, 
-        title: 'Team The First tham dự kỳ thi "AI First – Khai phá tư duy, làm chủ AI"', 
-        excerpt: 'Thể hiện tinh thần ham học hỏi và đổi mới sáng tạo, Team The First của trường THPT Hương Khê đã chính thức đăng ký tham dự kỳ thi AI First.', 
-        content: `
-          <p>Thể hiện tinh thần ham học hỏi và khát vọng đổi mới sáng tạo, Team The First của trường THPT Hương Khê đã chính thức đăng ký tham dự kỳ thi <strong>“AI First – Khai phá tư duy, làm chủ AI”</strong> – một sân chơi học thuật uy tín dành cho học sinh trung học phổ thông trên toàn quốc về ứng dụng trí tuệ nhân tạo.</p>
-
-          <h3>Sự kết hợp giữa đam mê công nghệ và nền tảng học thuật vững chắc</h3>
-          <p>Team The First gồm hai thành viên tiêu biểu của khối 12: em <strong>Võ Xuân Cường</strong> (lớp 12A1) – nhóm trưởng, học sinh có niềm đam mê công nghệ và định hướng phát triển các sản phẩm số phục vụ giáo dục; cùng em <strong>Trần Kim Nhật</strong> (lớp 12A1) – học sinh giỏi Quốc gia môn Tin học, đạt giải Nhì, sở hữu nền tảng vững chắc về lập trình và tư duy thuật toán.</p>
-          <p>Với sự kết hợp giữa kỹ năng phát triển hệ thống và kiến thức chuyên sâu về thuật toán, đội thi đã xây dựng kế hoạch chuẩn bị bài bản, tập trung nghiên cứu các lĩnh vực cốt lõi của AI như Machine Learning, Natural Language Processing và phân tích dữ liệu, đồng thời tìm hiểu cách ứng dụng các công nghệ này vào giải quyết những bài toán thực tiễn trong môi trường học đường.</p>
-
-          <h3>Quyết tâm chinh phục sân chơi trí tuệ</h3>
-          <p>Chia sẻ về hành trình tham gia cuộc thi, đại diện đội cho biết: <em>“Đây không chỉ là cơ hội để chúng em thử sức với AI mà còn là dịp rèn luyện tư duy, kỹ năng làm việc nhóm và tinh thần tự học.”</em> Trong quá trình chuẩn bị, cả hai thành viên đều chủ động nghiên cứu tài liệu, trao đổi ý tưởng và thử nghiệm các giải pháp nhằm hướng tới một sản phẩm mang tính ứng dụng cao.</p>
-
-          <h3>Niềm tin và sự đồng hành từ nhà trường</h3>
-          <p>Đại diện Ban Giám hiệu nhà trường khẳng định: <em>“Việc học sinh mạnh dạn tham gia các cuộc thi về công nghệ và trí tuệ nhân tạo cho thấy tinh thần hội nhập và đổi mới của thế hệ trẻ THPT Hương Khê. Nhà trường luôn khuyến khích và tạo điều kiện để các em phát huy tối đa năng lực của mình.”</em></p>
-          <p>Trong suốt quá trình chuẩn bị, Team The First luôn nhận được sự quan tâm, hỗ trợ từ thầy cô tổ Tin học cùng sự động viên nhiệt tình của bạn bè trong trường, tạo động lực lớn giúp các em thêm tự tin trên hành trình chinh phục sân chơi trí tuệ.</p>
-
-          <h3>Định hướng sản phẩm: Cổng thông tin điện tử hiện đại</h3>
-          <p>Trong khuôn khổ cuộc thi, Team The First đang xây dựng ý tưởng phát triển <strong>Cổng thông tin điện tử hiện đại – Kết nối nhà trường, phụ huynh và học sinh</strong>. Sản phẩm hướng tới việc tích hợp các chức năng quản lý thông tin học tập, thông báo nhà trường, trao đổi hai chiều giữa giáo viên – phụ huynh – học sinh, đồng thời ứng dụng AI để hỗ trợ tra cứu dữ liệu, tổng hợp nội dung và gợi ý thông tin phù hợp cho từng đối tượng người dùng.</p>
-          <p>Dự án không chỉ góp phần nâng cao hiệu quả truyền thông nội bộ mà còn hướng tới xây dựng môi trường học đường số hóa, thân thiện và tiện lợi. Thời gian tới, đội thi sẽ tiếp tục hoàn thiện các tính năng cốt lõi, thử nghiệm các mô-đun AI như xử lý ngôn ngữ tự nhiên và phân tích dữ liệu, song song với việc tối ưu giao diện nhằm đảm bảo tính dễ sử dụng và phù hợp với thực tiễn nhà trường.</p>
-
-          <h3>Lan tỏa tinh thần học tập và sáng tạo</h3>
-          <p>Sự tham gia của Team The First là minh chứng cho tinh thần chủ động học tập, dám nghĩ dám làm của học sinh THPT Hương Khê trong thời đại chuyển đổi số. Tin rằng hành trình của các em sẽ truyền cảm hứng tới đông đảo học sinh trong toàn trường, góp phần lan tỏa phong trào nghiên cứu khoa học và ứng dụng công nghệ trong học đường.</p>
-          <p>Nhà trường kêu gọi cán bộ, giáo viên và học sinh toàn trường cùng theo dõi, cổ vũ và tiếp thêm động lực cho Team The First trên chặng đường phía trước, góp phần viết tiếp những dấu ấn đẹp trong phong trào học tập và sáng tạo của mái trường THPT Hương Khê.</p>
-        `,
-        date: '26/03/2025', 
-        imageUrl: 'https://vicqpnikodxcncyappes.supabase.co/storage/v1/object/public/images/Screenshot%202026-01-28%20220501.png', 
-        category: 'Hoạt động' 
     },
     { 
         id: 4, 

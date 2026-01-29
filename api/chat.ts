@@ -49,7 +49,7 @@ Nếu không chắc chắn, hãy gợi ý liên hệ văn phòng nhà trường.
             content: message
           }
         ],
-        model: 'grok-2-1212',
+        model: 'grok-4-1-fast-non-reasoning',
         stream: false,
         temperature: 0.7,
         max_tokens: 1000,
