@@ -5,10 +5,8 @@ import Footer from './components/Footer';
 import Chatbot from './components/Chatbot';
 import ErrorBoundary from './components/ErrorBoundary';
 import { DataProvider, useData } from './context/DataContext';
-import { SupabaseProvider } from './context/SupabaseContext';
 import { DarkModeProvider } from './context/DarkModeContext';
 import FaviconUpdater from './components/FaviconUpdater';
-import { DataDebugStatus } from './components/DataDebugStatus';
 // Lazy-loaded pages
 const Home = lazy(() => import('./pages/Home'));
 const Introduction = lazy(() => import('./pages/Introduction'));
@@ -148,7 +146,6 @@ const App: React.FC = () => {
           </BrowserRouter>
         </DarkModeProvider>
       </DataProvider>
-    </SupabaseProvider>
     </ErrorBoundary>
   );
 };
