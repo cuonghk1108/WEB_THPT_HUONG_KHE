@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import { Plus, Edit, Trash2, Search, X, Save, Image as ImageIcon } from 'lucide-react';
 import { NewsItem } from '../../types';
-import { cloudStorage } from '../../services/cloudStorage';
+import { uploadBase64ToSupabase } from '../../services/supabaseStorage';
 
 const NewsManager: React.FC = () => {
   const { news, addNews, updateNews, deleteNews } = useData();
@@ -68,8 +68,7 @@ const NewsManager: React.FC = () => {
       } else {
           addNews({
               ...formData,
-              // Fallback image if empty
-              imageUrl: formData.imageUrl || 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=800' 
+              imageUrl: formData.imageUrl
           });
       }
       
@@ -107,9 +106,9 @@ const NewsManager: React.FC = () => {
         const base64String = reader.result as string;
         
         try {
-          // Upload to Cloudinary backend
-          console.log('📤 Uploading image to Cloudinary backend...');
-          const imageUrl = await cloudStorage.uploadImage(base64String, 'news');
+          // Upload to Supabase Storage
+          console.log('📤 Uploading image to Supabase Storage...');
+          const imageUrl = await uploadBase64ToSupabase(base64String, 'news');
           
           if (imageUrl) {
             console.log('✅ Image uploaded:', imageUrl);

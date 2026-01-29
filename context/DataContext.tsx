@@ -1,6 +1,25 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { NewsItem, GlobalImages, Teacher, Club, GalleryItem, StudentCornerData, ExamItem, FormItem, Event, Achievement, AchievementYear, DigitalResource, StudentPortalData, GradeItem, AssignmentItem, Announcement } from '../types';
 import { cloudStorage } from '../services/cloudStorage';
+import { 
+  saveNews as saveNewsToSupabase, 
+  saveTeacher as saveTeacherToSupabase, 
+  saveClub as saveClubToSupabase, 
+  saveGalleryImage as saveGalleryToSupabase, 
+  saveEvent as saveEventToSupabase, 
+  saveAchievement as saveAchievementToSupabase,
+  getAllNews as getAllNewsFromSupabase,
+  getAllTeachers as getAllTeachersFromSupabase,
+  getAllClubs as getAllClubsFromSupabase,
+  getAllGalleryImages as getAllGalleryFromSupabase,
+  getAllEvents as getAllEventsFromSupabase,
+  deleteNews as deleteNewsFromSupabase,
+  deleteTeacher as deleteTeacherFromSupabase,
+  deleteClub as deleteClubFromSupabase,
+  deleteGalleryImage as deleteGalleryFromSupabase,
+  deleteEvent as deleteEventFromSupabase,
+  deleteAchievement as deleteAchievementFromSupabase
+} from '../services/supabaseService';
 
 interface DataContextType {
   news: NewsItem[];
@@ -565,6 +584,136 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return INITIAL_STUDENT_PORTAL;
   });
 
+  const hasLoadedSupabaseRef = useRef(false);
+
+  // Load from Supabase on first mount (primary source)
+  useEffect(() => {
+    const loadSupabaseData = async () => {
+      console.log('📡 [DataContext] Starting Supabase data load...');
+      try {
+        const [newsData, teachersData, clubsData, galleryData, eventsData] = await Promise.all([
+          getAllNewsFromSupabase(),
+          getAllTeachersFromSupabase(),
+          getAllClubsFromSupabase(),
+          getAllGalleryFromSupabase(),
+          getAllEventsFromSupabase()
+        ]);
+
+        // Use Supabase data if available, otherwise use localStorage or initial data
+        if (newsData && newsData.length > 0) {
+          console.log(`✅ [News] Loaded ${newsData.length} items from Supabase`);
+          setNews(newsData);
+          localStorage.setItem('school_news', JSON.stringify(newsData));
+        } else {
+          console.log('⚠️ [News] Supabase returned empty, using fallback...');
+          // Fallback: use localStorage if available, otherwise use initial data
+          const saved = localStorage.getItem('school_news');
+          if (saved) {
+            try {
+              const parsed = JSON.parse(saved);
+              if (parsed && parsed.length > 0) {
+                console.log(`✅ [News] Loaded ${parsed.length} items from localStorage`);
+                setNews(parsed);
+              }
+            } catch (e) {
+              console.error('Error parsing news from localStorage:', e);
+            }
+          }
+        }
+
+        if (teachersData && teachersData.length > 0) {
+          console.log(`✅ [Teachers] Loaded ${teachersData.length} items from Supabase`);
+          setTeachers(teachersData);
+          localStorage.setItem('school_teachers', JSON.stringify(teachersData));
+        } else {
+          console.log('⚠️ [Teachers] Supabase returned empty, using fallback...');
+          const saved = localStorage.getItem('school_teachers');
+          if (saved) {
+            try {
+              const parsed = JSON.parse(saved);
+              if (parsed && parsed.length > 0) {
+                console.log(`✅ [Teachers] Loaded ${parsed.length} items from localStorage`);
+                setTeachers(parsed);
+              }
+            } catch (e) {
+              console.error('Error parsing teachers from localStorage:', e);
+            }
+          }
+        }
+
+        if (clubsData && clubsData.length > 0) {
+          console.log(`✅ [Clubs] Loaded ${clubsData.length} items from Supabase`);
+          setClubs(clubsData);
+          localStorage.setItem('school_clubs', JSON.stringify(clubsData));
+        } else {
+          console.log('⚠️ [Clubs] Supabase returned empty, using fallback...');
+          const saved = localStorage.getItem('school_clubs');
+          if (saved) {
+            try {
+              const parsed = JSON.parse(saved);
+              if (parsed && parsed.length > 0) {
+                console.log(`✅ [Clubs] Loaded ${parsed.length} items from localStorage`);
+                setClubs(parsed);
+              }
+            } catch (e) {
+              console.error('Error parsing clubs from localStorage:', e);
+            }
+          }
+        }
+
+        if (galleryData && galleryData.length > 0) {
+          console.log(`✅ [Gallery] Loaded ${galleryData.length} items from Supabase`);
+          setGallery(galleryData);
+          localStorage.setItem('school_gallery', JSON.stringify(galleryData));
+        } else {
+          console.log('⚠️ [Gallery] Supabase returned empty, using fallback...');
+          const saved = localStorage.getItem('school_gallery');
+          if (saved) {
+            try {
+              const parsed = JSON.parse(saved);
+              if (parsed && parsed.length > 0) {
+                console.log(`✅ [Gallery] Loaded ${parsed.length} items from localStorage`);
+                setGallery(parsed);
+              }
+            } catch (e) {
+              console.error('Error parsing gallery from localStorage:', e);
+            }
+          }
+        }
+
+        if (eventsData && eventsData.length > 0) {
+          console.log(`✅ [Events] Loaded ${eventsData.length} items from Supabase`);
+          setEvents(eventsData);
+          localStorage.setItem('school_events', JSON.stringify(eventsData));
+        } else {
+          console.log('⚠️ [Events] Supabase returned empty, using fallback...');
+          const saved = localStorage.getItem('school_events');
+          if (saved) {
+            try {
+              const parsed = JSON.parse(saved);
+              if (parsed && parsed.length > 0) {
+                console.log(`✅ [Events] Loaded ${parsed.length} items from localStorage`);
+                setEvents(parsed);
+              }
+            } catch (e) {
+              console.error('Error parsing events from localStorage:', e);
+            }
+          }
+        }
+
+        hasLoadedSupabaseRef.current = true;
+        console.log('✅ [DataContext] Supabase data load complete');
+      } catch (error) {
+        console.error('❌ [DataContext] Error loading Supabase data:', error);
+        // If Supabase fails completely, ensure we at least use localStorage/initial data
+        // The initial state should already be set from the useState initializers
+        hasLoadedSupabaseRef.current = true;
+      }
+    };
+
+    loadSupabaseData();
+  }, []);
+
   // Load from cloud on first mount (non-blocking)
   useEffect(() => {
     cloudStorage.fetchData().then(cloudData => {
@@ -574,19 +723,19 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setGlobalImages(cloudData.globalImages);
         localStorage.setItem('school_images', JSON.stringify(cloudData.globalImages));
       }
-      if (cloudData.gallery && cloudData.gallery.length > 0) {
+      if (!hasLoadedSupabaseRef.current && cloudData.gallery && cloudData.gallery.length > 0) {
         setGallery(cloudData.gallery);
         localStorage.setItem('school_gallery', JSON.stringify(cloudData.gallery));
       }
-      if (cloudData.news && cloudData.news.length > 0) {
+      if (!hasLoadedSupabaseRef.current && cloudData.news && cloudData.news.length > 0) {
         setNews(cloudData.news);
         localStorage.setItem('school_news', JSON.stringify(cloudData.news));
       }
-      if (cloudData.teachers && cloudData.teachers.length > 0) {
+      if (!hasLoadedSupabaseRef.current && cloudData.teachers && cloudData.teachers.length > 0) {
         setTeachers(cloudData.teachers);
         localStorage.setItem('school_teachers', JSON.stringify(cloudData.teachers));
       }
-      if (cloudData.clubs && cloudData.clubs.length > 0) {
+      if (!hasLoadedSupabaseRef.current && cloudData.clubs && cloudData.clubs.length > 0) {
         setClubs(cloudData.clubs);
         localStorage.setItem('school_clubs', JSON.stringify(cloudData.clubs));
       }
@@ -676,16 +825,64 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Actions
 
   // News
-  const addNews = (item: Omit<NewsItem, 'id'>) => {
+  const addNews = async (item: Omit<NewsItem, 'id'>) => {
     const newId = news.length > 0 ? Math.max(...news.map(n => n.id)) + 1 : 0;
     const newItem = { ...item, id: newId };
     setNews([newItem, ...news]);
+    
+    // Save to Supabase
+    try {
+      await saveNewsToSupabase({
+        id: `news-${Date.now()}-${newId}`,
+        title: newItem.title,
+        excerpt: newItem.excerpt,
+        content: newItem.content,
+        date: newItem.date,
+        category: newItem.category,
+        image: newItem.imageUrl,
+        author: 'Admin'
+      });
+      console.log('✅ News saved to Supabase');
+    } catch (error) {
+      console.error('❌ Failed to save news to Supabase:', error);
+    }
   };
-  const updateNews = (id: number, updatedItem: Partial<NewsItem>) => {
+  const updateNews = async (id: number, updatedItem: Partial<NewsItem>) => {
     setNews(news.map(item => item.id === id ? { ...item, ...updatedItem } : item));
+    
+    // Update in Supabase
+    const newsItem = news.find(n => n.id === id);
+    if (newsItem) {
+      try {
+        await saveNewsToSupabase({
+          id: `news-${Date.now()}-${id}`,
+          title: updatedItem.title || newsItem.title,
+          excerpt: updatedItem.excerpt || newsItem.excerpt,
+          content: updatedItem.content || newsItem.content,
+          date: updatedItem.date || newsItem.date,
+          category: updatedItem.category || newsItem.category,
+          image: updatedItem.imageUrl || newsItem.imageUrl,
+          author: 'Admin'
+        });
+        console.log('✅ News updated in Supabase');
+      } catch (error) {
+        console.error('❌ Failed to update news in Supabase:', error);
+      }
+    }
   };
-  const deleteNews = (id: number) => {
+  const deleteNews = async (id: number) => {
+    const newsItem = news.find(n => n.id === id);
     setNews(news.filter(item => item.id !== id));
+    
+    // Delete from Supabase
+    if (newsItem) {
+      try {
+        await deleteNewsFromSupabase(`news-${Date.now()}-${id}`);
+        console.log('✅ News deleted from Supabase');
+      } catch (error) {
+        console.error('❌ Failed to delete news from Supabase:', error);
+      }
+    }
   };
 
   // Global Images
@@ -694,36 +891,138 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Teachers
-  const addTeacher = (item: Omit<Teacher, 'id'>) => {
+  const addTeacher = async (item: Omit<Teacher, 'id'>) => {
     const newId = teachers.length > 0 ? Math.max(...teachers.map(t => t.id)) + 1 : 1;
     setTeachers([...teachers, { ...item, id: newId }]);
+    
+    // Save to Supabase
+    try {
+      await saveTeacherToSupabase({
+        id: `teacher-${Date.now()}-${newId}`,
+        name: item.name,
+        subject: item.subject,
+        image: item.imageUrl,
+        bio: item.bio || '',
+        email: '',
+        phone: ''
+      });
+      console.log('✅ Teacher saved to Supabase');
+    } catch (error) {
+      console.error('❌ Failed to save teacher to Supabase:', error);
+    }
   };
-  const updateTeacher = (id: number, updatedItem: Partial<Teacher>) => {
+  const updateTeacher = async (id: number, updatedItem: Partial<Teacher>) => {
     setTeachers(teachers.map(t => t.id === id ? { ...t, ...updatedItem } : t));
+    
+    const teacher = teachers.find(t => t.id === id);
+    if (teacher) {
+      try {
+        await saveTeacherToSupabase({
+          id: `teacher-${Date.now()}-${id}`,
+          name: updatedItem.name || teacher.name,
+          subject: updatedItem.subject || teacher.subject,
+          image: updatedItem.imageUrl || teacher.imageUrl,
+          bio: updatedItem.bio || teacher.bio || '',
+          email: '',
+          phone: ''
+        });
+        console.log('✅ Teacher updated in Supabase');
+      } catch (error) {
+        console.error('❌ Failed to update teacher in Supabase:', error);
+      }
+    }
   };
-  const deleteTeacher = (id: number) => {
+  const deleteTeacher = async (id: number) => {
     setTeachers(teachers.filter(t => t.id !== id));
+    
+    try {
+      await deleteTeacherFromSupabase(`teacher-${Date.now()}-${id}`);
+      console.log('✅ Teacher deleted from Supabase');
+    } catch (error) {
+      console.error('❌ Failed to delete teacher from Supabase:', error);
+    }
   };
 
   // Clubs
-  const addClub = (item: Omit<Club, 'id'>) => {
+  const addClub = async (item: Omit<Club, 'id'>) => {
     const newId = clubs.length > 0 ? Math.max(...clubs.map(c => c.id)) + 1 : 1;
     setClubs([...clubs, { ...item, id: newId }]);
+    
+    // Save to Supabase
+    try {
+      await saveClubToSupabase({
+        id: `club-${Date.now()}-${newId}`,
+        name: item.name,
+        description: item.description,
+        image: item.imageUrl,
+        members: 0,
+        advisor: ''
+      });
+      console.log('✅ Club saved to Supabase');
+    } catch (error) {
+      console.error('❌ Failed to save club to Supabase:', error);
+    }
   };
-  const updateClub = (id: number, updatedItem: Partial<Club>) => {
+  const updateClub = async (id: number, updatedItem: Partial<Club>) => {
     setClubs(clubs.map(c => c.id === id ? { ...c, ...updatedItem } : c));
+    
+    const club = clubs.find(c => c.id === id);
+    if (club) {
+      try {
+        await saveClubToSupabase({
+          id: `club-${Date.now()}-${id}`,
+          name: updatedItem.name || club.name,
+          description: updatedItem.description || club.description,
+          image: updatedItem.imageUrl || club.imageUrl,
+          members: 0,
+          advisor: ''
+        });
+        console.log('✅ Club updated in Supabase');
+      } catch (error) {
+        console.error('❌ Failed to update club in Supabase:', error);
+      }
+    }
   };
-  const deleteClub = (id: number) => {
+  const deleteClub = async (id: number) => {
     setClubs(clubs.filter(c => c.id !== id));
+    
+    try {
+      await deleteClubFromSupabase(`club-${Date.now()}-${id}`);
+      console.log('✅ Club deleted from Supabase');
+    } catch (error) {
+      console.error('❌ Failed to delete club from Supabase:', error);
+    }
   };
 
   // Gallery
-  const addGalleryItem = (item: Omit<GalleryItem, 'id'>) => {
+  const addGalleryItem = async (item: Omit<GalleryItem, 'id'>) => {
     const newId = gallery.length > 0 ? Math.max(...gallery.map(g => g.id)) + 1 : 1;
     setGallery([...gallery, { ...item, id: newId }]);
+    
+    // Save to Supabase
+    try {
+      await saveGalleryToSupabase({
+        id: `gallery-${Date.now()}-${newId}`,
+        url: item.imageUrl,
+        title: item.title,
+        category: item.category,
+        description: '',
+        uploaded_at: new Date().toISOString()
+      });
+      console.log('✅ Gallery image saved to Supabase');
+    } catch (error) {
+      console.error('❌ Failed to save gallery image to Supabase:', error);
+    }
   };
-  const deleteGalleryItem = (id: number) => {
+  const deleteGalleryItem = async (id: number) => {
     setGallery(gallery.filter(g => g.id !== id));
+    
+    try {
+      await deleteGalleryFromSupabase(`gallery-${Date.now()}-${id}`);
+      console.log('✅ Gallery item deleted from Supabase');
+    } catch (error) {
+      console.error('❌ Failed to delete gallery item from Supabase:', error);
+    }
   };
 
   // StudentCorner

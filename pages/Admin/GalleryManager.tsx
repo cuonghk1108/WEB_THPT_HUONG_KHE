@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import { Plus, Trash2, X, Save, Image as ImageIcon } from 'lucide-react';
-import { cloudStorage } from '../../services/cloudStorage';
+import { uploadBase64ToSupabase } from '../../services/supabaseStorage';
 
 const GalleryManager: React.FC = () => {
   const { gallery, addGalleryItem, deleteGalleryItem } = useData();
@@ -33,9 +33,9 @@ const GalleryManager: React.FC = () => {
         const base64String = reader.result as string;
         
         try {
-          // Upload to Cloudinary backend
-          console.log('📤 Uploading image to Cloudinary backend...');
-          const imageUrl = await cloudStorage.uploadImage(base64String, 'gallery');
+          // Upload to Supabase Storage
+          console.log('📤 Uploading image to Supabase Storage...');
+          const imageUrl = await uploadBase64ToSupabase(base64String, 'gallery');
           
           if (imageUrl) {
             console.log('✅ Image uploaded successfully:', imageUrl);
@@ -157,7 +157,7 @@ const GalleryManager: React.FC = () => {
                     </div>
                     <div className="pt-4 flex justify-end gap-3">
                         <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-slate-700 hover:bg-slate-100 font-bold rounded-lg border border-slate-300">Hủy</button>
-                        <button type="submit" className="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-lg flex items-center gap-2"><Save className="h-4 w-4" /> Thêm</button>
+                        <button type="submit" disabled={uploadingImage} className="px-6 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-slate-400 disabled:cursor-not-allowed text-white font-bold rounded-lg flex items-center gap-2"><Save className="h-4 w-4" /> {uploadingImage ? 'Đang tải...' : 'Thêm'}</button>
                     </div>
                 </form>
             </div>

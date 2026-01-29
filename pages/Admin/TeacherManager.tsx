@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import { Plus, Edit, Trash2, X, Save, User, Mail, BookOpen, Search, Upload } from 'lucide-react';
 import { Teacher } from '../../types';
-import { cloudStorage } from '../../services/cloudStorage';
+import { uploadBase64ToSupabase } from '../../services/supabaseStorage';
 
 const TeacherManager: React.FC = () => {
   const { teachers, addTeacher, updateTeacher, deleteTeacher } = useData();
@@ -50,7 +50,7 @@ const TeacherManager: React.FC = () => {
       reader.onloadend = async () => {
         const base64String = reader.result as string;
         try {
-          const imageUrl = await cloudStorage.uploadImage(base64String, 'teacher_image');
+          const imageUrl = await uploadBase64ToSupabase(base64String, 'teachers');
           if (imageUrl) {
             setFormData(prev => ({ ...prev, imageUrl }));
           } else {
@@ -94,7 +94,7 @@ const TeacherManager: React.FC = () => {
     } else {
         addTeacher({
             ...formData,
-            imageUrl: formData.imageUrl || 'https://via.placeholder.com/400?text=No+Image'
+            imageUrl: formData.imageUrl
         });
     }
     setIsModalOpen(false);
@@ -224,13 +224,13 @@ const TeacherManager: React.FC = () => {
                         </div>
                         {formData.imageUrl && (
                           <div className="w-20 h-20 rounded-lg overflow-hidden border border-slate-200">
-                            <img src={formData.imageUrl} alt="Preview" className="w-full h-full object-cover" onError={(e) => {(e.target as HTMLImageElement).src = 'https://via.placeholder.com/80?text=Error';}} />
+                            <img src={formData.imageUrl || '/uploads/images/placeholder.svg'} alt="Preview" className="w-full h-full object-cover" onError={(e) => {(e.target as HTMLImageElement).src = '/uploads/images/placeholder.svg';}} />
                           </div>
                         )}
                     </div>
                     <div className="pt-4 flex justify-end gap-3">
                         <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-slate-700 hover:bg-slate-100 font-bold rounded-lg border border-slate-300">Hủy</button>
-                        <button type="submit" className="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-lg flex items-center gap-2"><Save className="h-4 w-4" /> Lưu</button>
+                        <button type="submit" disabled={uploadingImage} className="px-6 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-slate-400 disabled:cursor-not-allowed text-white font-bold rounded-lg flex items-center gap-2"><Save className="h-4 w-4" /> {uploadingImage ? 'Đang tải...' : 'Lưu'}</button>
                     </div>
                 </form>
             </div>

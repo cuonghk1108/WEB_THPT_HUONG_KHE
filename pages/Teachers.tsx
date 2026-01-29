@@ -7,6 +7,8 @@ const Teachers: React.FC = () => {
   const [selectedDept, setSelectedDept] = useState('Tất cả');
   const departments = ['Tất cả', 'Ban Giám Hiệu', 'Tổ Toán - Tin', 'Tổ Lý - Hóa', 'Tổ Ngoại Ngữ', 'Tổ Xã Hội'];
 
+  const placeholderImage = '/uploads/images/placeholder.svg';
+
   const filteredTeachers = teachers.filter(t => 
     selectedDept === 'Tất cả' || t.department === selectedDept
   );
@@ -47,9 +49,12 @@ const Teachers: React.FC = () => {
             <div key={teacher.id} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group border border-slate-100">
               <div className="h-64 overflow-hidden relative">
                 <img 
-                  src={teacher.imageUrl} 
+                  src={teacher.imageUrl || placeholderImage} 
                   alt={teacher.name} 
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = placeholderImage;
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-4">
                   <a href={`mailto:${teacher.email}`} className="bg-white text-primary-900 px-4 py-2 rounded-full font-bold text-sm flex items-center gap-2 hover:bg-primary-50">

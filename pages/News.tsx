@@ -75,9 +75,12 @@ const News: React.FC = () => {
                 onClick={() => setSelectedArticle(featuredArticle)}
               >
                 <img 
-                  src={featuredArticle.imageUrl} 
+                  src={featuredArticle.imageUrl || '/uploads/images/placeholder.svg'} 
                   alt={featuredArticle.title} 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/uploads/images/placeholder.svg';
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
                 <div className="absolute bottom-0 left-0 w-full p-6 md:p-10 text-white">
@@ -114,9 +117,12 @@ const News: React.FC = () => {
                      <article key={item.id} className="group flex flex-col h-full bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer" onClick={() => setSelectedArticle(item)}>
                        <div className="aspect-[16/10] overflow-hidden relative rounded-t-2xl">
                          <img 
-                            src={item.imageUrl} 
-                            alt={item.title} 
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                           src={item.imageUrl || '/uploads/images/placeholder.svg'} 
+                           alt={item.title} 
+                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                           onError={(e) => {
+                            (e.target as HTMLImageElement).src = '/uploads/images/placeholder.svg';
+                           }}
                          />
                          <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-slate-800 shadow-sm">
                            {item.category}
@@ -280,9 +286,12 @@ const News: React.FC = () => {
                {/* Hero Image */}
                <div className="w-full h-64 md:h-96 relative">
                   <img 
-                    src={selectedArticle.imageUrl} 
+                    src={selectedArticle.imageUrl || '/uploads/images/placeholder.svg'} 
                     alt={selectedArticle.title} 
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/uploads/images/placeholder.svg';
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 w-full p-6 md:p-10">

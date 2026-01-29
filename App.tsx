@@ -5,8 +5,10 @@ import Footer from './components/Footer';
 import Chatbot from './components/Chatbot';
 import ErrorBoundary from './components/ErrorBoundary';
 import { DataProvider, useData } from './context/DataContext';
+import { SupabaseProvider } from './context/SupabaseContext';
 import { DarkModeProvider } from './context/DarkModeContext';
 import FaviconUpdater from './components/FaviconUpdater';
+import { DataDebugStatus } from './components/DataDebugStatus';
 // Lazy-loaded pages
 const Home = lazy(() => import('./pages/Home'));
 const Introduction = lazy(() => import('./pages/Introduction'));
@@ -16,6 +18,7 @@ const News = lazy(() => import('./pages/News'));
 const Documents = lazy(() => import('./pages/Documents'));
 const Teachers = lazy(() => import('./pages/Teachers'));
 const StudentCorner = lazy(() => import('./pages/StudentCorner'));
+const DataTest = lazy(() => import('./pages/DataTest'));
 const Clubs = lazy(() => import('./pages/Clubs'));
 const Gallery = lazy(() => import('./pages/Gallery'));
 const Events = lazy(() => import('./pages/Events'));
@@ -39,6 +42,9 @@ const AchievementManager = lazy(() => import('./pages/Admin/AchievementManager')
 const DigitalLibraryManager = lazy(() => import('./pages/Admin/DigitalLibraryManager'));
 const StudentPortalManager = lazy(() => import('./pages/Admin/StudentPortalManager'));
 const Settings = lazy(() => import('./pages/Admin/Settings'));
+const DataMigration = lazy(() => import('./pages/Admin/DataMigration'));
+const BulkImageUpload = lazy(() => import('./pages/Admin/BulkImageUpload'));
+const StorageSetup = lazy(() => import('./pages/Admin/StorageSetup'));
 
 // ScrollToTop Component handles window scroll on route change
 const ScrollToTop = () => {
@@ -62,6 +68,7 @@ const PublicLayout: React.FC = () => {
       </main>
       <Footer />
       <Chatbot />
+      <DataDebugStatus />
     </div>
   );
 };
@@ -78,11 +85,12 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 const App: React.FC = () => {
   return (
     <ErrorBoundary>
-      <DataProvider>
-        <DarkModeProvider>
+      <SupabaseProvider>
+        <DataProvider>
+          <DarkModeProvider>
           <BrowserRouter>
-            <ScrollToTop />
-            <Routes>
+              <ScrollToTop />
+              <Routes>
               {/* Public Routes */}
               <Route element={<PublicLayout />}>
                 <Route path="/" element={<Home />} />
@@ -100,6 +108,8 @@ const App: React.FC = () => {
                 <Route path="/thanh-tich" element={<Achievements />} />
                 <Route path="/thuc-don" element={<LunchMenu />} />
                 <Route path="/thu-vien" element={<DigitalLibrary />} />
+                <Route path="/test-darkmode" element={<DarkModeTest />} />
+                <Route path="/data-test" element={<DataTest />} />
                 <Route path="/test-darkmode" element={<DarkModeTest />} />
               </Route>
 
@@ -125,6 +135,9 @@ const App: React.FC = () => {
                  <Route path="student-corner" element={<StudentCornerManager />} />
                  <Route path="student-portal" element={<StudentPortalManager />} />
                  <Route path="settings" element={<Settings />} />
+                 <Route path="storage-setup" element={<StorageSetup />} />
+                 <Route path="data-migration" element={<DataMigration />} />
+                 <Route path="bulk-upload" element={<BulkImageUpload />} />
                  <Route path="*" element={<Navigate to="dashboard" replace />} />
               </Route>
 
@@ -133,6 +146,7 @@ const App: React.FC = () => {
           </BrowserRouter>
         </DarkModeProvider>
       </DataProvider>
+    </SupabaseProvider>
     </ErrorBoundary>
   );
 };

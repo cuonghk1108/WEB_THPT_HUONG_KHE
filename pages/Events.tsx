@@ -18,11 +18,16 @@ const Events: React.FC = () => {
 
   const EventCard: React.FC<{ event: any; isPast?: boolean }> = ({ event, isPast }) => (
     <div className={`bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow ${isPast ? 'opacity-75' : ''}`}>
-      {event.imageUrl && (
-        <div className="h-48 overflow-hidden">
-          <img src={event.imageUrl} alt={event.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
-        </div>
-      )}
+      <div className="h-48 overflow-hidden">
+        <img 
+          src={event.imageUrl || '/uploads/images/placeholder.svg'} 
+          alt={event.title} 
+          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" 
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = '/uploads/images/placeholder.svg';
+          }}
+        />
+      </div>
       <div className="p-6">
         <div className="flex items-start justify-between mb-3">
           <h3 className="text-xl font-bold text-slate-900 dark:text-white flex-1">{event.title}</h3>

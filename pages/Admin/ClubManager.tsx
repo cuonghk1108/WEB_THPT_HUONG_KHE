@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import { Plus, Edit, Trash2, X, Save, Users, Calendar, Upload } from 'lucide-react';
 import { Club } from '../../types';
-import { cloudStorage } from '../../services/cloudStorage';
+import { uploadBase64ToSupabase } from '../../services/supabaseStorage';
 
 const ClubManager: React.FC = () => {
   const { clubs, addClub, updateClub, deleteClub } = useData();
@@ -41,7 +41,7 @@ const ClubManager: React.FC = () => {
       reader.onloadend = async () => {
         const base64String = reader.result as string;
         try {
-          const imageUrl = await cloudStorage.uploadImage(base64String, 'club_image');
+          const imageUrl = await uploadBase64ToSupabase(base64String, 'clubs');
           if (imageUrl) {
             setFormData(prev => ({ ...prev, imageUrl }));
           } else {
@@ -84,7 +84,7 @@ const ClubManager: React.FC = () => {
     } else {
         addClub({
             ...formData,
-            imageUrl: formData.imageUrl || 'https://via.placeholder.com/600x400?text=Club+Image'
+        imageUrl: formData.imageUrl
         });
     }
     setIsModalOpen(false);
@@ -107,7 +107,14 @@ const ClubManager: React.FC = () => {
           {clubs.map(club => (
               <div key={club.id} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
                   <div className="h-48 overflow-hidden relative group">
-                      <img src={club.imageUrl} alt={club.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                      <img 
+                        src={club.imageUrl || '/uploads/images/placeholder.svg'} 
+                        alt={club.name} 
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = '/uploads/images/placeholder.svg';
+                        }}
+                      />
                       <div className="absolute top-2 right-2 flex gap-1">
                           <button onClick={() => handleOpenModal(club)} className="p-2 bg-white/90 hover:bg-white text-blue-700 rounded-full shadow-sm"><Edit className="h-4 w-4" /></button>
                           <button onClick={() => deleteClub(club.id)} className="p-2 bg-white/90 hover:bg-white text-red-700 rounded-full shadow-sm"><Trash2 className="h-4 w-4" /></button>
@@ -172,13 +179,13 @@ const ClubManager: React.FC = () => {
                         </div>
                         {formData.imageUrl && (
                           <div className="w-32 h-20 rounded-lg overflow-hidden border border-slate-200">
-                            <img src={formData.imageUrl} alt="Preview" className="w-full h-full object-cover" onError={(e) => {(e.target as HTMLImageElement).src = 'https://via.placeholder.com/128?text=Error';}} />
+                            <img src={formData.imageUrl || '/uploads/images/placeholder.svg'} alt="Preview" className="w-full h-full object-cover" onError={(e) => {(e.target as HTMLImageElement).src = '/uploads/images/placeholder.svg';}} />
                           </div>
                         )}
                     </div>
                     <div className="pt-4 flex justify-end gap-3">
                         <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-slate-700 hover:bg-slate-100 font-bold rounded-lg border border-slate-300">Hủy</button>
-                        <button type="submit" className="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-lg flex items-center gap-2"><Save className="h-4 w-4" /> Lưu</button>
+                        <button type="submit" disabled={uploadingImage} className="px-6 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-slate-400 disabled:cursor-not-allowed text-white font-bold rounded-lg flex items-center gap-2"><Save className="h-4 w-4" /> {uploadingImage ? 'Đang tải...' : 'Lưu'}</button>
                     </div>
                 </form>
             </div>

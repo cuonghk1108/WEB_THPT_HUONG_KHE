@@ -4,6 +4,7 @@ import { Maximize2, X } from 'lucide-react';
 
 const Gallery: React.FC = () => {
   const { gallery } = useData();
+  const placeholderImage = '/uploads/images/placeholder.svg';
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   return (
@@ -18,13 +19,16 @@ const Gallery: React.FC = () => {
           {gallery.map((item, idx) => (
             <div 
               key={item.id} 
-              onClick={() => setSelectedImage(item.imageUrl)}
+              onClick={() => setSelectedImage(item.imageUrl || placeholderImage)}
               className={`relative rounded-xl overflow-hidden cursor-pointer group ${idx % 3 === 0 ? 'md:col-span-2 md:row-span-2' : ''}`}
             >
               <img 
-                src={item.imageUrl} 
+                src={item.imageUrl || placeholderImage} 
                 alt={item.title} 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = placeholderImage;
+                }}
               />
               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
                  <span className="text-primary-400 text-xs font-bold uppercase mb-1 tracking-wider">{item.category}</span>
@@ -48,9 +52,12 @@ const Gallery: React.FC = () => {
              <X className="h-8 w-8" />
            </button>
            <img 
-             src={selectedImage} 
+             src={selectedImage || placeholderImage} 
              alt="Full View" 
              className="max-w-full max-h-[90vh] rounded shadow-2xl animate-scale-up"
+             onError={(e) => {
+               (e.target as HTMLImageElement).src = placeholderImage;
+             }}
              onClick={(e) => e.stopPropagation()} 
            />
         </div>

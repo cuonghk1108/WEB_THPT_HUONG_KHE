@@ -149,9 +149,12 @@ const Home: React.FC = () => {
               <Link to="/tin-tuc" key={item.id} className="group bg-white dark:bg-slate-800 rounded-[2rem] overflow-hidden hover:shadow-2xl hover:shadow-slate-200/50 dark:hover:shadow-slate-900/50 hover:-translate-y-2 transition-all duration-300 block h-full flex flex-col border border-slate-100 dark:border-slate-700">
                 <div className="aspect-[4/3] overflow-hidden relative">
                   <img
-                    src={item.imageUrl}
+                    src={item.imageUrl || '/uploads/images/placeholder.svg'}
                     alt={item.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/uploads/images/placeholder.svg';
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-slate-900 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">

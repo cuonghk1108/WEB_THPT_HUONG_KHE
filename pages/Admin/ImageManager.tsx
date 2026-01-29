@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useData } from '../../context/DataContext';
 import { Save, Image as ImageIcon, RotateCcw, Upload } from 'lucide-react';
 import { GlobalImages } from '../../types';
-import { cloudStorage } from '../../services/cloudStorage';
+import { uploadBase64ToSupabase } from '../../services/supabaseStorage';
 
 const ImageManager: React.FC = () => {
   const { globalImages, updateGlobalImages } = useData();
@@ -38,9 +38,9 @@ const ImageManager: React.FC = () => {
         const base64String = reader.result as string;
         
         try {
-          // Upload to Cloudinary backend
-          console.log('📤 Uploading image to Cloudinary backend for key:', key);
-          const imageUrl = await cloudStorage.uploadImage(base64String, key);
+          // Upload to Supabase Storage
+          console.log('📤 Uploading image to Supabase Storage for key:', key);
+          const imageUrl = await uploadBase64ToSupabase(base64String, 'global');
           
           if (imageUrl) {
             console.log('✅ Image uploaded:', imageUrl);
@@ -171,7 +171,7 @@ const ImageManager: React.FC = () => {
                                     alt="Preview" 
                                     className="w-full h-full object-cover"
                                     onError={(e) => {
-                                        (e.target as HTMLImageElement).src = 'https://via.placeholder.com/400x300?text=Invalid+Image+URL';
+                                    (e.target as HTMLImageElement).src = '/uploads/images/placeholder.svg';
                                     }}
                                 />
                             ) : (

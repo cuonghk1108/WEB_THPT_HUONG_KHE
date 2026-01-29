@@ -8,11 +8,16 @@
     "dev": "node server.js",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "firebase:init": "node scripts/initializeFirebaseDatabase.js",
+    "firebase:sample": "node scripts/addSampleData.js",
+    "supabase:seed": "node scripts/seedSupabase.js",
+    "setup:storage": "tsx scripts/setupStorage.ts"
   },
   "dependencies": {
     "@google/genai": "^1.38.0",
     "@google/generative-ai": "^0.24.1",
+    "@supabase/supabase-js": "^2.93.2",
     "@vercel/node": "^3.2.29",
     "cloudinary": "^2.9.0",
     "cors": "^2.8.6",
@@ -30,6 +35,7 @@
     "@vitejs/plugin-react": "^5.0.0",
     "concurrently": "^9.2.1",
     "gh-pages": "^6.3.0",
+    "tsx": "^4.21.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }

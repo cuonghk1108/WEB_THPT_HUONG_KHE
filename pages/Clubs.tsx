@@ -31,9 +31,12 @@ const Clubs: React.FC = () => {
             <div key={club.id} className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 group flex flex-col md:flex-row h-full md:h-64">
               <div className="md:w-2/5 h-48 md:h-full relative overflow-hidden">
                 <img 
-                  src={club.imageUrl} 
+                  src={club.imageUrl || '/uploads/images/placeholder.svg'} 
                   alt={club.name} 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/uploads/images/placeholder.svg';
+                  }}
                 />
                 <div className="absolute inset-0 bg-purple-900/20 group-hover:bg-purple-900/0 transition-colors"></div>
               </div>

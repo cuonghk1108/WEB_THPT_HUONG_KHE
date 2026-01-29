@@ -8,7 +8,7 @@
   "news": [
     {
       "id": "news-2026-01-26-team-the-first",
-      "title": "Team The First tham dự kỳ thi "AI First – Khai phá tư duy, làm chủ AI"",
+      "title": "Team The First tham dự kỳ thi \"AI First – Khai phá tư duy, làm chủ AI\"",
       "excerpt": "Thể hiện tinh thần ham học hỏi và đổi mới sáng tạo, Team The First của trường THPT Hương Khê đã chính thức đăng ký tham dự kỳ thi AI First.",
       "content": "Thể hiện tinh thần ham học hỏi và đổi mới sáng tạo, Team The First của trường THPT Hương Khê đã chính thức đăng ký tham dự kỳ thi \"AI First – Khai phá tư duy, làm chủ AI\" - một cuộc thi uy tín dành cho học sinh trung học phổ thông toàn quốc về ứng dụng trí tuệ nhân tạo.\n\nThành viên đội thi:\n- Nhóm trưởng: Võ Xuân Cường (Lớp A1, Khóa 59) - học sinh xuất sắc với đam mê công nghệ, đã phát triển website chính thức của nhà trường\n- Thành viên: Trần Kim Nhật - học sinh giỏi quốc gia môn Tin học, đạt giải Nhì, có nền tảng vững chắc về lập trình và thuật toán\n\nVới sự kết hợp giữa kỹ năng lập trình web hiện đại và kiến thức thuật toán sâu rộng, Team The First hứa hẹn sẽ mang đến những ý tưởng sáng tạo và ứng dụng AI thiết thực trong cuộc thi lần này.\n\nKỳ thi \"AI First\" tập trung vào việc khuyến khích học sinh tìm hiểu, nghiên cứu và ứng dụng các công nghệ AI như Machine Learning, Natural Language Processing, Computer Vision vào giải quyết các bài toán thực tế trong giáo dục, y tế, môi trường và đời sống xã hội.\n\nNhà trường và thầy cô giáo tin tưởng vào khả năng của các em và mong muốn đội thi sẽ có những trải nghiệm bổ ích, học hỏi được nhiều kiến thức mới và đạt được thành tích cao tại cuộc thi.\n\nChúc Team The First thành công!",
       "date": "2026-01-26",
@@ -17,8 +17,110 @@
       "author": "Ban Giám Hiệu"
     }
   ],
-  "teachers": [],
-  "clubs": [],
-  "gallery": [],
+  "teachers": [
+    {
+      "id": "teacher-1",
+      "name": "Thầy Hồ Đức Cường",
+      "subject": "Hiệu trưởng - Tin học",
+      "image": "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=400&auto=format&fit=crop",
+      "bio": "Hiệu trưởng nhà trường, giảng viên môn Tin học với hơn 15 năm kinh nghiệm",
+      "email": "cuong@thpthuongkhe.edu.vn",
+      "phone": "0123456789"
+    }
+  ],
+  "clubs": [
+    {
+      "id": "club-1",
+      "name": "Câu lạc bộ Tin học",
+      "description": "Nơi học sinh yêu thích công nghệ gặp gỡ, học hỏi lập trình và AI",
+      "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=800&auto=format&fit=crop",
+      "members": 45,
+      "advisor": "Thầy Hồ Đức Cường"
+    },
+    {
+      "id": "club-2",
+      "name": "Câu lạc bộ Tiếng Anh",
+      "description": "Rèn luyện kỹ năng giao tiếp tiếng Anh qua các hoạt động thực tế",
+      "image": "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?q=80&w=800&auto=format&fit=crop",
+      "members": 60,
+      "advisor": "Cô Nguyễn Thị Lan"
+    }
+  ],
+  "gallery": [
+    {
+      "id": "gallery-1",
+      "url": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1200&auto=format&fit=crop",
+      "title": "Lễ khai giảng năm học 2025-2026",
+      "category": "Sự kiện",
+      "description": "Buổi lễ khai giảng long trọng đánh dấu bước vào năm học mới"
+    },
+    {
+      "id": "gallery-2",
+      "url": "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1200&auto=format&fit=crop",
+      "title": "Lớp học hiện đại",
+      "category": "Cơ sở vật chất",
+      "description": "Phòng học được trang bị đầy đủ thiết bị công nghệ"
+    },
+    {
+      "id": "gallery-3",
+      "url": "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1200&auto=format&fit=crop",
+      "title": "Sân trường xanh mát",
+      "category": "Cơ sở vật chất",
+      "description": "Môi trường học tập trong lành, nhiều cây xanh"
+    }
+  ],
+  "events": [
+    {
+      "id": "event-1",
+      "title": "Hội thao học sinh năm 2026",
+      "description": "Ngày hội thể thao sôi động với nhiều môn thi đấu hấp dẫn",
+      "date": "2026-03-15",
+      "location": "Sân vận động trường",
+      "image": "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=800&auto=format&fit=crop",
+      "category": "Thể thao"
+    },
+    {
+      "id": "event-2",
+      "title": "Triển lãm STEM",
+      "description": "Trưng bày các dự án khoa học công nghệ của học sinh",
+      "date": "2026-04-20",
+      "location": "Hội trường A",
+      "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop",
+      "category": "Khoa học"
+    }
+  ],
+  "achievements": [
+    {
+      "id": "achievement-1",
+      "title": "Giải Nhì HSG Quốc gia môn Tin học",
+      "description": "Trần Kim Nhật đạt giải Nhì kỳ thi HSG Quốc gia",
+      "date": "2025-12-15",
+      "category": "Quốc gia",
+      "image": "https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?q=80&w=800&auto=format&fit=crop",
+      "students": "Trần Kim Nhật - 12A1"
+    }
+  ],
+  "digitalLibrary": [
+    {
+      "id": "lib-1",
+      "title": "Giáo trình Toán 12",
+      "description": "Tài liệu ôn thi THPT Quốc gia môn Toán",
+      "category": "Toán học",
+      "fileUrl": "https://example.com/toan-12.pdf",
+      "coverImage": "https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=400&auto=format&fit=crop",
+      "author": "Bộ GD&ĐT",
+      "uploadDate": "2026-01-15"
+    }
+  ],
+  "studentPortal": [
+    {
+      "id": "portal-1",
+      "title": "Tra cứu điểm thi",
+      "description": "Xem điểm các kỳ thi trong năm học",
+      "category": "Học tập",
+      "link": "/student-portal",
+      "icon": "book-open"
+    }
+  ],
   "lastUpdate": "2026-01-26T10:30:00.000Z"
 }
