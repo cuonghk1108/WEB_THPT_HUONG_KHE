@@ -53,7 +53,7 @@ const News: React.FC = () => {
           <div className="flex flex-col md:flex-row justify-between items-end gap-4">
             <div>
                <p className="text-primary-600 font-bold text-sm uppercase tracking-wider mb-2">Cổng thông tin điện tử</p>
-               <h1 className="text-3xl md:text-4xl font-bold font-heading text-slate-900">Tin tức & Sự kiện</h1>
+               <h1 className="text-3xl md:text-4xl font-bold font-heading text-slate-900 dark:text-white">Tin tức & Sự kiện</h1>
             </div>
             <div className="text-slate-600 text-sm font-medium">
                Cập nhật lần cuối: {new Date().toLocaleDateString('vi-VN')}
@@ -92,7 +92,7 @@ const News: React.FC = () => {
                     <span>•</span>
                     <span className="flex items-center gap-1"><Calendar className="h-4 w-4" /> {featuredArticle.date}</span>
                   </div>
-                  <h2 className="text-2xl md:text-4xl font-bold font-heading leading-tight mb-3 group-hover:text-primary-200 transition-colors">
+                  <h2 className="text-2xl md:text-4xl font-bold font-heading leading-tight mb-3 text-white group-hover:text-primary-200 transition-colors">
                     {featuredArticle.title}
                   </h2>
                   <p className="text-slate-200 line-clamp-2 md:line-clamp-2 max-w-2xl text-base md:text-lg opacity-95 font-medium">
@@ -105,7 +105,7 @@ const News: React.FC = () => {
             {/* 2. Article Grid List */}
             <div>
                {!isDefaultView && (
-                 <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                 <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
                    <Filter className="h-5 w-5 text-primary-600" />
                    Kết quả lọc: {listArticles.length} bài viết
                  </h3>
@@ -114,7 +114,7 @@ const News: React.FC = () => {
                {paginatedArticles.length > 0 ? (
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
                    {paginatedArticles.map((item) => (
-                     <article key={item.id} className="group flex flex-col h-full bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer" onClick={() => setSelectedArticle(item)}>
+                     <article key={item.id} className="group flex flex-col h-full bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer" onClick={() => setSelectedArticle(item)}>
                        <div className="aspect-[16/10] overflow-hidden relative rounded-t-2xl">
                          <img 
                            src={item.imageUrl || '/uploads/images/placeholder.svg'} 
@@ -132,10 +132,10 @@ const News: React.FC = () => {
                          <div className="text-xs text-slate-500 font-bold uppercase mb-2 flex items-center gap-2">
                             <Calendar className="h-3 w-3" /> {item.date}
                          </div>
-                         <h3 className="text-lg font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors leading-snug">
+                         <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors leading-snug">
                            {item.title}
                          </h3>
-                         <p className="text-slate-600 text-sm line-clamp-3 flex-grow mb-4 leading-relaxed font-medium">
+                         <p className="text-slate-600 dark:text-slate-300 text-sm line-clamp-3 flex-grow mb-4 leading-relaxed font-medium">
                            {item.excerpt}
                          </p>
                          <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
