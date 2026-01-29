@@ -1,4 +1,4 @@
-# 🏫 THPT Hương Khê - Website Chính Thức
+# 🏫 THPT Hương Khê - Website Chính Thức v3.0
 
 <div align="center">
 
@@ -11,7 +11,7 @@
 
 **Cổng thông tin điện tử hiện đại - Kết nối nhà trường, phụ huynh và học sinh**
 
-[🌐 Demo Live](https://thpthuongkhe.vercel.app) · [📄 Tài liệu](./README.md) · [🐛 Báo lỗi](https://github.com/cuonghk1108/WEB_THPT_HUONG_KHE/issues) · [✨ Yêu cầu tính năng](https://github.com/cuonghk1108/WEB_THPT_HUONG_KHE/discussions)
+[🌐 Demo Live](https://thpthuongkhe.vercel.app) · [📄 Tài liệu](./README.md) · [🐛 Báo lỗi](https://github.com/cuonghk1108/WEB_THPT_HUONG_KHE/issues) · [💬 Thảo luận](https://github.com/cuonghk1108/WEB_THPT_HUONG_KHE/discussions)
 
 </div>
 
@@ -26,7 +26,7 @@
 - **📰 Tin tức & Sự kiện** - Cập nhật hoạt động, thành tích và sự kiện nhà trường
 - **📋 Văn bản** - Thông báo, quy định và tài liệu hành chính
 - **👨‍🏫 Đội ngũ giáo viên** - Giới thiệu giáo viên và cán bộ quản lý
-- **� Thư viện học liệu kỹ thuật số** - Tài liệu, bài tập, tài nguyên học tập
+- **📚 Thư viện học liệu kỹ thuật số** - Tài liệu, bài tập, tài nguyên học tập
 - **📅 Góc học sinh** - Tài nguyên học tập
   - ⏰ **Thời khóa biểu** - Theo từng lớp (45 lớp khối 10-12, auto-sync từ admin)
   - 📝 **Lịch kiểm tra** - Định kỳ và thi học kỳ theo lớp
@@ -48,22 +48,10 @@
 - **🏆 Quản lý câu lạc bộ** - Thêm/chỉnh sửa thông tin các CLB
 - **📅 Quản lý góc học sinh** - Upload thời khóa biểu, lịch thi, biểu mẫu, thành tích
 - **📚 Quản lý thư viện kỹ thuật số** - Quản lý tài liệu và tài nguyên học tập
-- **💾 Đồng bộ dữ liệu** - Export/import dữ liệu sang JSONBin với một click
-- **⚙️ Cài đặt hệ thống** - Cấu hình chung (phát triển)
+- **🎓 Quản lý thành tích** - Ghi nhận các thành tích, bằng khen học sinh
+- **🛠️ Cấu hình hệ thống** - Tùy chỉnh website, đồng bộ dữ liệu cloud
 
-### 🎨 UX/UI Features
-- **🌓 Light Mode Optimized** - Giao diện sáng hiện đại, tối ưu cho công việc hành chính
-- **📱 Responsive Design** - Tương thích mọi thiết bị (mobile, tablet, desktop)
-- **⚡ Fast Performance** - Tối ưu tốc độ tải trang với Vite và code splitting
-- **♿ Accessibility** - Tuân thủ chuẩn WCAG 2.1 cho người khuyết tật
-- **🔍 SEO Optimized** - Meta tags và structured data cho SEO
-- **🎭 Smooth Animations** - Các hiệu ứng mượt mà, không gây khó chịu
-
-### ☁️ Cloud Integration
-- **☁️ JSONBin Sync** - Tự động đồng bộ dữ liệu từ cloud
-- **🖼️ Cloudinary Upload** - Upload ảnh trực tiếp lên CDN
-- **📊 Visitor Counter** - Theo dõi lượt truy cập real-time
-- **🔄 Auto Backup** - Dữ liệu tự động sao lưu lên cloud
+---
 
 ---
 
@@ -76,7 +64,7 @@
 - 🎨 **Tailwind CSS 3.4** - Utility-first CSS framework
 - 🧭 **React Router v7** - Client-side routing
 - 🎭 **Lucide Icons** - Modern icon library
-- 📦 **Zustand/Context API** - State management
+- 📦 **Context API** - State management
 
 ### Backend & Cloud Services
 - 💾 **JSONBin.io** - Cloud JSON database (100K requests/month free)
@@ -99,20 +87,27 @@
 
 ---
 
-## 📦 Cài đặt
+## 📋 Yêu Cầu Hệ Thống
 
-### Yêu cầu hệ thống
-- **Node.js** >= 18.0.0
-- **npm** >= 9.0.0
-- **Git** (để clone repository)
+```bash
+Node.js >= 18.0.0
+npm >= 9.0.0
+# hoặc
+yarn >= 3.0.0
+pnpm >= 8.0.0
+```
 
-### Bước 1: Clone Repository
+---
+
+## 🚀 Cài Đặt & Chạy
+
+### 1. Clone Repository
 ```bash
 git clone https://github.com/cuonghk1108/WEB_THPT_HUONG_KHE.git
 cd WEB_THPT_HUONG_KHE
 ```
 
-### Bước 2: Cài đặt Dependencies
+### 2. Cài Đặt Dependencies
 ```bash
 npm install
 ```
@@ -188,48 +183,6 @@ npm run dev
 
 ---
 
-## 🏗️ Build & Deploy
-
-### Build cho Production
-```bash
-npm run build
-```
-
-Build output: `dist/` folder (~300KB gzipped)
-
-### Test Production Build Locally
-```bash
-npm run preview
-```
-
-### Deploy lên Vercel (Recommended)
-
-#### ✅ Method 1: Vercel Dashboard (Easy)
-```
-1. Push code lên GitHub
-2. Truy cập: https://vercel.com/new
-3. Import repository
-4. Add Environment Variables (copy từ .env)
-5. Click "Deploy"
-6. Done! 🎉
-```
-
-#### ✅ Method 2: Vercel CLI
-```bash
-# Install
-npm i -g vercel
-
-# Login
-vercel login
-
-# Deploy
-vercel --prod
-```
-
-**⚠️ Important**: Thêm tất cả `.env` variables vào Vercel Project Settings trước deploy!
-
----
-
 ## 📁 Cấu trúc Dự Án
 
 ```
@@ -245,7 +198,8 @@ WEB_THPT_HUONG_KHE/
 │   ├── Header.tsx                  # Navigation & branding
 │   ├── Footer.tsx                  # Footer with visitor counter
 │   ├── Chatbot.tsx                 # AI chatbot (Google Gemini)
-│   └── VisitorCounter.tsx          # Visitor statistics badge
+│   ├── VisitorCounter.tsx          # Visitor statistics badge
+│   └── ...
 │
 ├── 📁 context/                      # Global State (React Context)
 │   ├── DataContext.tsx             # Central data management + CRUD
@@ -325,8 +279,9 @@ WEB_THPT_HUONG_KHE/
 └── 📝 Documentation
     ├── README.md                   # This file
     ├── API_SETUP.md                # API setup guide
+    ├── DEPLOYMENT_SUMMARY.md       # v3.0 deployment details
     ├── ROADMAP.md                  # Development roadmap
-    └── PRESENTATION.md             # Project presentation
+    └── PRESENTATION.md             # 31-slide project presentation
 ```
 
 ### 🗂️ Data Flow
@@ -416,9 +371,7 @@ WEB_THPT_HUONG_KHE/
 
 ---
 
-## 📊 Schema Dữ Liệu
-
-## 📊 Schema Dữ Liệu
+## � Schema Dữ Liệu
 
 ### 📦 School Data Bin (JSONBin)
 ```json
@@ -512,7 +465,7 @@ WEB_THPT_HUONG_KHE/
 
 ---
 
-## 🚀 Scripts Npm
+## � Scripts Npm
 
 ```bash
 # Development
@@ -633,7 +586,7 @@ Mọi đóng góp đều được hoan nghênh! Để đóng góp:
 
 ---
 
-## 📝 License
+## � License
 
 MIT License - Tự do sử dụng cho mục đích thương mại & cá nhân.
 
@@ -682,6 +635,6 @@ Nếu project hữu ích, hãy cho một **⭐ Star** để hỗ trợ!
 
 Made with ❤️ by **cuongdev1108** & **Team The First**
 
-[🔝 Back to Top](#-thpt-hương-khê---website-chính-thức)
+[🔝 Back to Top](#-thpt-hương-khê---website-chính-thức-v30)
 
 </div>
