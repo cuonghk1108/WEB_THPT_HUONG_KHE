@@ -34,7 +34,7 @@
   - 📊 **Thành tích học sinh** - Ghi nhận các thành tích, bằng khen
 - **🏆 Câu lạc bộ** - Thông tin các CLB học thuật, văn nghệ, thể thao
 - **🖼️ Thư viện ảnh** - Gallery hình ảnh hoạt động theo từng chủ đề
-- **🤖 Chatbot AI** - Trợ lý ảo hỗ trợ tư vấn 24/7 được hỗ trợ bởi Google Gemini
+- **🤖 Chatbot AI** - Trợ lý ảo hỗ trợ tư vấn 24/7 được hỗ trợ bởi Grok AI (xAI)
 - **👥 Thống kê truy cập** - Theo dõi lượt truy cập theo ngày/tuần/năm
 
 ### 🔐 Dành cho quản trị viên
@@ -69,7 +69,7 @@
 ### Backend & Cloud Services
 - 💾 **JSONBin.io** - Cloud JSON database (100K requests/month free)
 - 🖼️ **Cloudinary** - Image hosting & CDN (25GB/month free)
-- 🤖 **Google Gemini API** - Advanced AI chatbot
+- 🤖 **Grok AI API (xAI)** - Advanced AI chatbot
 - ☁️ **Vercel** - Serverless deployment & edge functions
 - 📊 **Real-time Data Sync** - Auto-sync from cloud on app startup
 
@@ -122,8 +122,8 @@ cp .env.example .env
 Mở file `.env` và thêm các API keys:
 
 ```env
-# Google Gemini AI (bắt buộc cho chatbot - miễn phí)
-VITE_GEMINI_API_KEY=your_gemini_api_key_here
+# Grok AI (xAI) (bắt buộc cho chatbot)
+VITE_XAI_API_KEY=your_grok_api_key_here
 
 # JSONBin.io (bắt buộc cho lưu trữ dữ liệu)
 VITE_JSONBIN_API_KEY=your_jsonbin_api_key_here
@@ -138,13 +138,13 @@ VITE_CLOUDINARY_API_SECRET=your_api_secret_here
 
 **📚 Hướng dẫn lấy từng API key:**
 
-#### 1️⃣ Google Gemini API (Miễn phí)
+#### 1️⃣ Grok AI API (xAI)
 ```
-✓ Truy cập: https://aistudio.google.com/app/apikey
-✓ Đăng nhập với Google account
-✓ Click "Create API Key" → "Create API key in new project"
-✓ Copy key vào VITE_GEMINI_API_KEY
-✓ Free tier: 60 requests/minute
+✓ Truy cập: https://console.x.ai
+✓ Đăng nhập với X/Twitter account
+✓ Navigate to API Keys → "Create API Key"
+✓ Copy key vào VITE_XAI_API_KEY
+✓ Model: grok-beta (advanced reasoning)
 ```
 
 #### 2️⃣ JSONBin.io (Miễn phí)
@@ -197,7 +197,7 @@ WEB_THPT_HUONG_KHE/
 ├── 📁 components/                   # React Components
 │   ├── Header.tsx                  # Navigation & branding
 │   ├── Footer.tsx                  # Footer with visitor counter
-│   ├── Chatbot.tsx                 # AI chatbot (Google Gemini)
+│   ├── Chatbot.tsx                 # AI chatbot (Grok AI - xAI)
 │   ├── VisitorCounter.tsx          # Visitor statistics badge
 │   └── ...
 │
@@ -249,7 +249,7 @@ WEB_THPT_HUONG_KHE/
 │   │   ├── fetchData()             # Fetch from JSONBin
 │   │   ├── saveData()              # Export to JSONBin
 │   │   └── deleteImage()           # Delete from Cloudinary
-│   ├── geminiService.ts            # Google Gemini AI
+│   ├── geminiService.ts            # Grok AI (xAI) Service
 │   │   └── getChatResponse()       # AI chat responses
 │   └── visitorCounter.ts           # Visitor tracking
 │
@@ -536,7 +536,7 @@ Website tự động responsive trên tất cả kích thước màn hình.
 ```
 ✓ Cloudinary: API key phải public
 ✓ JSONBin: Bin phải public hoặc private + API key
-✓ Gemini: API key phải có quyền
+✓ Grok AI: API key phải hợp lệ từ xAI console
 ```
 
 ### ❌ "Build fails"
@@ -615,7 +615,7 @@ Cảm ơn:
 - 🎨 [Tailwind CSS](https://tailwindcss.com) - CSS framework
 - ☁️ [Vercel](https://vercel.com) - Best deployment platform
 - 🖼️ [Cloudinary](https://cloudinary.com) - Image CDN
-- 🤖 [Google Gemini](https://ai.google.dev) - AI API
+- 🤖 [Grok AI (xAI)](https://x.ai) - AI API
 - 📦 [JSONBin](https://jsonbin.io) - JSON storage
 
 ---
