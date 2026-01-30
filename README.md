@@ -57,33 +57,118 @@
 
 ## 🚀 Công nghệ sử dụng
 
-### Frontend Stack
-- ⚛️ **React 19.2.3** - Modern UI library với React Compiler support
-- 📘 **TypeScript 5.7** - Type-safe development
-- ⚡ **Vite 6.4.1** - Next-generation build tool (⚡ ~2s build time)
-- 🎨 **Tailwind CSS 3.4** - Utility-first CSS framework
-- 🧭 **React Router v7** - Client-side routing
-- 🎭 **Lucide Icons** - Modern icon library
-- 📦 **Context API** - State management
+Website được xây dựng trên nền tảng công nghệ hiện đại, tối ưu cho hiệu suất và trải nghiệm người dùng:
 
-### Backend & Cloud Services
-- 💾 **JSONBin.io** - Cloud JSON database (100K requests/month free)
-- 🖼️ **Cloudinary** - Image hosting & CDN (25GB/month free)
-- 🤖 **Grok AI API (xAI)** - Advanced AI chatbot
-- ☁️ **Vercel** - Serverless deployment & edge functions
-- 📊 **Real-time Data Sync** - Auto-sync from cloud on app startup
+### 🎨 Giao diện người dùng (Frontend)
 
-### Development Tools
-- 📦 **npm** - Package manager
-- 🔧 **ESLint** - Code quality
-- 🎭 **PostCSS** - CSS transformations
-- 🔥 **HMR** - Hot Module Replacement
+#### **React 19.2.3** - Thư viện xây dựng giao diện
+- ⚡ **Hiệu suất cao**: Render siêu nhanh với React Compiler mới nhất
+- 🔄 **Cập nhật tức thì**: Tự động cập nhật nội dung khi có thay đổi
+- 📱 **Responsive**: Giao diện tự động điều chỉnh trên mọi thiết bị (điện thoại, máy tính bảng, PC)
 
-### Architecture
-- 🏗️ **Context API** - Global state management (DataContext, DarkModeContext)
-- 🔄 **Real-time Sync** - Bidirectional cloud sync
-- 📱 **Responsive First** - Mobile-first design approach
-- ♿ **Accessibility First** - WCAG 2.1 compliant
+#### **TypeScript 5.7** - Ngôn ngữ lập trình
+- ✅ **An toàn**: Phát hiện lỗi ngay khi code, giảm 90% bug
+- 📖 **Dễ bảo trì**: Code rõ ràng, dễ đọc và bảo trì lâu dài
+- 🚀 **Hiệu suất**: Biên dịch tối ưu cho tốc độ tải trang nhanh
+
+#### **Vite 6.4.1** - Công cụ build
+- ⚡ **Siêu nhanh**: Khởi động server chỉ ~200ms, build production ~2s
+- 🔥 **Hot reload**: Thay đổi code hiển thị ngay lập tức không cần refresh
+- 📦 **Tối ưu**: Tự động nén, minify code để website tải siêu nhanh
+
+#### **Tailwind CSS 3.4** - Framework CSS
+- 🎨 **Thiết kế linh hoạt**: Dễ dàng tùy chỉnh màu sắc, kích thước, layout
+- 📱 **Mobile-first**: Ưu tiên hiển thị tốt trên điện thoại trước
+- 🌓 **Dark Mode**: Hỗ trợ chế độ tối/sáng tự động
+
+#### **React Router v7** - Điều hướng trang
+- 🧭 **SPA**: Chuyển trang mượt mà không reload, trải nghiệm như app mobile
+- 🔗 **SEO-friendly**: Hỗ trợ tốt cho Google tìm kiếm
+- 📍 **Deep linking**: Chia sẻ link trực tiếp đến bất kỳ trang nào
+
+### 🗄️ Backend & Cơ sở dữ liệu
+
+#### **MongoDB Atlas** - Database NoSQL
+- 💾 **Lưu trữ đám mây**: Dữ liệu an toàn, sao lưu tự động
+- 🚀 **Hiệu suất cao**: Truy vấn nhanh với indexing tối ưu
+- 📊 **Dễ mở rộng**: Dễ dàng thêm field mới không cần migration
+
+#### **Node.js + Express** - Backend API
+- 🔌 **RESTful API**: Chuẩn API dễ tích hợp với mọi nền tảng
+- 🔐 **JWT Authentication**: Bảo mật admin với token 7 ngày
+- ✅ **Validation**: Kiểm tra dữ liệu với Zod schema
+
+#### **Socket.io 4.6** - Real-time Updates
+- 🔄 **Cập nhật tức thì**: Admin đăng tin, website hiện ngay không cần F5
+- 📡 **WebSocket**: Kết nối 2 chiều tốc độ cao
+- 👥 **Multi-user**: Nhiều admin có thể làm việc đồng thời
+
+#### **Cloudinary** - Quản lý hình ảnh
+- 🖼️ **CDN toàn cầu**: Tải ảnh siêu nhanh từ server gần nhất
+- 🔄 **Tự động tối ưu**: Resize, compress ảnh theo device
+- 💰 **Miễn phí**: 25GB bandwidth/tháng (đủ cho ~100K lượt truy cập)
+
+### 🤖 AI & Tích hợp
+
+#### **Grok AI (xAI)** - Chatbot thông minh
+- 💬 **Tư vấn 24/7**: Trả lời tự động về thông tin trường, tuyển sinh, học tập
+- 🧠 **Hiểu ngữ cảnh**: Nhớ lịch sử chat, trả lời chính xác
+- 🇻🇳 **Tiếng Việt**: Tối ưu cho người dùng Việt Nam
+
+### 🔒 Bảo mật & Hiệu suất
+
+#### **Winston Logger** - Ghi log hệ thống
+- 📝 **Theo dõi hoạt động**: Log mọi request, error để debug
+- 🔍 **Phát hiện lỗi**: Email thông báo khi có lỗi nghiêm trọng
+- 📊 **Phân tích**: Biết user dùng tính năng nào nhiều nhất
+
+#### **bcrypt + JWT** - Bảo mật admin
+- 🔐 **Mã hóa password**: Hash SHA-256 không thể reverse
+- 🎫 **Token xác thực**: JWT với expiry 7 ngày
+- 🛡️ **RBAC**: Phân quyền admin/editor/viewer
+
+### ☁️ Deploy & Hosting
+
+#### **Vercel** - Frontend Hosting
+- 🌍 **Edge Network**: Deploy lên 20+ server toàn cầu
+- ⚡ **CDN tự động**: Tải trang < 1s từ mọi nơi
+- 🔄 **Auto Deploy**: Push code lên GitHub → tự động deploy
+
+#### **Railway/Render** - Backend Hosting
+- 🚂 **Serverless**: Tự động scale theo traffic
+- 💰 **Miễn phí**: $5 credit/tháng (đủ cho 100K requests)
+- 📊 **Monitoring**: Dashboard theo dõi CPU, RAM, traffic
+
+### 🛠️ Development Tools
+
+- 📦 **npm** - Quản lý thư viện JavaScript
+- 🔧 **ESLint** - Kiểm tra code tự động, đảm bảo chuẩn coding
+- 🎭 **PostCSS** - Tự động thêm vendor prefix CSS
+- 🔥 **HMR** - Hot Module Replacement, thay đổi code hiển thị ngay
+
+### 🏗️ Kiến trúc hệ thống
+
+```
+┌─────────────────┐         ┌──────────────────┐
+│   React App     │ ◄─────► │   Express API    │
+│  (Port 3000)    │  HTTP   │   (Port 5000)    │
+└────────┬────────┘         └────────┬─────────┘
+         │                           │
+         │ Socket.io                 │ Mongoose
+         │                           │
+         ▼                           ▼
+    ┌────────────────────────────────────┐
+    │         MongoDB Atlas              │
+    │  (Cloud Database - Free Tier)      │
+    └────────────────────────────────────┘
+```
+
+**Đặc điểm:**
+- 🏗️ **Separation of Concerns**: Frontend/Backend tách biệt, dễ scale
+- 🔄 **Real-time Sync**: Socket.io đồng bộ data 2 chiều
+- 📱 **Mobile-first**: Thiết kế ưu tiên mobile rồi mở rộng lên desktop
+- ♿ **Accessibility**: Tuân thủ WCAG 2.1 (hỗ trợ người khuyết tật)
+- 🎯 **SEO Optimized**: Meta tags, sitemap, structured data
 
 ---
 

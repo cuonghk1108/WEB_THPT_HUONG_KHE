@@ -26,6 +26,8 @@ const LunchMenu = lazy(() => import('./pages/LunchMenu'));
 const Achievements = lazy(() => import('./pages/Achievements'));
 const DarkModeTest = lazy(() => import('./pages/DarkModeTest'));
 const Dashboard = lazy(() => import('./pages/Admin/Dashboard'));
+const Error404 = lazy(() => import('./pages/Error404'));
+const Error500 = lazy(() => import('./pages/Error500'));
 
 // Admin Imports (lazy)
 const Login = lazy(() => import('./pages/Admin/Login'));
@@ -139,7 +141,9 @@ const App: React.FC = () => {
                  <Route path="*" element={<Navigate to="dashboard" replace />} />
               </Route>
 
-              <Route path="*" element={<Navigate to="/" replace />} />
+              {/* Error Pages */}
+              <Route path="/error/500" element={<Error500 />} />
+              <Route path="*" element={<Error404 />} />
             </Routes>
           </BrowserRouter>
         </DarkModeProvider>

@@ -1,13 +1,13 @@
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export const mongoService = {
   async getAllNews() {
-    const response = await fetch(`${API_BASE}/news`);
+    const response = await fetch(`${API_BASE}/api/news`);
     return await response.json();
   },
 
   async addNews(newsData: any) {
-    const response = await fetch(`${API_BASE}/news`, {
+    const response = await fetch(`${API_BASE}/api/news`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newsData)
@@ -16,7 +16,7 @@ export const mongoService = {
   },
 
   async updateNews(id: string, newsData: any) {
-    const response = await fetch(`${API_BASE}/news/${id}`, {
+    const response = await fetch(`${API_BASE}/api/news/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newsData)
@@ -25,17 +25,17 @@ export const mongoService = {
   },
 
   async deleteNews(id: string) {
-    const response = await fetch(`${API_BASE}/news/${id}`, { method: 'DELETE' });
+    const response = await fetch(`${API_BASE}/api/news/${id}`, { method: 'DELETE' });
     return await response.json();
   },
 
   async getAllGallery() {
-    const response = await fetch(`${API_BASE}/gallery`);
+    const response = await fetch(`${API_BASE}/api/gallery`);
     return await response.json();
   },
 
   async addGalleryImage(imageData: any) {
-    const response = await fetch(`${API_BASE}/gallery`, {
+    const response = await fetch(`${API_BASE}/api/gallery`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(imageData)
@@ -44,7 +44,7 @@ export const mongoService = {
   },
 
   async updateGalleryImage(id: string, imageData: any) {
-    const response = await fetch(`${API_BASE}/gallery/${id}`, {
+    const response = await fetch(`${API_BASE}/api/gallery/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(imageData)
@@ -53,17 +53,17 @@ export const mongoService = {
   },
 
   async deleteGalleryImage(id: string) {
-    const response = await fetch(`${API_BASE}/gallery/${id}`, { method: 'DELETE' });
+    const response = await fetch(`${API_BASE}/api/gallery/${id}`, { method: 'DELETE' });
     return await response.json();
   },
 
   async getAllTeachers() {
-    const response = await fetch(`${API_BASE}/teachers`);
+    const response = await fetch(`${API_BASE}/api/teachers`);
     return await response.json();
   },
 
   async addTeacher(teacherData: any) {
-    const response = await fetch(`${API_BASE}/teachers`, {
+    const response = await fetch(`${API_BASE}/api/teachers`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(teacherData)
@@ -72,7 +72,7 @@ export const mongoService = {
   },
 
   async updateTeacher(id: string, teacherData: any) {
-    const response = await fetch(`${API_BASE}/teachers/${id}`, {
+    const response = await fetch(`${API_BASE}/api/teachers/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(teacherData)
@@ -81,17 +81,17 @@ export const mongoService = {
   },
 
   async deleteTeacher(id: string) {
-    const response = await fetch(`${API_BASE}/teachers/${id}`, { method: 'DELETE' });
+    const response = await fetch(`${API_BASE}/api/teachers/${id}`, { method: 'DELETE' });
     return await response.json();
   },
 
   async getAllClubs() {
-    const response = await fetch(`${API_BASE}/clubs`);
+    const response = await fetch(`${API_BASE}/api/clubs`);
     return await response.json();
   },
 
   async addClub(clubData: any) {
-    const response = await fetch(`${API_BASE}/clubs`, {
+    const response = await fetch(`${API_BASE}/api/clubs`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(clubData)
@@ -100,7 +100,7 @@ export const mongoService = {
   },
 
   async updateClub(id: string, clubData: any) {
-    const response = await fetch(`${API_BASE}/clubs/${id}`, {
+    const response = await fetch(`${API_BASE}/api/clubs/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(clubData)
@@ -109,17 +109,17 @@ export const mongoService = {
   },
 
   async deleteClub(id: string) {
-    const response = await fetch(`${API_BASE}/clubs/${id}`, { method: 'DELETE' });
+    const response = await fetch(`${API_BASE}/api/clubs/${id}`, { method: 'DELETE' });
     return await response.json();
   },
 
   async getAllEvents() {
-    const response = await fetch(`${API_BASE}/events`);
+    const response = await fetch(`${API_BASE}/api/events`);
     return await response.json();
   },
 
   async addEvent(eventData: any) {
-    const response = await fetch(`${API_BASE}/events`, {
+    const response = await fetch(`${API_BASE}/api/events`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(eventData)
@@ -128,7 +128,7 @@ export const mongoService = {
   },
 
   async updateEvent(id: string, eventData: any) {
-    const response = await fetch(`${API_BASE}/events/${id}`, {
+    const response = await fetch(`${API_BASE}/api/events/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(eventData)
@@ -137,7 +137,7 @@ export const mongoService = {
   },
 
   async deleteEvent(id: string) {
-    const response = await fetch(`${API_BASE}/events/${id}`, { method: 'DELETE' });
+    const response = await fetch(`${API_BASE}/api/events/${id}`, { method: 'DELETE' });
     return await response.json();
   }
 };

@@ -1386,8 +1386,14 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setAnnouncements(announcements.filter(a => a.id !== id));
   };
 
-  const login = () => setIsAuthenticated(true);
-  const logout = () => setIsAuthenticated(false);
+  const login = () => {
+    setIsAuthenticated(true);
+    localStorage.setItem('admin_auth', 'true');
+  };
+  const logout = () => {
+    setIsAuthenticated(false);
+    localStorage.setItem('admin_auth', 'false');
+  };
 
   return (
     <DataContext.Provider value={{ 
