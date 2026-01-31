@@ -1,4 +1,4 @@
-# 🏫 THPT Hương Khê - Website Chính Thức v3.0
+# 🏫 THPT Hương Khê - Website Chính Thức
 
 <div align="center">
 
